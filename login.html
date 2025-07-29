@@ -227,9 +227,29 @@
                     resultDiv.style.color = data.success ? '#22c55e' : '#ef4444';
                     
                     if(data.success){
-                        setTimeout(function(){ 
-                            window.location.href = 'admin-panel.html'; 
-                        }, 1200);
+                        // Kullanıcı rolünü kontrol et
+                        fetch('backend/public/profile.php', {
+                            method: 'GET',
+                            credentials: 'include'
+                        })
+                        .then(r => r.json())
+                        .then(userData => {
+                            if(userData.success && userData.user.role === 'admin') {
+                                setTimeout(function(){ 
+                                    window.location.href = 'admin-panel.html'; 
+                                }, 1200);
+                            } else {
+                                setTimeout(function(){ 
+                                    window.location.href = 'user-panel.html'; 
+                                }, 1200);
+                            }
+                        })
+                        .catch(err => {
+                            // Hata durumunda user paneline yönlendir
+                            setTimeout(function(){ 
+                                window.location.href = 'user-panel.html'; 
+                            }, 1200);
+                        });
                     }
                 })
                 .catch(err => {

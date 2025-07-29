@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Paneli - GlobalTradePro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .user-panel {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        .panel-header {
+            background: #0d1b4c;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .panel-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .panel-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-panel">
+        <div class="panel-header">
+            <h1><i class="fas fa-user-circle"></i> Kullanıcı Paneli</h1>
+            <p>Hoş geldiniz! Aşağıdaki seçeneklerden istediğinizi kullanabilirsiniz.</p>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+            </button>
+        </div>
+
+        <div class="panel-content">
+            <div class="panel-card">
+                <h3><i class="fas fa-user"></i> Profil Bilgileri</h3>
+                <div id="userInfo">Yükleniyor...</div>
+            </div>
+
+            <div class="panel-card">
+                <h3><i class="fas fa-wallet"></i> Bakiye</h3>
+                <div id="userBalance">Yükleniyor...</div>
+            </div>
+
+            <div class="panel-card">
+                <h3><i class="fas fa-coins"></i> Coin Listesi</h3>
+                <div id="coinList">Yükleniyor...</div>
+            </div>
+
+            <div class="panel-card">
+                <h3><i class="fas fa-credit-card"></i> Para Yatır</h3>
+                <p>Para yatırma sistemi yakında aktif olacak.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sayfa yüklendiğinde kullanıcı bilgilerini çek
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            loadCoins();
+        });
+
+        function loadUserInfo() {
+            fetch('backend/public/profile.php', {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    document.getElementById('userInfo').innerHTML = `
+                        <p><strong>Kullanıcı Adı:</strong> ${data.user.username}</p>
+                        <p><strong>Email:</strong> ${data.user.email}</p>
+                        <p><strong>Kayıt Tarihi:</strong> ${data.user.created_at}</p>
+                        <p><strong>Rol:</strong> ${data.user.role}</p>
+                    `;
+                    document.getElementById('userBalance').innerHTML = `
+                        <h2 style="color: #22c55e;">₺${parseFloat(data.user.balance).toLocaleString()}</h2>
+                    `;
+                } else {
+                    window.location.href = 'login.html';
+                }
+            })
+            .catch(err => {
+                window.location.href = 'login.html';
+            });
+        }
+
+        function loadCoins() {
+            fetch('backend/user/coins.php', {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    let html = '';
+                    if(data.coins.length > 0) {
+                        data.coins.forEach(coin => {
+                            html += `<p><strong>${coin.coin_adi} (${coin.coin_kodu})</strong> - ${coin.kategori_adi || 'Kategori yok'}</p>`;
+                        });
+                    } else {
+                        html = '<p>Henüz coin eklenmemiş.</p>';
+                    }
+                    document.getElementById('coinList').innerHTML = html;
+                } else {
+                    document.getElementById('coinList').innerHTML = '<p>Coinler yüklenemedi.</p>';
+                }
+            })
+            .catch(err => {
+                document.getElementById('coinList').innerHTML = '<p>Bağlantı hatası.</p>';
+            });
+        }
+
+        function logout() {
+            fetch('backend/public/logout.php', {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(() => {
+                window.location.href = 'login.html';
+            });
+        }
+    </script>
+</body>
+</html> 
