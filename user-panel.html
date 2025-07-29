@@ -3,87 +3,526 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kullanıcı Paneli - GlobalTradePro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Trading Dashboard - GlobalTradePro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
     <style>
-        .user-panel {
-            max-width: 1200px;
-            margin: 100px auto 50px;
-            padding: 0 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .panel-header {
-            background: #0d1b4c;
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e1a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sol Navigasyon Paneli */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1a1f2e 0%, #151a26 100%);
+            border-right: 1px solid #2a2f3e;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid #2a2f3e;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d4aa;
+        }
+        
+        .nav-menu {
+            padding: 0 10px;
+        }
+        
+        .nav-item {
+            margin-bottom: 5px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #8b8fa3;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: #2a2f3e;
+            color: #00d4aa;
+        }
+        
+        .nav-link i {
+            width: 20px;
             text-align: center;
         }
-        .panel-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        
+        /* Ana İçerik Alanı */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            min-height: 100vh;
+        }
+        
+        .top-bar {
+            background: #151a26;
+            border-bottom: 1px solid #2a2f3e;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .top-bar-left {
+            flex: 1;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .top-bar-right {
+            display: flex;
+            align-items: center;
             gap: 20px;
         }
-        .panel-card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        
+        .balance-display {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a87a 100%);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
         }
-        .logout-btn {
-            background: #ef4444;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+        
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #00d4aa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            float: right;
-            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #ff3742;
+        }
+        
+        /* İçerik Alanı */
+        .content-area {
+            padding: 30px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .section-subtitle {
+            color: #8b8fa3;
+            font-size: 16px;
+        }
+        
+        /* Kart Komponenti */
+        .card {
+            background: linear-gradient(135deg, #1e2530 0%, #1a1f2e 100%);
+            border: 1px solid #2a2f3e;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #8b8fa3;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #2a2f3e;
+            border-top: 2px solid #00d4aa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="user-panel">
-        <div class="panel-header">
-            <h1><i class="fas fa-user-circle"></i> Kullanıcı Paneli</h1>
-            <p>Hoş geldiniz! Aşağıdaki seçeneklerden istediğinizi kullanabilirsiniz.</p>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Çıkış Yap
-            </button>
-        </div>
-
-        <div class="panel-content">
-            <div class="panel-card">
-                <h3><i class="fas fa-user"></i> Profil Bilgileri</h3>
-                <div id="userInfo">Yükleniyor...</div>
+    <div class="dashboard-container">
+        <!-- Sol Navigasyon Paneli -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <span>TradePro</span>
+                </div>
             </div>
-
-            <div class="panel-card">
-                <h3><i class="fas fa-wallet"></i> Bakiye</h3>
-                <div id="userBalance">Yükleniyor...</div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-section="portfolio">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Portföyüm</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-section="markets">
+                        <i class="fas fa-coins"></i>
+                        <span>Piyasalar</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-section="trading">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>İşlem Yap</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-section="recommendations">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Tavsiyeler</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-section="wallet">
+                        <i class="fas fa-wallet"></i>
+                        <span>Cüzdan</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-section="profile">
+                        <i class="fas fa-user"></i>
+                        <span>Profil</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Ana İçerik Alanı -->
+        <main class="main-content">
+            <!-- Üst Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="top-bar-right">
+                    <div class="balance-display" id="userBalance">
+                        <i class="fas fa-spinner fa-spin"></i> Yükleniyor...
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar">?</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Çıkış
+                    </button>
+                </div>
+            </header>
+            
+            <!-- İçerik Alanları -->
+            <div class="content-area">
+                
+                <!-- Dashboard Bölümü -->
+                <section class="content-section active" id="dashboard">
+                    <div class="section-header">
+                        <h2 class="section-title">Hoş Geldiniz</h2>
+                        <p class="section-subtitle">Trading hesabınızın genel durumu</p>
+                    </div>
+                    
+                    <div class="grid grid-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Toplam Bakiye</h3>
+                                <i class="fas fa-wallet" style="color: #00d4aa;"></i>
+                            </div>
+                            <div id="totalBalance" class="loading">
+                                <div class="spinner"></div>
+                                Yükleniyor...
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Günlük Kazanç</h3>
+                                <i class="fas fa-chart-line" style="color: #00d4aa;"></i>
+                            </div>
+                            <div id="dailyPnl" class="loading">
+                                <div class="spinner"></div>
+                                Hesaplanıyor...
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Açık Pozisyonlar</h3>
+                                <i class="fas fa-chart-pie" style="color: #00d4aa;"></i>
+                            </div>
+                            <div id="openPositions" class="loading">
+                                <div class="spinner"></div>
+                                Yükleniyor...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Son İşlemler</h3>
+                            </div>
+                            <div id="recentTrades" class="loading">
+                                <div class="spinner"></div>
+                                Yükleniyor...
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Piyasa Özetı</h3>
+                            </div>
+                            <div id="marketSummary" class="loading">
+                                <div class="spinner"></div>
+                                Yükleniyor...
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Diğer bölümler buraya eklenecek -->
+                <section class="content-section" id="portfolio">
+                    <div class="section-header">
+                        <h2 class="section-title">Portföyüm</h2>
+                        <p class="section-subtitle">Sahip olduğunuz varlıklar</p>
+                    </div>
+                    <div class="card">
+                        <p>Portföy içeriği yakında eklenecek...</p>
+                    </div>
+                </section>
+                
+                <section class="content-section" id="markets">
+                    <div class="section-header">
+                        <h2 class="section-title">Piyasalar</h2>
+                        <p class="section-subtitle">Crypto para fiyatları</p>
+                    </div>
+                    <div class="card">
+                        <p>Piyasa verileri yakında eklenecek...</p>
+                    </div>
+                </section>
+                
+                <section class="content-section" id="trading">
+                    <div class="section-header">
+                        <h2 class="section-title">İşlem Yap</h2>
+                        <p class="section-subtitle">Al/Sat işlemleri</p>
+                    </div>
+                    <div class="card">
+                        <p>Trading arayüzü yakında eklenecek...</p>
+                    </div>
+                </section>
+                
+                <section class="content-section" id="recommendations">
+                    <div class="section-header">
+                        <h2 class="section-title">Yatırım Tavsiyeleri</h2>
+                        <p class="section-subtitle">AI destekli öneriler</p>
+                    </div>
+                    <div class="card">
+                        <p>Tavsiye sistemi yakında eklenecek...</p>
+                    </div>
+                </section>
+                
+                <section class="content-section" id="wallet">
+                    <div class="section-header">
+                        <h2 class="section-title">Cüzdan</h2>
+                        <p class="section-subtitle">Para yatır/çek</p>
+                    </div>
+                    <div class="card">
+                        <p>Cüzdan işlemleri yakında eklenecek...</p>
+                    </div>
+                </section>
+                
+                <section class="content-section" id="profile">
+                    <div class="section-header">
+                        <h2 class="section-title">Profil</h2>
+                        <p class="section-subtitle">Hesap ayarları</p>
+                    </div>
+                    <div class="card">
+                        <div id="userInfo" class="loading">
+                            <div class="spinner"></div>
+                            Yükleniyor...
+                        </div>
+                    </div>
+                </section>
+                
             </div>
-
-            <div class="panel-card">
-                <h3><i class="fas fa-coins"></i> Coin Listesi</h3>
-                <div id="coinList">Yükleniyor...</div>
-            </div>
-
-            <div class="panel-card">
-                <h3><i class="fas fa-credit-card"></i> Para Yatır</h3>
-                <p>Para yatırma sistemi yakında aktif olacak.</p>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        // Sayfa yüklendiğinde kullanıcı bilgilerini çek
+        // Sayfa yüklendiğinde
         document.addEventListener('DOMContentLoaded', function() {
             loadUserInfo();
-            loadCoins();
+            setupNavigation();
         });
 
+        // Navigasyon sistemi
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+            const pageTitle = document.getElementById('pageTitle');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetSection = this.dataset.section;
+                    
+                    // Aktif nav linkini güncelle
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Bölümleri gizle/göster
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(targetSection).classList.add('active');
+                    
+                    // Sayfa başlığını güncelle
+                    const titles = {
+                        'dashboard': 'Dashboard',
+                        'portfolio': 'Portföyüm',
+                        'markets': 'Piyasalar',
+                        'trading': 'İşlem Yap',
+                        'recommendations': 'Yatırım Tavsiyeleri',
+                        'wallet': 'Cüzdan',
+                        'profile': 'Profil'
+                    };
+                    pageTitle.textContent = titles[targetSection] || 'Dashboard';
+                });
+            });
+        }
+
+        // Kullanıcı bilgilerini yükle
         function loadUserInfo() {
             fetch('backend/public/profile.php', {
                 method: 'GET',
@@ -92,15 +531,44 @@
             .then(r => r.json())
             .then(data => {
                 if(data.success) {
+                    // Bakiye göster
+                    const balance = parseFloat(data.user.balance);
+                    document.getElementById('userBalance').innerHTML = 
+                        `<i class="fas fa-wallet"></i> ₺${balance.toLocaleString()}`;
+                    
+                    document.getElementById('totalBalance').innerHTML = 
+                        `<h1 style="font-size: 2rem; color: #00d4aa;">₺${balance.toLocaleString()}</h1>`;
+                    
+                    // Avatar harfi
+                    const firstLetter = data.user.username.charAt(0).toUpperCase();
+                    document.getElementById('userAvatar').textContent = firstLetter;
+                    
+                    // Profil bilgileri
                     document.getElementById('userInfo').innerHTML = `
-                        <p><strong>Kullanıcı Adı:</strong> ${data.user.username}</p>
-                        <p><strong>Email:</strong> ${data.user.email}</p>
-                        <p><strong>Kayıt Tarihi:</strong> ${data.user.created_at}</p>
-                        <p><strong>Rol:</strong> ${data.user.role}</p>
+                        <div style="line-height: 1.8;">
+                            <p><strong>Kullanıcı Adı:</strong> ${data.user.username}</p>
+                            <p><strong>Email:</strong> ${data.user.email}</p>
+                            <p><strong>Kayıt Tarihi:</strong> ${new Date(data.user.created_at).toLocaleDateString('tr-TR')}</p>
+                            <p><strong>Hesap Tipi:</strong> ${data.user.role === 'admin' ? 'Yönetici' : 'Standart'}</p>
+                            <p><strong>Toplam Bakiye:</strong> <span style="color: #00d4aa; font-weight: 600;">₺${balance.toLocaleString()}</span></p>
+                        </div>
                     `;
-                    document.getElementById('userBalance').innerHTML = `
-                        <h2 style="color: #22c55e;">₺${parseFloat(data.user.balance).toLocaleString()}</h2>
-                    `;
+                    
+                    // Diğer dashboard verilerini simüle et
+                    setTimeout(() => {
+                        document.getElementById('dailyPnl').innerHTML = 
+                            `<h2 style="color: #00d4aa;">+₺156.24</h2><small style="color: #8b8fa3;">+2.34%</small>`;
+                        
+                        document.getElementById('openPositions').innerHTML = 
+                            `<h2 style="color: #ffffff;">3</h2><small style="color: #8b8fa3;">Aktif pozisyon</small>`;
+                        
+                        document.getElementById('recentTrades').innerHTML = 
+                            `<p style="color: #8b8fa3;">Henüz işlem yapılmamış</p>`;
+                        
+                        document.getElementById('marketSummary').innerHTML = 
+                            `<p style="color: #8b8fa3;">Piyasa verileri yükleniyor...</p>`;
+                    }, 1000);
+                    
                 } else {
                     window.location.href = 'login.html';
                 }
@@ -110,32 +578,7 @@
             });
         }
 
-        function loadCoins() {
-            fetch('backend/user/coins.php', {
-                method: 'GET',
-                credentials: 'include'
-            })
-            .then(r => r.json())
-            .then(data => {
-                if(data.success) {
-                    let html = '';
-                    if(data.coins.length > 0) {
-                        data.coins.forEach(coin => {
-                            html += `<p><strong>${coin.coin_adi} (${coin.coin_kodu})</strong> - ${coin.kategori_adi || 'Kategori yok'}</p>`;
-                        });
-                    } else {
-                        html = '<p>Henüz coin eklenmemiş.</p>';
-                    }
-                    document.getElementById('coinList').innerHTML = html;
-                } else {
-                    document.getElementById('coinList').innerHTML = '<p>Coinler yüklenemedi.</p>';
-                }
-            })
-            .catch(err => {
-                document.getElementById('coinList').innerHTML = '<p>Bağlantı hatası.</p>';
-            });
-        }
-
+        // Çıkış yap
         function logout() {
             fetch('backend/public/logout.php', {
                 method: 'GET',
