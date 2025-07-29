@@ -159,12 +159,11 @@ function setupRegisterValidation(form) {
         const isFirstNameValid = validateName(firstNameInput);
         const isLastNameValid = validateName(lastNameInput);
         const isEmailValid = validateEmail(emailInput);
-        const isPhoneValid = validatePhone(phoneInput);
         const isPasswordValid = validatePassword(passwordInput, true);
         const isConfirmPasswordValid = validateConfirmPassword(confirmPasswordInput, passwordInput);
         const isTermsValid = validateTerms(termsCheckbox);
         
-        if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid && 
+        if (isFirstNameValid && isLastNameValid && isEmailValid && 
             isPasswordValid && isConfirmPasswordValid && isTermsValid) {
             handleRegister(form, submitBtn);
         }
@@ -232,21 +231,9 @@ function validatePassword(input, isStrict) {
     if (!value) {
         showError(input, errorElement, 'Şifre zorunludur');
         return false;
-    } else if (value.length < 6) {
-        showError(input, errorElement, 'Şifre en az 6 karakter olmalıdır');
+    } else if (value.length < 8) {
+        showError(input, errorElement, 'Şifre en az 8 karakter olmalıdır');
         return false;
-    } else if (isStrict) {
-        // Strict validation for registration
-        if (value.length < 8) {
-            showError(input, errorElement, 'Şifre en az 8 karakter olmalıdır');
-            return false;
-        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
-            showError(input, errorElement, 'Şifre büyük harf, küçük harf ve rakam içermelidir');
-            return false;
-        } else {
-            showSuccess(input, errorElement);
-            return true;
-        }
     } else {
         showSuccess(input, errorElement);
         return true;
