@@ -28,6 +28,36 @@ class HeroSlider {
         const sliderContainer = document.querySelector('.slider-container');
         sliderContainer.addEventListener('mouseenter', () => this.stopAutoSlide());
         sliderContainer.addEventListener('mouseleave', () => this.startAutoSlide());
+        
+        // Load widget when slider is ready
+        this.loadWidget();
+    }
+    
+    loadWidget() {
+        // Widget'ın yüklenmesini bekle
+        setTimeout(() => {
+            const widget = document.querySelector('gecko-coin-heatmap-widget');
+            if (widget) {
+                // Widget'ın tam yüklenmesini bekle
+                const checkWidget = setInterval(() => {
+                    if (widget.shadowRoot || widget.children.length > 0) {
+                        clearInterval(checkWidget);
+                        this.adjustWidgetStyles();
+                    }
+                }, 100);
+            }
+        }, 1000);
+    }
+    
+    adjustWidgetStyles() {
+        const widget = document.querySelector('gecko-coin-heatmap-widget');
+        if (widget) {
+            // Widget'ın stillerini ayarla
+            widget.style.width = '100%';
+            widget.style.maxWidth = '1000px';
+            widget.style.margin = '0 auto';
+            widget.style.display = 'block';
+        }
     }
     
     goToSlide(index) {
@@ -41,6 +71,13 @@ class HeroSlider {
         // Add active class to new slide and dot
         this.slides[this.currentSlide].classList.add('active');
         this.dots[this.currentSlide].classList.add('active');
+        
+        // Widget slide'ına geçildiğinde widget'ı yeniden ayarla
+        if (index === 1) {
+            setTimeout(() => {
+                this.adjustWidgetStyles();
+            }, 300);
+        }
     }
     
     nextSlide() {

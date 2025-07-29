@@ -16,6 +16,24 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- ===== TOP BAR ===== -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <div class="top-bar-left">
+                    <a href="#partnership" class="top-link">Ortaklık</a>
+                </div>
+                <div class="top-bar-right">
+                    <div class="language-selector">
+                        <img src="https://flagcdn.com/tr.svg" alt="Türkçe" class="flag-icon">
+                        <span>Türkçe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="nav-container">
@@ -23,34 +41,31 @@
             <div class="nav-logo">
                 <a href="#home">
                     <span class="logo-text">GlobalFinans</span>
-                    <span class="logo-subtitle">TRADING PLATFORM</span>
+                    <span class="logo-subtitle">15 YEARS</span>
                 </a>
             </div>
             
             <!-- Desktop Menu -->
             <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">Hakkımızda</a>
+                <li class="nav-item dropdown">
+                    <a href="#investment" class="nav-link">Yatırım <i class="fas fa-chevron-down"></i></a>
                 </li>
-                <li class="nav-item">
-                    <a href="#platforms" class="nav-link">Platformlar</a>
+                <li class="nav-item dropdown">
+                    <a href="#discover" class="nav-link">Keşfedin <i class="fas fa-chevron-down"></i></a>
                 </li>
-                <li class="nav-item">
-                    <a href="#accounts" class="nav-link">Hesap Türleri</a>
+                <li class="nav-item dropdown">
+                    <a href="#promotions" class="nav-link">Promosyonlar <i class="fas fa-chevron-down"></i></a>
                 </li>
-                <li class="nav-item">
-                    <a href="#education" class="nav-link">Eğitim</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#tools" class="nav-link">Araçlar</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#support" class="nav-link">Destek</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#login" class="nav-link login-btn">Giriş</a>
+                <li class="nav-item dropdown">
+                    <a href="#about" class="nav-link">Şirket hakkında <i class="fas fa-chevron-down"></i></a>
                 </li>
             </ul>
+            
+            <!-- Right Side Buttons -->
+            <div class="nav-buttons">
+                <a href="#login" class="btn btn-login">Giriş</a>
+                <a href="#register" class="btn btn-primary">Hemen Başla</a>
+            </div>
             
             <!-- Mobile Menu Button -->
             <div class="hamburger">
@@ -65,7 +80,11 @@
     <section class="hero-slider">
         <div class="slider-container">
             <!-- Slide 1 - Ana Hero Slide -->
-            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-color: #0f172a;">
+            <div class="slide active">
+                <div class="slide-background">
+                    <!-- Abstract financial graph background -->
+                    <div class="graph-overlay"></div>
+                </div>
                 <div class="slide-content">
                     <h1 class="slide-title">En çok ödül alan broker olmamız tesadüf değil</h1>
                     <p class="slide-description">Yatırımcılara rahatça kâr edebilecekleri seçkin bir yatırım ortamı sağlıyoruz.</p>
@@ -76,24 +95,31 @@
                 </div>
             </div>
             
-            <!-- Slide 2 - Platform Tanıtım -->
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-color: #1e293b;">
+            <!-- Slide 2 - CoinGecko Widget -->
+            <div class="slide">
+                <div class="slide-background">
+                    <div class="graph-overlay"></div>
+                </div>
+                <div class="slide-content widget-slide">
+                    <h1 class="slide-title">Kripto Para Piyasaları</h1>
+                    <p class="slide-description">Gerçek zamanlı kripto para verileri ve piyasa analizi</p>
+                    <div class="widget-container">
+                        <script src="https://widgets.coingecko.com/gecko-coin-heatmap-widget.js"></script>
+                        <gecko-coin-heatmap-widget locale="en" outlined="true" top="100"></gecko-coin-heatmap-widget>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 - Platform Tanıtım -->
+            <div class="slide">
+                <div class="slide-background">
+                    <div class="graph-overlay"></div>
+                </div>
                 <div class="slide-content">
                     <h1 class="slide-title">1.400'den fazla küresel varlığa kolay erişim</h1>
                     <p class="slide-description">Forex, CFD, hisse senedi ve emtia işlemleri için profesyonel platform.</p>
                     <div class="slide-buttons">
                         <a href="#platforms" class="btn btn-primary">Platformları Keşfet</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 3 - Güven ve Deneyim -->
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-color: #334155;">
-                <div class="slide-content">
-                    <h1 class="slide-title">15 milyondan fazla yatırımcı bize güveniyor</h1>
-                    <p class="slide-description">Dünya çapında güvenilir ve şeffaf trading deneyimi.</p>
-                    <div class="slide-buttons">
-                        <a href="#about" class="btn btn-primary">Hakkımızda</a>
                     </div>
                 </div>
             </div>
