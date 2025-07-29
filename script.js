@@ -393,13 +393,14 @@ function initLiveSupport() {
 
 // ===== SCROLL ANIMATIONS =====
 function initScrollAnimations() {
-    const animateElements = document.querySelectorAll('.service-card, .education-card, .indicator-item');
+    const animateElements = document.querySelectorAll('.service-card, .education-card, .indicator-item, .promo-card, .animate-on-scroll');
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
                 entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('animate');
             }
         });
     }, {
@@ -408,9 +409,12 @@ function initScrollAnimations() {
     });
     
     animateElements.forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(30px)';
-        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        // Don't hide promo cards initially, they should be visible
+        if (!element.classList.contains('promo-card')) {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        }
         observer.observe(element);
     });
 }
