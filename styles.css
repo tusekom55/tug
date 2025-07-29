@@ -233,11 +233,13 @@ body {
 
 .slide-content .container {
     position: relative;
+    z-index: 10;
 }
 
 .hero-content-panel {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     padding: 50px;
@@ -247,6 +249,7 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    z-index: 15;
 }
 
 .hero-content-panel::before {
@@ -339,7 +342,7 @@ body {
     transform: translateX(-50%);
     display: flex;
     gap: 15px;
-    z-index: 3;
+    z-index: 20;
 }
 
 .slider-dot {
@@ -385,12 +388,15 @@ body {
     width: 100%;
     overflow: hidden;
     position: relative;
+    mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
+    -webkit-mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
 }
 
 .ticker-track {
     display: flex;
     animation: scroll-left 30s linear infinite;
     white-space: nowrap;
+    width: max-content;
 }
 
 .coin-item {
@@ -401,6 +407,7 @@ body {
     padding: 15px 20px;
     margin-right: 20px;
     min-width: 250px;
+    flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
@@ -1001,6 +1008,11 @@ body {
         min-width: 200px;
         padding: 12px 15px;
         margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .ticker-track {
+        flex-wrap: nowrap;
     }
 
     .coin-flag {
@@ -1108,6 +1120,7 @@ body {
         min-width: 180px;
         padding: 10px 12px;
         margin-right: 12px;
+        flex-shrink: 0;
     }
 
     .coin-flag {
