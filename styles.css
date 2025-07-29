@@ -904,35 +904,29 @@ body {
 }
 
 /* Enhanced Scroll Animations */
-.animate-on-scroll {
+.animate-on-scroll:not(.promo-card) {
     opacity: 0;
     transform: translateY(50px) scale(0.9);
     transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     filter: blur(5px);
 }
 
-.animate-on-scroll.animate {
+.animate-on-scroll.animate:not(.promo-card) {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
     transition-delay: var(--delay, 0s);
 }
 
-/* Promo cards - always visible */
-.promo-card {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-    visibility: visible !important;
-}
-
-.promo-card.animate-on-scroll {
-    opacity: 1;
-    transform: translateY(0);
-}
-
+/* Promo cards - always visible and override any animation */
+.promo-card,
+.promo-card.animate-on-scroll,
 .promo-card.animate-on-scroll.animate {
-    transform: translateY(0) rotateX(0deg) scale(1);
-    animation: cardSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    opacity: 1 !important;
+    transform: translateY(0) rotateX(0deg) scale(1) !important;
+    visibility: visible !important;
+    filter: none !important;
+    display: flex !important;
 }
 
 @keyframes cardSlideUp {
