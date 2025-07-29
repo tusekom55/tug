@@ -251,57 +251,94 @@
     <!-- JavaScript -->
     <script src="auth-script.js"></script>
     <script>
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var form = this;
-      var formData = new FormData();
-      
-      // Ad ve soyad zorunlu, email isteğe bağlı
-      var firstName = form.firstName.value.trim();
-      var lastName = form.lastName.value.trim();
-      var email = form.email.value.trim() || firstName.toLowerCase() + lastName.toLowerCase() + '@example.com'; // Test için otomatik email
-      var password = form.password.value;
-      var confirmPassword = form.confirmPassword.value;
-      
-      // Basit validasyon
-      if (!firstName || !lastName) {
-        document.getElementById('registerResult').innerText = 'Ad ve soyad zorunludur';
-        return;
+    // Mevcut auth-script.js fonksiyonlarını override ediyoruz
+    document.addEventListener('DOMContentLoaded', function() {
+      const registerForm = document.getElementById('registerForm');
+      if(registerForm) {
+        // Mevcut event listener'ı kaldır ve yeni ekle
+        registerForm.onsubmit = null;
+        
+        registerForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Form verilerini al
+          var firstName = document.getElementById('firstName').value.trim();
+          var lastName = document.getElementById('lastName').value.trim();
+          var email = document.getElementById('email').value.trim();
+          var password = document.getElementById('password').value;
+          var confirmPassword = document.getElementById('confirmPassword').value;
+          var terms = document.getElementById('terms').checked;
+          
+          var resultDiv = document.getElementById('registerResult');
+          
+          // Basit validasyon
+          if (!firstName) {
+            resultDiv.innerText = 'Ad zorunludur';
+            resultDiv.style.color = '#ef4444';
+            return;
+          }
+          
+          if (!lastName) {
+            resultDiv.innerText = 'Soyad zorunludur';
+            resultDiv.style.color = '#ef4444';
+            return;
+          }
+          
+          if (password.length < 8) {
+            resultDiv.innerText = 'Şifre en az 8 karakter olmalıdır';
+            resultDiv.style.color = '#ef4444';
+            return;
+          }
+          
+          if (password !== confirmPassword) {
+            resultDiv.innerText = 'Şifreler eşleşmiyor';
+            resultDiv.style.color = '#ef4444';
+            return;
+          }
+          
+          if (!terms) {
+            resultDiv.innerText = 'Kullanım şartlarını kabul etmelisiniz';
+            resultDiv.style.color = '#ef4444';
+            return;
+          }
+          
+          // Email boşsa otomatik oluştur
+          if (!email) {
+            email = firstName.toLowerCase() + lastName.toLowerCase() + '@test.com';
+          }
+          
+          // Backend'e gönder
+          var formData = new FormData();
+          formData.append('username', firstName + lastName);
+          formData.append('email', email);
+          formData.append('password', password);
+          
+          resultDiv.innerText = 'Kayıt yapılıyor...';
+          resultDiv.style.color = '#2563eb';
+          
+          fetch('/backend/public/register.php', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            resultDiv.innerText = data.message;
+            resultDiv.style.color = data.success ? '#22c55e' : '#ef4444';
+            
+            if(data.success) {
+              setTimeout(function(){ 
+                window.location.href = 'login.html'; 
+              }, 1500);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            resultDiv.innerText = 'Bağlantı hatası oluştu';
+            resultDiv.style.color = '#ef4444';
+          });
+        });
       }
-      
-      if (password.length < 8) {
-        document.getElementById('registerResult').innerText = 'Şifre en az 8 karakter olmalıdır';
-        return;
-      }
-      
-      if (password !== confirmPassword) {
-        document.getElementById('registerResult').innerText = 'Şifreler eşleşmiyor';
-        return;
-      }
-      
-      // Backend'e gönder
-      formData.append('username', firstName + lastName); // username = ad+soyad
-      formData.append('email', email);
-      formData.append('password', password);
-      
-      fetch('/backend/public/register.php', {
-        method: 'POST',
-        credentials: 'include',
-        body: formData
-      })
-      .then(r => r.json())
-      .then(data => {
-        var resultDiv = document.getElementById('registerResult');
-        resultDiv.innerText = data.message;
-        resultDiv.style.color = data.success ? '#22c55e' : '#ef4444';
-        if(data.success){
-          setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
-        }
-      })
-      .catch(err => {
-        document.getElementById('registerResult').innerText = 'Bağlantı hatası';
-        document.getElementById('registerResult').style.color = '#ef4444';
-      });
     });
     </script>
 </body>
