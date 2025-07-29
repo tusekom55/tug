@@ -11,23 +11,42 @@
     <button type="submit">Giriş Yap</button>
   </form>
   <div id="loginResult"></div>
+  <script src="auth-script.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      fetch('/backend/public/login.php', {
-        method: 'POST',
-        credentials: 'include',
-        body: formData
-      })
-      .then(r => r.json())
-      .then(data => {
-        document.getElementById('loginResult').innerText = data.message;
-        if(data.success){
-          window.location.href = '/admin-panel.html'; // Giriş başarılıysa yönlendir
-        }
+    // Mevcut form submitini override et
+    const loginForm = document.getElementById('loginForm');
+    if(loginForm){
+      loginForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const formData = new FormData(loginForm);
+        // Backend'in beklediği alanlar: username, password
+        // Eğer formda email alanı varsa, username yerine email gönderilebilir
+        let username = formData.get('username') || formData.get('email');
+        let password = formData.get('password');
+        let sendData = new FormData();
+        sendData.append('username', username);
+        sendData.append('password', password);
+        fetch('/backend/public/login.php', {
+          method: 'POST',
+          credentials: 'include',
+          body: sendData
+        })
+        .then(r => r.json())
+        .then(data => {
+          // Sonucu uygun yere yaz
+          let resultDiv = document.getElementById('loginResult');
+          if(!resultDiv){
+            resultDiv = document.createElement('div');
+            resultDiv.id = 'loginResult';
+            loginForm.parentNode.insertBefore(resultDiv, loginForm.nextSibling);
+          }
+          resultDiv.innerText = data.message;
+          if(data.success){
+            setTimeout(function(){ window.location.href = 'admin-panel.html'; }, 1200);
+          }
+        });
       });
-    });
+    }
   </script>
 </body>
 </html> 

@@ -272,5 +272,28 @@
 
     <!-- JavaScript -->
     <script src="auth-script.js"></script>
+    <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      var formData = new FormData();
+      // Sadece backend'in beklediği alanları ekle
+      formData.append('username', form.firstName.value + form.lastName.value); // örnek: ad+soyad birleştirildi
+      formData.append('email', form.email.value);
+      formData.append('password', form.password.value);
+      fetch('/backend/public/register.php', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      })
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('registerResult').innerText = data.message;
+        if(data.success){
+          setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
+        }
+      });
+    });
+    </script>
 </body>
 </html> 
