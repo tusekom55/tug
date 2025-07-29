@@ -99,6 +99,25 @@
         
         .top-bar-left {
             flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
         }
         
         .page-title {
@@ -1125,33 +1144,335 @@
              margin-top: 16px;
          }
          
-         /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .content-area {
-                padding: 20px;
-            }
-            
-            .grid-2, .grid-3 {
-                grid-template-columns: 1fr;
-            }
-        }
+                 /* Mobile Responsive Styles */
+       @media (max-width: 768px) {
+           .sidebar {
+               transform: translateX(-100%);
+               transition: transform 0.3s ease;
+               z-index: 1001;
+           }
+           
+           .sidebar.mobile-open {
+               transform: translateX(0);
+           }
+           
+           .mobile-overlay {
+               display: none;
+               position: fixed;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background: rgba(0, 0, 0, 0.5);
+               z-index: 1000;
+           }
+           
+           .mobile-overlay.active {
+               display: block;
+           }
+           
+           .main-content {
+               margin-left: 0;
+           }
+           
+           .content-area {
+               padding: 20px;
+           }
+           
+           .grid-2, .grid-3 {
+               grid-template-columns: 1fr;
+           }
+           
+           /* Trading Modal Mobile Optimization */
+           .modal-container {
+               width: 98%;
+               height: 95%;
+               max-width: none;
+           }
+           
+           .modal-content {
+               grid-template-columns: 1fr;
+               grid-template-rows: 1fr auto;
+               overflow: hidden;
+           }
+           
+           .chart-panel {
+               border-right: none;
+               border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+               min-height: 280px;
+               height: auto;
+           }
+           
+           .order-panel {
+               min-height: auto;
+               max-height: 50vh;
+               overflow-y: auto;
+           }
+           
+           .chart-header {
+               padding: 12px 16px;
+           }
+           
+           .timeframe-buttons {
+               gap: 4px;
+               flex-wrap: wrap;
+           }
+           
+           .timeframe-btn {
+               padding: 6px 8px;
+               font-size: 11px;
+           }
+           
+           .chart-tools {
+               gap: 4px;
+           }
+           
+           .tool-btn {
+               padding: 6px;
+               font-size: 12px;
+           }
+           
+           .order-content {
+               padding: 16px;
+           }
+           
+           .order-direction-toggle {
+               grid-template-columns: 1fr 1fr;
+               gap: 8px;
+               margin-bottom: 20px;
+           }
+           
+           .direction-btn {
+               padding: 12px;
+           }
+           
+           .direction-btn .btn-text {
+               font-size: 14px;
+           }
+           
+           .direction-btn .btn-subtitle {
+               font-size: 11px;
+           }
+           
+           .form-group {
+               margin-bottom: 16px;
+           }
+           
+           .form-label {
+               font-size: 13px;
+               margin-bottom: 6px;
+           }
+           
+           .form-select, .form-input {
+               padding: 10px 12px;
+               font-size: 13px;
+           }
+           
+           .percentage-buttons {
+               grid-template-columns: repeat(4, 1fr);
+               gap: 6px;
+               margin-top: 10px;
+           }
+           
+           .percent-btn {
+               padding: 6px;
+               font-size: 11px;
+           }
+           
+           .order-summary {
+               padding: 12px;
+               margin-bottom: 16px;
+           }
+           
+           .summary-row {
+               margin-bottom: 6px;
+           }
+           
+           .summary-label, .summary-value {
+               font-size: 13px;
+           }
+           
+           .execute-btn {
+               padding: 14px;
+               font-size: 15px;
+               margin-bottom: 16px;
+           }
+           
+           .advanced-toggle {
+               padding: 10px 0;
+               font-size: 13px;
+           }
+           
+           /* Coins Grid Mobile */
+           .coins-grid {
+               grid-template-columns: 1fr;
+               gap: 12px;
+           }
+           
+           .coin-card {
+               padding: 12px;
+           }
+           
+           .coin-info h3 {
+               font-size: 14px;
+           }
+           
+           .coin-price {
+               font-size: 13px;
+           }
+           
+           .coin-change {
+               font-size: 11px;
+               padding: 2px 6px;
+           }
+           
+           .coin-actions {
+               margin-top: 8px;
+           }
+           
+           .trade-btn {
+               padding: 6px 12px;
+               font-size: 11px;
+           }
+       }
+
+       /* Extra Small Mobile Devices */
+       @media (max-width: 480px) {
+           .main-content {
+               width: 100%;
+           }
+           
+           .top-bar {
+               padding: 12px 16px;
+           }
+           
+           .mobile-menu-btn {
+               display: block;
+           }
+           
+           .user-profile .user-name {
+               font-size: 14px;
+           }
+           
+           .user-profile .user-balance {
+               font-size: 12px;
+           }
+           
+           /* Full Screen Mobile Trading Modal */
+           .modal-container {
+               width: 100%;
+               height: 100%;
+               border-radius: 0;
+               max-height: 100vh;
+           }
+           
+           .modal-header {
+               padding: 16px 20px;
+           }
+           
+           .modal-title-section h2 {
+               font-size: 18px;
+               margin-bottom: 6px;
+           }
+           
+           .modal-coin-info {
+               gap: 10px;
+           }
+           
+           .modal-coin-info span {
+               font-size: 12px;
+           }
+           
+           #modalCoinPrice {
+               font-size: 15px;
+           }
+           
+           .chart-panel {
+               min-height: 220px;
+           }
+           
+           .chart-header {
+               padding: 10px 16px;
+           }
+           
+           .timeframe-buttons {
+               gap: 3px;
+           }
+           
+           .timeframe-btn {
+               padding: 5px 6px;
+               font-size: 10px;
+           }
+           
+           .order-content {
+               padding: 12px;
+           }
+           
+           .order-direction-toggle {
+               margin-bottom: 16px;
+           }
+           
+           .direction-btn {
+               padding: 10px;
+           }
+           
+           .direction-btn .btn-text {
+               font-size: 13px;
+           }
+           
+           .form-group {
+               margin-bottom: 12px;
+           }
+           
+           .form-select, .form-input {
+               padding: 8px 10px;
+               font-size: 12px;
+           }
+           
+           .execute-btn {
+               padding: 12px;
+               font-size: 14px;
+               margin-bottom: 12px;
+           }
+           
+           .coin-card {
+               padding: 10px;
+           }
+           
+           .coin-info h3 {
+               font-size: 13px;
+           }
+           
+           .coin-price {
+               font-size: 12px;
+           }
+       }
+
+       /* Landscape Mobile */
+       @media (max-width: 768px) and (orientation: landscape) {
+           .modal-content {
+               grid-template-columns: 1fr 320px;
+               grid-template-rows: 1fr;
+           }
+           
+           .chart-panel {
+               border-right: 1px solid rgba(255, 255, 255, 0.1);
+               border-bottom: none;
+               min-height: auto;
+           }
+           
+           .order-panel {
+               min-height: auto;
+               max-height: none;
+           }
+       }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+        
         <!-- Sol Navigasyon Paneli -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -1212,6 +1533,9 @@
             <!-- Üst Bar -->
             <header class="top-bar">
                 <div class="top-bar-left">
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <h1 class="page-title" id="pageTitle">Dashboard</h1>
                 </div>
                 <div class="top-bar-right">
@@ -1848,6 +2172,29 @@
                 window.location.href = 'login.html';
             });
         }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        // Close mobile menu
+        function closeMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+        }
+
+        // Close mobile menu when clicking navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', closeMobileMenu);
+        });
 
                  // Hibrit sistem - Veritabanı + API kombinasyonu
          async function fetchMarketData() {
