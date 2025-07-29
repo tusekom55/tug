@@ -215,7 +215,7 @@
                 sendData.append('username', username);
                 sendData.append('password', password);
                 
-                fetch('/backend/public/login.php', {
+                fetch('backend/public/login.php', {
                     method: 'POST',
                     credentials: 'include',
                     body: sendData

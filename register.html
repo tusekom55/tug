@@ -316,7 +316,7 @@
           resultDiv.innerText = 'Kayıt yapılıyor...';
           resultDiv.style.color = '#2563eb';
           
-          fetch('/backend/public/register.php', {
+          fetch('backend/public/register.php', {
             method: 'POST',
             credentials: 'include',
             body: formData
