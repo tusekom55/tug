@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalTradePro - Modern Yatırım Platformu</title>
+    <meta name="description" content="Lisanslı ve güvenilir yatırım platformu. MetaTrader 4/5 desteği, 7/24 Türkçe destek.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>GlobalTradePro</span>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <div class="nav-links">
+                    <a href="#yatirim-araclari" class="nav-link">Yatırım Araçları</a>
+                    <a href="#platformlar" class="nav-link">Platformlar</a>
+                    <a href="#hesaplar" class="nav-link">Hesaplar</a>
+                    <a href="#egitim" class="nav-link">Eğitim</a>
+                    <a href="#hakkimizda" class="nav-link">Hakkımızda</a>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="btn-login">Giriş</button>
+                    <button class="btn-start">Hemen Başla</button>
+                </div>
+            </div>
+            
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Slider -->
+    <section class="hero-slider" id="hero">
+        <div class="slider-container">
+            <!-- Slide 1 -->
+            <div class="slide active">
+                <div class="slide-background"></div>
+                <div class="slide-content">
+                    <div class="container">
+                        <h1 class="hero-title">Yatırımınızı <span class="highlight">Profesyonel</span> Ellerde Güvence Altına Alın</h1>
+                        <p class="hero-description">Lisanslı ve regüle edilmiş platformumuzda güvenle yatırım yapın. MetaTrader 4/5 desteği ve 7/24 Türkçe destek ile yanınızdayız.</p>
+                        <button class="btn-cta">Demo Hesap Aç</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <div class="slide-background slide-bg-2"></div>
+                <div class="slide-content">
+                    <div class="container">
+                        <h1 class="hero-title">Forex ve CFD Ticaretinde <span class="highlight">Lider Platform</span></h1>
+                        <p class="hero-description">Dünya çapında 5 milyondan fazla yatırımcının tercih ettiği güvenilir platform. Düşük spread'ler ve hızlı işlem garantisi.</p>
+                        <button class="btn-cta">Canlı Hesap Aç</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <div class="slide-background slide-bg-3"></div>
+                <div class="slide-content">
+                    <div class="container">
+                        <h1 class="hero-title">Uzman Analist Desteği ile <span class="highlight">Kazanmaya Başlayın</span></h1>
+                        <p class="hero-description">Günlük piyasa analizleri, webinarlar ve eğitim materyalleri ile yatırım bilginizi artırın. Başarılı trader'ların sırlarını öğrenin.</p>
+                        <button class="btn-cta">Ücretsiz Eğitime Başla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider Navigation -->
+        <div class="slider-nav">
+            <button class="slider-dot active" data-slide="0"></button>
+            <button class="slider-dot" data-slide="1"></button>
+            <button class="slider-dot" data-slide="2"></button>
+        </div>
+    </section>
+
+    <!-- Service Cards -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Lisanslı ve Regüle Edilmiş</h3>
+                    <p>SPK ve uluslararası düzenleyici kurumlar tarafından denetlenen güvenilir platform.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>MetaTrader 4 ve 5 Desteği</h3>
+                    <p>Dünya standartı MT4/MT5 platformları ile profesyonel ticaret deneyimi.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>7/24 Türkçe Destek</h3>
+                    <p>Uzman ekibimiz 7 gün 24 saat Türkçe destek hizmeti sunmaktadır.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Indicators -->
+    <section class="market-indicators" id="indicators">
+        <div class="container">
+            <h2 class="section-title">Canlı Piyasa Göstergeleri</h2>
+            <div class="indicators-grid">
+                <div class="indicator-item">
+                    <span class="pair">EUR/USD</span>
+                    <span class="price">1.0856</span>
+                    <span class="change positive">+0.0012</span>
+                </div>
+                <div class="indicator-item">
+                    <span class="pair">GBP/USD</span>
+                    <span class="price">1.2734</span>
+                    <span class="change negative">-0.0023</span>
+                </div>
+                <div class="indicator-item">
+                    <span class="pair">USD/JPY</span>
+                    <span class="price">149.85</span>
+                    <span class="change positive">+0.45</span>
+                </div>
+                <div class="indicator-item">
+                    <span class="pair">USD/TRY</span>
+                    <span class="price">32.45</span>
+                    <span class="change negative">-0.12</span>
+                </div>
+                <div class="indicator-item">
+                    <span class="pair">GOLD</span>
+                    <span class="price">2,068.50</span>
+                    <span class="change positive">+15.30</span>
+                </div>
+                <div class="indicator-item">
+                    <span class="pair">OIL</span>
+                    <span class="price">87.65</span>
+                    <span class="change negative">-1.25</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education" id="egitim">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Eğitim ve Analiz Merkezi</h2>
+                <p class="section-description">Başarılı yatırımcı olmak için gereken tüm bilgileri uzman ekibimizden öğrenin.</p>
+            </div>
+
+            <div class="education-grid">
+                <div class="education-card">
+                    <div class="card-image">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Canlı Webinarlar</h3>
+                        <p>Uzman analistlerden canlı piyasa analizleri ve ticaret stratejileri öğrenin.</p>
+                        <button class="card-btn">Katıl</button>
+                    </div>
+                </div>
+
+                <div class="education-card">
+                    <div class="card-image">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Forex Sözlüğü</h3>
+                        <p>Forex ve CFD ticaretinde kullanılan tüm terimleri detaylı açıklamalarıyla öğrenin.</p>
+                        <button class="card-btn">Keşfet</button>
+                    </div>
+                </div>
+
+                <div class="education-card">
+                    <div class="card-image">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Temel Teknik Analiz</h3>
+                        <p>Grafik okuma, indikatörler ve ticaret sinyalleri hakkında temel bilgileri edinin.</p>
+                        <button class="card-btn">Başla</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact/CTA Section -->
+    <section class="contact-cta" id="iletisim">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Sizi Arayalım</h2>
+                    <p>Yatırım danışmanlarımız size en uygun hesap türünü ve yatırım stratejisini belirlemek için iletişime geçsin.</p>
+                    <div class="contact-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Ücretsiz danışmanlık</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Kişiselleştirilmiş strateji</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Risk yönetimi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form id="callbackForm">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Adınız Soyadınız" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" name="phone" placeholder="Telefon Numaranız" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="E-posta Adresiniz" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="experience" name="experience" required>
+                                <option value="">Yatırım Deneyiminiz</option>
+                                <option value="beginner">Yeni başlıyorum</option>
+                                <option value="intermediate">Orta seviye</option>
+                                <option value="advanced">İleri seviye</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Beni Arayın</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <i class="fas fa-chart-line"></i>
+                        <span>GlobalTradePro</span>
+                    </div>
+                    <p>Güvenilir ve lisanslı yatırım platformu. 2015'ten beri 5 milyondan fazla yatırımcının tercihi.</p>
+                    <div class="footer-licenses">
+                        <p><strong>Lisanslar:</strong> SPK, CySEC, FCA</p>
+                        <p><strong>Sigorta:</strong> 1M€'ya kadar</p>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Hızlı Erişim</h4>
+                    <ul class="footer-links">
+                        <li><a href="#yatirim-araclari">Yatırım Araçları</a></li>
+                        <li><a href="#platformlar">Trading Platformları</a></li>
+                        <li><a href="#hesaplar">Hesap Türleri</a></li>
+                        <li><a href="#egitim">Eğitim Merkezi</a></li>
+                        <li><a href="#analiz">Piyasa Analizi</a></li>
+                        <li><a href="#hakkimizda">Hakkımızda</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Bizi Takip Edin</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="contact-info-footer">
+                        <p><i class="fas fa-phone"></i> 0850 123 45 67</p>
+                        <p><i class="fas fa-envelope"></i> info@globaltradepro.com</p>
+                        <p><i class="fas fa-map-marker-alt"></i> İstanbul, Türkiye</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CoinGecko Widget -->
+            <div class="crypto-widget">
+                <script src="https://widgets.coingecko.com/gecko-coin-price-static-headline-widget.js"></script>
+                <gecko-coin-price-static-headline-widget locale="en" outlined="true" coin-ids="" initial-currency="usd"></gecko-coin-price-static-headline-widget>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 GlobalTradePro. Tüm hakları saklıdır.</p>
+                <div class="footer-legal">
+                    <a href="#" class="legal-link">Gizlilik Politikası</a>
+                    <a href="#" class="legal-link">Kullanım Şartları</a>
+                    <a href="#" class="legal-link">Risk Uyarısı</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Live Support Button -->
+    <div class="live-support" id="liveSupport">
+        <button class="support-btn">
+            <i class="fas fa-comments"></i>
+            <span>Canlı Destek</span>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html> 
