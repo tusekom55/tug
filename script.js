@@ -553,4 +553,245 @@ const optimizedScrollHandler = debounce(() => {
     }
 }, 10);
 
-window.addEventListener('scroll', optimizedScrollHandler); 
+window.addEventListener('scroll', optimizedScrollHandler);
+
+// ===== PROMO CAROUSEL FUNCTIONALITY =====
+class PromoCarousel {
+    constructor() {
+        this.track = document.getElementById('promoTrack');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.dots = document.querySelectorAll('.dot');
+        this.currentSlide = 0;
+        this.totalSlides = 4;
+        this.autoPlayInterval = null;
+        this.isPlaying = true;
+        
+        this.init();
+    }
+    
+    init() {
+        // Navigation buttons
+        this.prevBtn.addEventListener('click', () => this.previousSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+        
+        // Dots navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => this.goToSlide(index));
+        });
+        
+        // Touch/swipe support
+        this.addTouchSupport();
+        
+        // Auto-play
+        this.startAutoPlay();
+        
+        // Pause on hover
+        this.track.addEventListener('mouseenter', () => this.pauseAutoPlay());
+        this.track.addEventListener('mouseleave', () => this.resumeAutoPlay());
+    }
+    
+    goToSlide(slideIndex) {
+        this.currentSlide = slideIndex;
+        const translateX = -slideIndex * 25; // Each slide is 25% (100% / 4 slides)
+        this.track.style.transform = `translateX(${translateX}%)`;
+        this.updateDots();
+    }
+    
+    nextSlide() {
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+    }
+    
+    previousSlide() {
+        this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(this.currentSlide);
+    }
+    
+    updateDots() {
+        this.dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentSlide);
+        });
+    }
+    
+    startAutoPlay() {
+        this.autoPlayInterval = setInterval(() => {
+            if (this.isPlaying) {
+                this.nextSlide();
+            }
+        }, 5000); // 5 seconds
+    }
+    
+    pauseAutoPlay() {
+        this.isPlaying = false;
+    }
+    
+    resumeAutoPlay() {
+        this.isPlaying = true;
+    }
+    
+    addTouchSupport() {
+        let startX = 0;
+        let startY = 0;
+        let distX = 0;
+        let distY = 0;
+        
+        this.track.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+        });
+        
+        this.track.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+        
+        this.track.addEventListener('touchend', (e) => {
+            const touch = e.changedTouches[0];
+            distX = touch.clientX - startX;
+            distY = touch.clientY - startY;
+            
+            // Check if horizontal swipe
+            if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
+                if (distX > 0) {
+                    this.previousSlide();
+                } else {
+                    this.nextSlide();
+                }
+            }
+        });
+    }
+}
+
+// ===== SCROLL ANIMATIONS =====
+class ScrollAnimations {
+    constructor() {
+        this.animateElements = document.querySelectorAll('.animate-on-scroll');
+        this.init();
+    }
+    
+    init() {
+        // Initial check for elements in viewport
+        this.checkElements();
+        
+        // Create optimized scroll handler
+        let ticking = false;
+        const scrollHandler = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    this.checkElements();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', scrollHandler);
+        window.addEventListener('resize', scrollHandler);
+    }
+    
+    checkElements() {
+        this.animateElements.forEach((element, index) => {
+            if (this.isElementInViewport(element)) {
+                // Add stagger delay for multiple elements
+                element.style.setProperty('--delay', `${index * 0.1}s`);
+                element.classList.add('animate', 'stagger-animation');
+            }
+        });
+    }
+    
+    isElementInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        
+        return (
+            rect.top >= 0 &&
+            rect.top <= windowHeight * 0.8 // Trigger when 80% visible
+        );
+    }
+}
+
+// ===== ENHANCED CARD ANIMATIONS =====
+function initCardAnimations() {
+    const promoCards = document.querySelectorAll('.promo-card');
+    
+    promoCards.forEach(card => {
+        // Tilt effect on mouse move
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            card.style.transform = `
+                translateY(-8px) 
+                scale(1.02) 
+                perspective(1000px) 
+                rotateX(${rotateX}deg) 
+                rotateY(${rotateY}deg)
+            `;
+        });
+        
+        // Reset on mouse leave
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+        
+        // Click ripple effect
+        card.addEventListener('click', (e) => {
+            const ripple = document.createElement('span');
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                left: ${x - 10}px;
+                top: ${y - 10}px;
+                width: 20px;
+                height: 20px;
+                pointer-events: none;
+            `;
+            
+            card.style.position = 'relative';
+            card.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+    
+    // Add ripple animation CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Initialize all carousel and animation functionality
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize carousel
+    if (document.getElementById('promoTrack')) {
+        new PromoCarousel();
+    }
+    
+    // Initialize scroll animations
+    new ScrollAnimations();
+    
+    // Initialize enhanced card animations
+    initCardAnimations();
+}); 
