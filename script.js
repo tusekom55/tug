@@ -782,15 +782,201 @@ function initCardAnimations() {
     document.head.appendChild(style);
 }
 
-// Initialize all carousel and animation functionality
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize carousel
-    if (document.getElementById('promoTrack')) {
-        new PromoCarousel();
+// ===== ENHANCED HERO SLIDER =====
+class EnhancedHeroSlider {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.dots = document.querySelectorAll('.slider-dot');
+        this.prevBtn = document.getElementById('prevSlide');
+        this.nextBtn = document.getElementById('nextSlide');
+        this.progressBar = document.getElementById('sliderProgress');
+        this.currentSlide = 0;
+        this.totalSlides = this.slides.length;
+        this.autoPlayInterval = null;
+        this.progressInterval = null;
+        this.isPlaying = true;
+        this.autoPlayDuration = 6000; // 6 seconds
+        
+        this.init();
     }
     
-    // Initialize scroll animations
-    new ScrollAnimations();
+    init() {
+        // Navigation buttons
+        this.prevBtn.addEventListener('click', () => this.previousSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+        
+        // Dots navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => this.goToSlide(index));
+        });
+        
+        // Touch/swipe support
+        this.addTouchSupport();
+        
+        // Pause on hover
+        const slider = document.querySelector('.hero-slider');
+        slider.addEventListener('mouseenter', () => this.pauseAutoPlay());
+        slider.addEventListener('mouseleave', () => this.resumeAutoPlay());
+        
+        // Start auto-play
+        this.startAutoPlay();
+    }
+    
+    goToSlide(slideIndex) {
+        // Remove active class from current slide
+        this.slides[this.currentSlide].classList.remove('active');
+        this.dots[this.currentSlide].classList.remove('active');
+        
+        // Set new current slide
+        this.currentSlide = slideIndex;
+        
+        // Add active class to new slide
+        this.slides[this.currentSlide].classList.add('active');
+        this.dots[this.currentSlide].classList.add('active');
+        
+        // Restart progress bar
+        this.resetProgress();
+    }
+    
+    nextSlide() {
+        const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(nextIndex);
+    }
+    
+    previousSlide() {
+        const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(prevIndex);
+    }
+    
+    startAutoPlay() {
+        this.autoPlayInterval = setInterval(() => {
+            if (this.isPlaying) {
+                this.nextSlide();
+            }
+        }, this.autoPlayDuration);
+        
+        this.startProgress();
+    }
+    
+    startProgress() {
+        let progress = 0;
+        const increment = 100 / (this.autoPlayDuration / 100);
+        
+        this.progressInterval = setInterval(() => {
+            if (this.isPlaying) {
+                progress += increment;
+                this.progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    progress = 0;
+                }
+            }
+        }, 100);
+    }
+    
+    resetProgress() {
+        clearInterval(this.progressInterval);
+        this.progressBar.style.width = '0%';
+        this.startProgress();
+    }
+    
+    pauseAutoPlay() {
+        this.isPlaying = false;
+    }
+    
+    resumeAutoPlay() {
+        this.isPlaying = true;
+    }
+    
+    addTouchSupport() {
+        let startX = 0;
+        let startY = 0;
+        
+        const slider = document.querySelector('.hero-slider');
+        
+        slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+        
+        slider.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const distX = endX - startX;
+            const distY = endY - startY;
+            
+            // Check if horizontal swipe and minimum distance
+            if (Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > 50) {
+                if (distX > 0) {
+                    this.previousSlide();
+                } else {
+                    this.nextSlide();
+                }
+            }
+        });
+    }
+}
+
+// ===== ENHANCED SCROLL ANIMATIONS =====
+class EnhancedScrollAnimations {
+    constructor() {
+        this.animateElements = document.querySelectorAll('.animate-on-scroll');
+        this.init();
+    }
+    
+    init() {
+        // Initial check
+        this.checkElements();
+        
+        // Optimized scroll handler
+        let ticking = false;
+        const scrollHandler = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    this.checkElements();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+        
+        window.addEventListener('scroll', scrollHandler);
+        window.addEventListener('resize', scrollHandler);
+    }
+    
+    checkElements() {
+        this.animateElements.forEach((element) => {
+            if (this.isElementInViewport(element) && !element.classList.contains('animate')) {
+                // Get delay from data attribute
+                const delay = element.getAttribute('data-delay') || '0';
+                element.style.setProperty('--delay', `${delay}s`);
+                
+                // Add animate class with delay
+                setTimeout(() => {
+                    element.classList.add('animate');
+                }, parseFloat(delay) * 1000);
+            }
+        });
+    }
+    
+    isElementInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        return (
+            rect.top < windowHeight * 0.8 &&
+            rect.bottom > 0
+        );
+    }
+}
+
+// Initialize all enhanced functionality
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize enhanced hero slider
+    new EnhancedHeroSlider();
+    
+    // Initialize enhanced scroll animations
+    new EnhancedScrollAnimations();
     
     // Initialize enhanced card animations
     initCardAnimations();
