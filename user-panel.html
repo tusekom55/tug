@@ -1303,36 +1303,198 @@
                font-size: 13px;
            }
            
-           /* Coins Grid Mobile */
-           .coins-grid {
+           /* Mobile Market Table Override */
+           #marketTable {
+               display: none !important;
+           }
+           
+           .mobile-coins-grid {
+               display: grid !important;
                grid-template-columns: 1fr;
+               gap: 12px;
+               padding: 16px;
+           }
+           
+           .mobile-coin-card {
+               background: linear-gradient(135deg, #1e2530 0%, #2a3441 100%);
+               border: 1px solid rgba(255, 255, 255, 0.1);
+               border-radius: 12px;
+               padding: 16px;
+               position: relative;
+               overflow: hidden;
+           }
+           
+           .mobile-coin-header {
+               display: flex;
+               align-items: center;
+               justify-content: space-between;
+               margin-bottom: 12px;
+           }
+           
+           .mobile-coin-info {
+               display: flex;
+               align-items: center;
                gap: 12px;
            }
            
-           .coin-card {
-               padding: 12px;
+           .mobile-coin-logo {
+               width: 40px;
+               height: 40px;
+               border-radius: 50%;
+               background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               color: white;
+               font-weight: bold;
+               font-size: 16px;
            }
            
-           .coin-info h3 {
-               font-size: 14px;
+           .mobile-coin-details h3 {
+               color: #ffffff;
+               font-size: 16px;
+               font-weight: 600;
+               margin-bottom: 4px;
            }
            
-           .coin-price {
+           .mobile-coin-details .coin-symbol {
+               color: #8896ab;
+               font-size: 12px;
+               text-transform: uppercase;
+           }
+           
+           .mobile-coin-price {
+               color: #ffffff;
+               font-size: 18px;
+               font-weight: 700;
+               text-align: right;
+           }
+           
+           .mobile-coin-stats {
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               margin-bottom: 12px;
+           }
+           
+           .mobile-coin-change {
+               padding: 4px 8px;
+               border-radius: 6px;
+               font-size: 12px;
+               font-weight: 600;
+           }
+           
+           .mobile-coin-change.positive {
+               background: rgba(76, 175, 80, 0.2);
+               color: #4caf50;
+           }
+           
+           .mobile-coin-change.negative {
+               background: rgba(244, 67, 54, 0.2);
+               color: #f44336;
+           }
+           
+           .mobile-coin-volume {
+               color: #8896ab;
+               font-size: 11px;
+           }
+           
+           .mobile-coin-actions {
+               display: flex;
+               gap: 8px;
+           }
+           
+           .mobile-trade-btn {
+               flex: 1;
+               padding: 10px;
+               border: none;
+               border-radius: 8px;
                font-size: 13px;
+               font-weight: 600;
+               cursor: pointer;
+               transition: all 0.3s ease;
            }
            
-           .coin-change {
-               font-size: 11px;
-               padding: 2px 6px;
+           .mobile-trade-btn.buy {
+               background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+               color: #ffffff;
            }
            
-           .coin-actions {
-               margin-top: 8px;
+           .mobile-trade-btn.sell {
+               background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+               color: #ffffff;
            }
            
-           .trade-btn {
-               padding: 6px 12px;
-               font-size: 11px;
+           .mobile-trade-btn:active {
+               transform: scale(0.98);
+           }
+           
+           /* Mobile Forex Trading Optimization */
+           .trading-container {
+               margin: 16px !important;
+               border-radius: 12px !important;
+           }
+           
+           .trading-header {
+               padding: 16px !important;
+           }
+           
+           .trading-title {
+               font-size: 18px !important;
+               margin-bottom: 8px !important;
+           }
+           
+           .trading-subtitle {
+               font-size: 12px !important;
+           }
+           
+           .trading-filters {
+               margin-top: 12px !important;
+               gap: 6px !important;
+               flex-wrap: wrap !important;
+           }
+           
+           .filter-btn {
+               padding: 6px 10px !important;
+               font-size: 11px !important;
+           }
+           
+           .trading-panel {
+               margin: 0 !important;
+               border-radius: 0 !important;
+           }
+           
+           .panel-header {
+               padding: 12px 16px !important;
+           }
+           
+           .panel-title {
+               font-size: 16px !important;
+           }
+           
+           .panel-subtitle {
+               font-size: 11px !important;
+           }
+           
+           .forex-pair-item {
+               padding: 10px 12px !important;
+               margin-bottom: 8px !important;
+           }
+           
+           .pair-symbol {
+               font-size: 13px !important;
+           }
+           
+           .pair-category {
+               font-size: 9px !important;
+           }
+           
+           .pair-price {
+               font-size: 14px !important;
+           }
+           
+           .pair-spread {
+               font-size: 10px !important;
            }
        }
 
@@ -1877,22 +2039,22 @@
                                     </div>
                                 </div>
                                 
-                                <div class="chart-container" id="tradingChart">
-                                    <!-- TradingView widget buraya gelecek -->
-                                    <div class="chart-placeholder">
-                                        <div class="chart-loading">
-                                            <i class="fas fa-chart-line chart-icon"></i>
-                                            <h3>Advanced Trading Chart</h3>
-                                            <p>Professional TradingView integration</p>
-                                            <div class="chart-features">
-                                                <div>✓ Real-time data</div>
-                                                <div>✓ Technical indicators</div>
-                                                <div>✓ Drawing tools</div>
-                                                <div>✓ Multiple timeframes</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                <div class="chart-container" id="tradingChart">
+                    <canvas id="priceChart" width="800" height="400" style="width: 100%; height: 100%; background: #141927; border-radius: 8px;"></canvas>
+                    <div class="chart-placeholder" id="chartPlaceholder">
+                        <div class="chart-loading">
+                            <i class="fas fa-chart-line chart-icon"></i>
+                            <h3>Advanced Trading Chart</h3>
+                            <p>Professional price analysis</p>
+                            <div class="chart-features">
+                                <div>✓ Real-time data</div>
+                                <div>✓ Price movements</div>
+                                <div>✓ Trend analysis</div>
+                                <div>✓ Multiple timeframes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                             </div>
                             
                             <!-- Sağ Panel: Trading Form -->
@@ -2196,6 +2358,23 @@
             item.addEventListener('click', closeMobileMenu);
         });
 
+        // Window resize event for responsive design
+        window.addEventListener('resize', function() {
+            // Re-render coins if needed
+            if (window.innerWidth <= 768) {
+                const mobileGrid = document.getElementById('mobileCoinsGrid');
+                if (mobileGrid && mobileGrid.children.length > 0) {
+                    // Mobile grid is already rendered, no need to re-render
+                }
+            } else {
+                const mobileGrid = document.getElementById('mobileCoinsGrid');
+                if (mobileGrid) {
+                    mobileGrid.style.display = 'none';
+                    document.getElementById('marketTable').style.display = 'block';
+                }
+            }
+        });
+
                  // Hibrit sistem - Veritabanı + API kombinasyonu
          async function fetchMarketData() {
              const searchInput = document.getElementById('coinSearch').value.toLowerCase();
@@ -2221,29 +2400,34 @@
                  
                  const result = await response.json();
 
-                 if (result.success && result.coins && result.coins.length > 0) {
-                     result.coins.forEach((coin, index) => {
-                         const priceChangeColor = coin.price_change_24h >= 0 ? '#00d4aa' : '#ff4757';
-                         const priceChangeIcon = coin.price_change_24h >= 0 ? '▲' : '▼';
-                         const priceSourceIcon = coin.price_source === 'api' ? '🟢' : '🔴';
-                         const priceSourceText = coin.price_source === 'api' ? 'Canlı' : 'Sabit';
-                         
-                         const row = document.createElement('tr');
-                         row.innerHTML = `
-                             <td style="padding: 12px; text-align: left; color: #8b8fa3;">${coin.sira || index + 1}</td>
-                             <td style="padding: 12px; text-align: left;">
-                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                     <img src="${coin.logo_url}" alt="${coin.coin_adi}" style="width: 24px; height: 24px; border-radius: 50%;" onerror="this.src='https://via.placeholder.com/24x24/444/fff?text=${coin.coin_kodu.charAt(0)}'">
-                                     <div>
-                                         <div style="color: #ffffff; font-weight: 600;">${coin.coin_adi}</div>
-                                         <div style="color: #8b8fa3; font-size: 12px;">
-                                             ${coin.coin_kodu} 
-                                             <span style="font-size: 10px; margin-left: 4px;" title="Fiyat Kaynağı: ${priceSourceText}">
-                                                 ${priceSourceIcon}
-                                             </span>
-                                         </div>
-                                     </div>
-                                 </div>
+                                 if (result.success && result.coins && result.coins.length > 0) {
+                    // Mobil görünümde farklı render
+                    if (window.innerWidth <= 768) {
+                        renderMobileCoins(result.coins);
+                    } else {
+                        // Desktop tablo görünümü
+                        result.coins.forEach((coin, index) => {
+                            const priceChangeColor = coin.price_change_24h >= 0 ? '#00d4aa' : '#ff4757';
+                            const priceChangeIcon = coin.price_change_24h >= 0 ? '▲' : '▼';
+                            const priceSourceIcon = coin.price_source === 'api' ? '🟢' : '🔴';
+                            const priceSourceText = coin.price_source === 'api' ? 'Canlı' : 'Sabit';
+                            
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td style="padding: 12px; text-align: left; color: #8b8fa3;">${coin.sira || index + 1}</td>
+                                <td style="padding: 12px; text-align: left;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <img src="${coin.logo_url}" alt="${coin.coin_adi}" style="width: 24px; height: 24px; border-radius: 50%;" onerror="this.src='https://via.placeholder.com/24x24/444/fff?text=${coin.coin_kodu.charAt(0)}'">
+                                        <div>
+                                            <div style="color: #ffffff; font-weight: 600;">${coin.coin_adi}</div>
+                                            <div style="color: #8b8fa3; font-size: 12px;">
+                                                ${coin.coin_kodu} 
+                                                <span style="font-size: 10px; margin-left: 4px;" title="Fiyat Kaynağı: ${priceSourceText}">
+                                                    ${priceSourceIcon}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                              </td>
                              <td style="padding: 12px; text-align: right; color: #ffffff; font-weight: 600;">
                                  $${parseFloat(coin.current_price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}
@@ -2273,10 +2457,14 @@
                                  📊 ${result.total_count} coin yüklendi | 🟢 ${result.api_active_count} canlı fiyat | 🔴 ${result.total_count - result.api_active_count} sabit fiyat
                              </td>
                          `;
-                         marketTableBody.appendChild(infoRow);
-                     }
-                     
-                 } else {
+                                                 marketTableBody.appendChild(infoRow);
+                    }
+                    
+                    marketLoader.style.display = 'none';
+                    marketTable.style.display = 'block';
+                    }
+                    
+                } else {
                      marketTableBody.innerHTML = `
                          <tr>
                              <td colspan="6" style="text-align: center; color: #8b8fa3; padding: 40px;">
@@ -2340,6 +2528,9 @@
              
              // Trading modalı için event listener'ları kurulum
              setupTradingModalEvents();
+             
+             // Grafik çiz
+             drawPriceChart(coinId, currentPrice);
          }
 
          // Trading modalını kapat
@@ -2480,21 +2671,234 @@
              closeTradingModal();
          }
 
-         // Advanced options toggle
-         function toggleAdvancedOptions() {
-             const content = document.getElementById('advancedContent');
-             const icon = document.querySelector('.advanced-toggle i');
-             
-             if (content.style.display === 'none') {
-                 content.style.display = 'block';
-                 icon.style.transform = 'rotate(180deg)';
-             } else {
-                 content.style.display = 'none';
-                 icon.style.transform = 'rotate(0deg)';
-             }
+                 // Advanced options toggle
+        function toggleAdvancedOptions() {
+            const content = document.getElementById('advancedContent');
+            const icon = document.querySelector('.advanced-toggle i');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Mobil coin listesi render fonksiyonu
+        function renderMobileCoins(coins) {
+            const marketTable = document.getElementById('marketTable');
+            const marketLoader = document.getElementById('marketLoader');
+            
+            // Mevcut market table'ı gizle
+            marketTable.style.display = 'none';
+            
+            // Mobil grid container oluştur
+            let mobileGrid = document.getElementById('mobileCoinsGrid');
+            if (!mobileGrid) {
+                mobileGrid = document.createElement('div');
+                mobileGrid.id = 'mobileCoinsGrid';
+                mobileGrid.className = 'mobile-coins-grid';
+                marketTable.parentNode.appendChild(mobileGrid);
+            }
+            
+            mobileGrid.innerHTML = '';
+            
+            coins.forEach((coin, index) => {
+                const priceChangeClass = coin.price_change_24h >= 0 ? 'positive' : 'negative';
+                const priceChangeIcon = coin.price_change_24h >= 0 ? '▲' : '▼';
+                
+                const card = document.createElement('div');
+                card.className = 'mobile-coin-card';
+                card.innerHTML = `
+                    <div class="mobile-coin-header">
+                        <div class="mobile-coin-info">
+                            <div class="mobile-coin-logo">
+                                <img src="${coin.logo_url}" alt="${coin.coin_adi}" 
+                                     style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
+                                     onerror="this.style.display='none'; this.parentNode.textContent='${coin.coin_kodu.charAt(0)}'">
+                            </div>
+                            <div class="mobile-coin-details">
+                                <h3>${coin.coin_adi}</h3>
+                                <span class="coin-symbol">${coin.coin_kodu}</span>
+                            </div>
+                        </div>
+                        <div class="mobile-coin-price">
+                            $${parseFloat(coin.current_price).toLocaleString('en-US', { 
+                                minimumFractionDigits: 2, 
+                                maximumFractionDigits: 6 
+                            })}
+                        </div>
+                    </div>
+                    
+                    <div class="mobile-coin-stats">
+                        <div class="mobile-coin-change ${priceChangeClass}">
+                            ${priceChangeIcon} ${parseFloat(coin.price_change_24h).toFixed(2)}%
+                        </div>
+                        <div class="mobile-coin-volume">
+                            Vol: $${coin.market_cap ? (parseInt(coin.market_cap) / 1000000).toFixed(1) + 'M' : 'N/A'}
+                        </div>
+                    </div>
+                    
+                    <div class="mobile-coin-actions">
+                        <button class="mobile-trade-btn buy" onclick="openTradingModal('${coin.coin_kodu.toLowerCase()}', '${coin.coin_adi}', '${coin.current_price}')">
+                            <i class="fas fa-arrow-up"></i> Alış
+                        </button>
+                        <button class="mobile-trade-btn sell" onclick="openTradingModal('${coin.coin_kodu.toLowerCase()}', '${coin.coin_adi}', '${coin.current_price}')">
+                            <i class="fas fa-arrow-down"></i> Satış
+                        </button>
+                    </div>
+                `;
+                
+                mobileGrid.appendChild(card);
+            });
+            
+                     marketLoader.style.display = 'none';
          }
 
-        // Sayfa yüklendiğinde piyasaları yükle
+         // Grafik çizme fonksiyonu
+         function drawPriceChart(coinId, currentPrice) {
+             const canvas = document.getElementById('priceChart');
+             const placeholder = document.getElementById('chartPlaceholder');
+             const ctx = canvas.getContext('2d');
+             
+             // Canvas boyutlarını ayarla
+             const rect = canvas.getBoundingClientRect();
+             canvas.width = rect.width * window.devicePixelRatio;
+             canvas.height = rect.height * window.devicePixelRatio;
+             ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+             
+             // Placeholder'ı gizle
+             placeholder.style.display = 'none';
+             canvas.style.display = 'block';
+             
+             // Fiyat geçmişi için demo data oluştur
+             const basePrice = parseFloat(currentPrice);
+             const priceData = [];
+             const timeLabels = [];
+             const dataPoints = 50;
+             
+             for (let i = dataPoints; i >= 0; i--) {
+                 const variation = (Math.random() - 0.5) * 0.1; // %10 varyasyon
+                 const price = basePrice * (1 + variation * (i / dataPoints));
+                 priceData.push(price);
+                 
+                 const time = new Date();
+                 time.setMinutes(time.getMinutes() - i * 5); // 5'er dakika geriye
+                 timeLabels.push(time.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }));
+             }
+             
+             // Canvas'ı temizle
+             ctx.clearRect(0, 0, rect.width, rect.height);
+             
+             // Grafik alanı
+             const padding = 40;
+             const chartWidth = rect.width - padding * 2;
+             const chartHeight = rect.height - padding * 2;
+             
+             // Min/Max değerleri bul
+             const minPrice = Math.min(...priceData);
+             const maxPrice = Math.max(...priceData);
+             const priceRange = maxPrice - minPrice;
+             
+             // Grid çiz
+             ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+             ctx.lineWidth = 1;
+             
+             // Yatay grid çizgileri
+             for (let i = 0; i <= 5; i++) {
+                 const y = padding + (chartHeight / 5) * i;
+                 ctx.beginPath();
+                 ctx.moveTo(padding, y);
+                 ctx.lineTo(padding + chartWidth, y);
+                 ctx.stroke();
+                 
+                 // Fiyat etiketleri
+                 const price = maxPrice - (priceRange / 5) * i;
+                 ctx.fillStyle = '#8896ab';
+                 ctx.font = '12px Inter, sans-serif';
+                 ctx.textAlign = 'right';
+                 ctx.fillText('$' + price.toFixed(2), padding - 10, y + 4);
+             }
+             
+             // Dikey grid çizgileri
+             for (let i = 0; i <= 10; i++) {
+                 const x = padding + (chartWidth / 10) * i;
+                 ctx.beginPath();
+                 ctx.moveTo(x, padding);
+                 ctx.lineTo(x, padding + chartHeight);
+                 ctx.stroke();
+             }
+             
+             // Fiyat çizgisini çiz
+             ctx.strokeStyle = '#4fc3f7';
+             ctx.lineWidth = 2;
+             ctx.beginPath();
+             
+             priceData.forEach((price, index) => {
+                 const x = padding + (chartWidth / (dataPoints)) * index;
+                 const y = padding + chartHeight - ((price - minPrice) / priceRange) * chartHeight;
+                 
+                 if (index === 0) {
+                     ctx.moveTo(x, y);
+                 } else {
+                     ctx.lineTo(x, y);
+                 }
+             });
+             
+             ctx.stroke();
+             
+             // Fiyat alanını doldur (gradient)
+             const gradient = ctx.createLinearGradient(0, padding, 0, padding + chartHeight);
+             gradient.addColorStop(0, 'rgba(79, 195, 247, 0.3)');
+             gradient.addColorStop(1, 'rgba(79, 195, 247, 0.05)');
+             
+             ctx.fillStyle = gradient;
+             ctx.beginPath();
+             
+             priceData.forEach((price, index) => {
+                 const x = padding + (chartWidth / (dataPoints)) * index;
+                 const y = padding + chartHeight - ((price - minPrice) / priceRange) * chartHeight;
+                 
+                 if (index === 0) {
+                     ctx.moveTo(x, y);
+                 } else {
+                     ctx.lineTo(x, y);
+                 }
+             });
+             
+             ctx.lineTo(padding + chartWidth, padding + chartHeight);
+             ctx.lineTo(padding, padding + chartHeight);
+             ctx.closePath();
+             ctx.fill();
+             
+             // Mevcut fiyat noktası
+             const lastIndex = priceData.length - 1;
+             const lastX = padding + (chartWidth / dataPoints) * lastIndex;
+             const lastY = padding + chartHeight - ((priceData[lastIndex] - minPrice) / priceRange) * chartHeight;
+             
+             ctx.beginPath();
+             ctx.arc(lastX, lastY, 6, 0, 2 * Math.PI);
+             ctx.fillStyle = '#4fc3f7';
+             ctx.fill();
+             ctx.strokeStyle = '#ffffff';
+             ctx.lineWidth = 2;
+             ctx.stroke();
+             
+             // Başlık
+             ctx.fillStyle = '#ffffff';
+             ctx.font = 'bold 16px Inter, sans-serif';
+             ctx.textAlign = 'left';
+             ctx.fillText(`${coinId.toUpperCase()}/USD Price Chart`, padding, 25);
+             
+             // Son fiyat
+             ctx.fillStyle = '#4fc3f7';
+             ctx.font = 'bold 14px Inter, sans-serif';
+             ctx.textAlign = 'right';
+             ctx.fillText('$' + priceData[lastIndex].toFixed(6), rect.width - padding, 25);
+         }
+
+         // Sayfa yüklendiğinde piyasaları yükle
         async function refreshMarketData() {
             await fetchMarketData();
         }
