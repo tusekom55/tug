@@ -2601,11 +2601,22 @@
              const modal = document.getElementById('tradingModal');
              const container = modal.querySelector('.modal-container');
              
+             // Chart animasyonunu durdur
+             stopChartAnimation();
+             
              container.style.transform = 'scale(0.95)';
              container.style.opacity = '0';
              
              setTimeout(() => {
                  modal.style.display = 'none';
+                 
+                 // Chart'ı sıfırla
+                 const canvas = document.getElementById('priceChart');
+                 const placeholder = document.getElementById('chartPlaceholder');
+                 if (canvas && placeholder) {
+                     canvas.style.display = 'none';
+                     placeholder.style.display = 'flex';
+                 }
              }, 200);
          }
 
@@ -2690,6 +2701,10 @@
                  btn.addEventListener('click', function() {
                      document.querySelectorAll('.timeframe-btn').forEach(b => b.classList.remove('active'));
                      this.classList.add('active');
+                     
+                     // Grafik timeframe'ini değiştir
+                     const timeframe = this.dataset.timeframe;
+                     updateChartTimeframe(timeframe);
                  });
              });
 
@@ -2819,7 +2834,19 @@
                      marketLoader.style.display = 'none';
          }
 
-         // Grafik çizme fonksiyonu
+         // Global chart variables
+         let chartAnimationFrame;
+         let chartData = {
+             priceData: [],
+             timeLabels: [],
+             animationProgress: 0,
+             isAnimating: false,
+             lastUpdate: 0,
+             coinId: '',
+             basePrice: 0
+         };
+
+         // Animasyonlu grafik çizme fonksiyonu
          function drawPriceChart(coinId, currentPrice) {
              const canvas = document.getElementById('priceChart');
              const placeholder = document.getElementById('chartPlaceholder');
@@ -2835,37 +2862,78 @@
              placeholder.style.display = 'none';
              canvas.style.display = 'block';
              
-             // Fiyat geçmişi için demo data oluştur
-             const basePrice = parseFloat(currentPrice);
-             const priceData = [];
-             const timeLabels = [];
+             // Chart data'yı inicialize et
+             initializeChartData(coinId, currentPrice);
+             
+             // Animasyonu başlat
+             startChartAnimation(ctx, rect);
+         }
+
+         // Chart data'yı inicialize et
+         function initializeChartData(coinId, currentPrice) {
+             chartData.coinId = coinId;
+             chartData.basePrice = parseFloat(currentPrice);
+             chartData.priceData = [];
+             chartData.timeLabels = [];
+             chartData.animationProgress = 0;
+             chartData.isAnimating = true;
+             
              const dataPoints = 50;
              
              for (let i = dataPoints; i >= 0; i--) {
-                 const variation = (Math.random() - 0.5) * 0.1; // %10 varyasyon
-                 const price = basePrice * (1 + variation * (i / dataPoints));
-                 priceData.push(price);
+                 const variation = (Math.random() - 0.5) * 0.15; // %15 varyasyon
+                 const trend = Math.sin((i / dataPoints) * Math.PI * 2) * 0.05; // Sinüs trend
+                 const noise = (Math.random() - 0.5) * 0.03; // Küçük gürültü
+                 const price = chartData.basePrice * (1 + variation + trend + noise);
+                 chartData.priceData.push(price);
                  
                  const time = new Date();
-                 time.setMinutes(time.getMinutes() - i * 5); // 5'er dakika geriye
-                 timeLabels.push(time.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }));
+                 time.setMinutes(time.getMinutes() - i * 5);
+                 chartData.timeLabels.push(time.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }));
+             }
+         }
+
+         // Chart animasyonunu başlat
+         function startChartAnimation(ctx, rect) {
+             const startTime = performance.now();
+             
+             function animate(currentTime) {
+                 const elapsed = currentTime - startTime;
+                 const duration = 2000; // 2 saniye animasyon
+                 
+                 chartData.animationProgress = Math.min(elapsed / duration, 1);
+                 
+                 // Canvas'ı temizle
+                 ctx.clearRect(0, 0, rect.width, rect.height);
+                 
+                 // Grafiği çiz
+                 drawAnimatedChart(ctx, rect);
+                 
+                 if (chartData.animationProgress < 1) {
+                     chartAnimationFrame = requestAnimationFrame(animate);
+                 } else {
+                     // Animasyon tamamlandı, canlı güncellemeleri başlat
+                     startLiveUpdates(ctx, rect);
+                 }
              }
              
-             // Canvas'ı temizle
-             ctx.clearRect(0, 0, rect.width, rect.height);
-             
-             // Grafik alanı
+             chartAnimationFrame = requestAnimationFrame(animate);
+         }
+
+         // Animasyonlu chart çiz
+         function drawAnimatedChart(ctx, rect) {
              const padding = 40;
              const chartWidth = rect.width - padding * 2;
              const chartHeight = rect.height - padding * 2;
              
              // Min/Max değerleri bul
-             const minPrice = Math.min(...priceData);
-             const maxPrice = Math.max(...priceData);
+             const minPrice = Math.min(...chartData.priceData);
+             const maxPrice = Math.max(...chartData.priceData);
              const priceRange = maxPrice - minPrice;
              
-             // Grid çiz
-             ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+             // Grid çiz (fade in)
+             const gridOpacity = chartData.animationProgress * 0.1;
+             ctx.strokeStyle = `rgba(255, 255, 255, ${gridOpacity})`;
              ctx.lineWidth = 1;
              
              // Yatay grid çizgileri
@@ -2876,9 +2944,9 @@
                  ctx.lineTo(padding + chartWidth, y);
                  ctx.stroke();
                  
-                 // Fiyat etiketleri
+                 // Fiyat etiketleri (fade in)
                  const price = maxPrice - (priceRange / 5) * i;
-                 ctx.fillStyle = '#8896ab';
+                 ctx.fillStyle = `rgba(136, 150, 171, ${chartData.animationProgress})`;
                  ctx.font = '12px Inter, sans-serif';
                  ctx.textAlign = 'right';
                  ctx.fillText('$' + price.toFixed(2), padding - 10, y + 4);
@@ -2893,73 +2961,182 @@
                  ctx.stroke();
              }
              
-             // Fiyat çizgisini çiz
-             ctx.strokeStyle = '#4fc3f7';
-             ctx.lineWidth = 2;
-             ctx.beginPath();
+             // Animasyonlu fiyat çizgisi
+             const dataPoints = chartData.priceData.length;
+             const currentPoints = Math.floor(dataPoints * chartData.animationProgress);
              
-             priceData.forEach((price, index) => {
-                 const x = padding + (chartWidth / (dataPoints)) * index;
-                 const y = padding + chartHeight - ((price - minPrice) / priceRange) * chartHeight;
+             if (currentPoints > 1) {
+                 // Ana çizgi
+                 ctx.strokeStyle = '#4fc3f7';
+                 ctx.lineWidth = 3;
+                 ctx.beginPath();
                  
-                 if (index === 0) {
-                     ctx.moveTo(x, y);
-                 } else {
-                     ctx.lineTo(x, y);
+                 for (let i = 0; i < currentPoints; i++) {
+                     const x = padding + (chartWidth / (dataPoints - 1)) * i;
+                     const y = padding + chartHeight - ((chartData.priceData[i] - minPrice) / priceRange) * chartHeight;
+                     
+                     if (i === 0) {
+                         ctx.moveTo(x, y);
+                     } else {
+                         ctx.lineTo(x, y);
+                     }
                  }
-             });
-             
-             ctx.stroke();
-             
-             // Fiyat alanını doldur (gradient)
-             const gradient = ctx.createLinearGradient(0, padding, 0, padding + chartHeight);
-             gradient.addColorStop(0, 'rgba(79, 195, 247, 0.3)');
-             gradient.addColorStop(1, 'rgba(79, 195, 247, 0.05)');
-             
-             ctx.fillStyle = gradient;
-             ctx.beginPath();
-             
-             priceData.forEach((price, index) => {
-                 const x = padding + (chartWidth / (dataPoints)) * index;
-                 const y = padding + chartHeight - ((price - minPrice) / priceRange) * chartHeight;
+                 ctx.stroke();
                  
-                 if (index === 0) {
-                     ctx.moveTo(x, y);
-                 } else {
-                     ctx.lineTo(x, y);
+                 // Gradient fill (animasyonlu)
+                 const gradient = ctx.createLinearGradient(0, padding, 0, padding + chartHeight);
+                 const fillOpacity = chartData.animationProgress * 0.3;
+                 gradient.addColorStop(0, `rgba(79, 195, 247, ${fillOpacity})`);
+                 gradient.addColorStop(1, `rgba(79, 195, 247, ${fillOpacity * 0.1})`);
+                 
+                 ctx.fillStyle = gradient;
+                 ctx.beginPath();
+                 
+                 for (let i = 0; i < currentPoints; i++) {
+                     const x = padding + (chartWidth / (dataPoints - 1)) * i;
+                     const y = padding + chartHeight - ((chartData.priceData[i] - minPrice) / priceRange) * chartHeight;
+                     
+                     if (i === 0) {
+                         ctx.moveTo(x, y);
+                     } else {
+                         ctx.lineTo(x, y);
+                     }
                  }
-             });
+                 
+                 // Fill to bottom
+                 if (currentPoints > 0) {
+                     const lastX = padding + (chartWidth / (dataPoints - 1)) * (currentPoints - 1);
+                     ctx.lineTo(lastX, padding + chartHeight);
+                     ctx.lineTo(padding, padding + chartHeight);
+                 }
+                 ctx.closePath();
+                 ctx.fill();
+                 
+                 // Animating dot at the end
+                 if (currentPoints > 0) {
+                     const lastIndex = currentPoints - 1;
+                     const lastX = padding + (chartWidth / (dataPoints - 1)) * lastIndex;
+                     const lastY = padding + chartHeight - ((chartData.priceData[lastIndex] - minPrice) / priceRange) * chartHeight;
+                     
+                     // Pulsing effect
+                     const pulseScale = 1 + Math.sin(performance.now() * 0.01) * 0.3;
+                     
+                     ctx.beginPath();
+                     ctx.arc(lastX, lastY, 6 * pulseScale, 0, 2 * Math.PI);
+                     ctx.fillStyle = '#4fc3f7';
+                     ctx.fill();
+                     ctx.strokeStyle = '#ffffff';
+                     ctx.lineWidth = 2;
+                     ctx.stroke();
+                 }
+             }
              
-             ctx.lineTo(padding + chartWidth, padding + chartHeight);
-             ctx.lineTo(padding, padding + chartHeight);
-             ctx.closePath();
-             ctx.fill();
-             
-             // Mevcut fiyat noktası
-             const lastIndex = priceData.length - 1;
-             const lastX = padding + (chartWidth / dataPoints) * lastIndex;
-             const lastY = padding + chartHeight - ((priceData[lastIndex] - minPrice) / priceRange) * chartHeight;
-             
-             ctx.beginPath();
-             ctx.arc(lastX, lastY, 6, 0, 2 * Math.PI);
-             ctx.fillStyle = '#4fc3f7';
-             ctx.fill();
-             ctx.strokeStyle = '#ffffff';
-             ctx.lineWidth = 2;
-             ctx.stroke();
-             
-             // Başlık
-             ctx.fillStyle = '#ffffff';
+             // Başlık (fade in)
+             ctx.fillStyle = `rgba(255, 255, 255, ${chartData.animationProgress})`;
              ctx.font = 'bold 16px Inter, sans-serif';
              ctx.textAlign = 'left';
-             ctx.fillText(`${coinId.toUpperCase()}/USD Price Chart`, padding, 25);
+             ctx.fillText(`${chartData.coinId.toUpperCase()}/USD Price Chart`, padding, 25);
              
-             // Son fiyat
-             ctx.fillStyle = '#4fc3f7';
-             ctx.font = 'bold 14px Inter, sans-serif';
-             ctx.textAlign = 'right';
-             ctx.fillText('$' + priceData[lastIndex].toFixed(6), rect.width - padding, 25);
+             // Son fiyat (fade in)
+             if (chartData.priceData.length > 0) {
+                 ctx.fillStyle = `rgba(79, 195, 247, ${chartData.animationProgress})`;
+                 ctx.font = 'bold 14px Inter, sans-serif';
+                 ctx.textAlign = 'right';
+                 const currentIndex = Math.min(Math.floor(chartData.priceData.length * chartData.animationProgress), chartData.priceData.length - 1);
+                 ctx.fillText('$' + chartData.priceData[currentIndex].toFixed(6), rect.width - padding, 25);
+             }
          }
+
+         // Canlı güncellemeleri başlat
+         function startLiveUpdates(ctx, rect) {
+             function updatePrice() {
+                 // Yeni fiyat noktası ekle
+                 const lastPrice = chartData.priceData[chartData.priceData.length - 1];
+                 const change = (Math.random() - 0.5) * 0.02; // %2 değişim
+                 const newPrice = lastPrice * (1 + change);
+                 
+                 // Array'i kaydır ve yeni fiyat ekle
+                 chartData.priceData.shift();
+                 chartData.priceData.push(newPrice);
+                 
+                 // Time label'ı güncelle
+                 chartData.timeLabels.shift();
+                 const now = new Date();
+                 chartData.timeLabels.push(now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }));
+                 
+                 // Grafiği yeniden çiz
+                 ctx.clearRect(0, 0, rect.width, rect.height);
+                 chartData.animationProgress = 1; // Tam görünür
+                 drawAnimatedChart(ctx, rect);
+                 
+                 // Modal price'ı güncelle
+                 document.getElementById('modalCoinPrice').textContent = `$${newPrice.toLocaleString()}`;
+                 
+                 // 3 saniye sonra tekrar güncelle
+                 setTimeout(updatePrice, 3000);
+             }
+             
+             // İlk güncellemeyi 3 saniye sonra başlat
+             setTimeout(updatePrice, 3000);
+         }
+
+                   // Modal kapandığında animasyonu durdur
+          function stopChartAnimation() {
+              if (chartAnimationFrame) {
+                  cancelAnimationFrame(chartAnimationFrame);
+                  chartAnimationFrame = null;
+              }
+              chartData.isAnimating = false;
+          }
+
+          // Timeframe değiştir
+          function updateChartTimeframe(timeframe) {
+              if (!chartData.isAnimating && chartData.priceData.length > 0) {
+                  // Farklı timeframe'ler için farklı data pattern'leri
+                  const patterns = {
+                      '1m': { volatility: 0.01, trend: 0.02 },
+                      '5m': { volatility: 0.02, trend: 0.03 },
+                      '15m': { volatility: 0.03, trend: 0.04 },
+                      '1h': { volatility: 0.05, trend: 0.06 },
+                      '4h': { volatility: 0.08, trend: 0.08 },
+                      '1d': { volatility: 0.12, trend: 0.10 }
+                  };
+                  
+                  const pattern = patterns[timeframe] || patterns['1h'];
+                  
+                  // Yeni data generate et
+                  const dataPoints = 50;
+                  const newPriceData = [];
+                  
+                  for (let i = 0; i < dataPoints; i++) {
+                      const variation = (Math.random() - 0.5) * pattern.volatility;
+                      const trend = Math.sin((i / dataPoints) * Math.PI * 3) * pattern.trend;
+                      const noise = (Math.random() - 0.5) * (pattern.volatility * 0.3);
+                      const price = chartData.basePrice * (1 + variation + trend + noise);
+                      newPriceData.push(price);
+                  }
+                  
+                  chartData.priceData = newPriceData;
+                  
+                  // Grafiği smooth transition ile güncelle
+                  const canvas = document.getElementById('priceChart');
+                  const ctx = canvas.getContext('2d');
+                  const rect = canvas.getBoundingClientRect();
+                  
+                  // Kısa animasyonla güncelle
+                  let progress = 0;
+                  function updateTransition() {
+                      progress += 0.1;
+                      if (progress <= 1) {
+                          ctx.clearRect(0, 0, rect.width, rect.height);
+                          chartData.animationProgress = 1;
+                          drawAnimatedChart(ctx, rect);
+                          requestAnimationFrame(updateTransition);
+                      }
+                  }
+                  requestAnimationFrame(updateTransition);
+              }
+          }
 
          // Sayfa yüklendiğinde piyasaları yükle
         async function refreshMarketData() {
