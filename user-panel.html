@@ -272,6 +272,119 @@
             background-color: #1a1f2e;
         }
         
+        /* Trading Styles */
+        .trading-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 6px 12px;
+            background: #2a2f3e;
+            color: #8b8fa3;
+            border: 1px solid #3a3f4e;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn:hover {
+            background: #3a3f4e;
+            color: #ffffff;
+        }
+        
+        .filter-btn.active {
+            background: #00d4aa;
+            color: #ffffff;
+            border-color: #00d4aa;
+        }
+        
+        .trade-direction-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #3a3f4e;
+            background: #2a2f3e;
+            color: #8b8fa3;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .trade-direction-btn:hover {
+            border-color: #00d4aa;
+            color: #00d4aa;
+        }
+        
+        .trade-direction-btn.active {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a87a 100%);
+            border-color: #00d4aa;
+            color: #ffffff;
+        }
+        
+        .trade-direction-btn.active[data-direction="short"] {
+            background: linear-gradient(135deg, #ff4757 0%, #c44569 100%);
+            border-color: #ff4757;
+        }
+        
+        .trade-open-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00d4aa 0%, #00a87a 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .trade-open-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 170, 0.3);
+        }
+        
+        .trade-open-btn:disabled {
+            background: #2a2f3e;
+            color: #8b8fa3;
+            cursor: not-allowed;
+        }
+        
+        .forex-pair-item {
+            padding: 12px;
+            border-bottom: 1px solid #1a1f2e;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .forex-pair-item:hover {
+            background-color: #1a1f2e;
+        }
+        
+        .forex-pair-item.selected {
+            background-color: #00d4aa20;
+            border-left: 3px solid #00d4aa;
+        }
+        
+        .position-item {
+            padding: 15px;
+            border: 1px solid #2a2f3e;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #1a1f2e;
+        }
+        
+        .position-item.profit {
+            border-left: 4px solid #00d4aa;
+        }
+        
+        .position-item.loss {
+            border-left: 4px solid #ff4757;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -499,11 +612,129 @@
                 
                 <section class="content-section" id="trading">
                     <div class="section-header">
-                        <h2 class="section-title">İşlem Yap</h2>
-                        <p class="section-subtitle">Al/Sat işlemleri</p>
+                        <h2 class="section-title">Kaldıraçlı İşlemler</h2>
+                        <p class="section-subtitle">Forex, İndeks ve Emtia Trading</p>
                     </div>
+                    
+                    <!-- Trading Widget'ları -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                        <!-- Sol Panel: Forex Pairs -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Forex Pairs</h3>
+                                <div class="trading-filters">
+                                    <button class="filter-btn active" data-category="all">Tümü</button>
+                                    <button class="filter-btn" data-category="major">Major</button>
+                                    <button class="filter-btn" data-category="minor">Minor</button>
+                                    <button class="filter-btn" data-category="indices">İndeks</button>
+                                    <button class="filter-btn" data-category="commodities">Emtia</button>
+                                </div>
+                            </div>
+                            
+                            <div id="forexPairsContainer" style="max-height: 400px; overflow-y: auto;">
+                                <div class="loading" id="forexLoader">
+                                    <div class="spinner"></div>
+                                    Forex verileri yükleniyor...
+                                </div>
+                                <div id="forexPairsList" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sağ Panel: Trading Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Pozisyon Aç</h3>
+                                <div id="selectedPairInfo" style="color: #8b8fa3; font-size: 14px;">
+                                    Bir forex pair seçin
+                                </div>
+                            </div>
+                            
+                            <div id="tradingForm" style="display: none;">
+                                <div style="margin-bottom: 20px;">
+                                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                        <button class="trade-direction-btn active" id="longBtn" data-direction="long">
+                                            <i class="fas fa-arrow-up"></i> LONG (Alış)
+                                        </button>
+                                        <button class="trade-direction-btn" id="shortBtn" data-direction="short">
+                                            <i class="fas fa-arrow-down"></i> SHORT (Satış)
+                                        </button>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="color: #8b8fa3; font-size: 14px; margin-bottom: 5px; display: block;">Lot Boyutu</label>
+                                        <select id="lotSize" style="width: 100%; padding: 10px; background: #2a2f3e; border: 1px solid #3a3f4e; color: white; border-radius: 6px;">
+                                            <option value="0.01">0.01 (Micro Lot)</option>
+                                            <option value="0.1">0.1 (Mini Lot)</option>
+                                            <option value="1.0">1.0 (Standard Lot)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="color: #8b8fa3; font-size: 14px; margin-bottom: 5px; display: block;">Kaldıraç</label>
+                                        <select id="leverageRatio" style="width: 100%; padding: 10px; background: #2a2f3e; border: 1px solid #3a3f4e; color: white; border-radius: 6px;">
+                                            <option value="10">1:10</option>
+                                            <option value="50">1:50</option>
+                                            <option value="100" selected>1:100</option>
+                                            <option value="200">1:200</option>
+                                            <option value="500">1:500</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                                        <div>
+                                            <label style="color: #8b8fa3; font-size: 14px; margin-bottom: 5px; display: block;">Stop Loss</label>
+                                            <input type="number" id="stopLoss" placeholder="Opsiyonel" step="0.00001" style="width: 100%; padding: 10px; background: #2a2f3e; border: 1px solid #3a3f4e; color: white; border-radius: 6px;">
+                                        </div>
+                                        <div>
+                                            <label style="color: #8b8fa3; font-size: 14px; margin-bottom: 5px; display: block;">Take Profit</label>
+                                            <input type="number" id="takeProfit" placeholder="Opsiyonel" step="0.00001" style="width: 100%; padding: 10px; background: #2a2f3e; border: 1px solid #3a3f4e; color: white; border-radius: 6px;">
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="tradeCalculation" style="background: #1a1f2e; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 14px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #8b8fa3;">Gerekli Margin:</span>
+                                            <span style="color: #00d4aa;" id="requiredMargin">$0.00</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #8b8fa3;">Pip Değeri:</span>
+                                            <span style="color: #ffffff;" id="pipValue">$0.00</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: #8b8fa3;">Spread:</span>
+                                            <span style="color: #ff4757;" id="spreadValue">0.0 pips</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button id="openTradeBtn" class="trade-open-btn" disabled>
+                                        <i class="fas fa-chart-line"></i> Pozisyon Aç
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="noSelectionMessage" style="text-align: center; color: #8b8fa3; padding: 40px;">
+                                <i class="fas fa-mouse-pointer" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                                <p>Forex pair seçerek trading başlayın</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Açık Pozisyonlar -->
                     <div class="card">
-                        <p>Trading arayüzü yakında eklenecek...</p>
+                        <div class="card-header">
+                            <h3 class="card-title">Açık Pozisyonlar</h3>
+                            <button onclick="refreshPositions()" style="padding: 8px 12px; background: #00d4aa; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                <i class="fas fa-sync-alt"></i> Yenile
+                            </button>
+                        </div>
+                        
+                        <div id="openPositionsContainer">
+                            <div class="loading" id="positionsLoader">
+                                <div class="spinner"></div>
+                                Pozisyonlar yükleniyor...
+                            </div>
+                            <div id="openPositionsList" style="display: none;"></div>
+                        </div>
                     </div>
                 </section>
                 
@@ -550,6 +781,8 @@
             loadUserInfo();
             setupNavigation();
             refreshMarketData(); // Sayfa yüklendiğinde piyasaları yükle
+            initTrading(); // Trading sistemini başlat
+            refreshPositions(); // Pozisyonları yükle
             
             // Arama kutusu için event listener
             const searchInput = document.getElementById('coinSearch');
@@ -781,6 +1014,238 @@
         // Sayfa yüklendiğinde piyasaları yükle
         async function refreshMarketData() {
             await fetchMarketData();
+        }
+
+        // Trading sistem değişkenleri
+        let selectedForexPair = null;
+        let currentTradeDirection = 'long';
+
+        // Trading sistemini başlat
+        function initTrading() {
+            loadForexPairs();
+            setupTradingEventListeners();
+        }
+
+        // Forex pair'leri yükle
+        async function loadForexPairs() {
+            const forexLoader = document.getElementById('forexLoader');
+            const forexPairsList = document.getElementById('forexPairsList');
+
+            try {
+                // Şimdilik mock data kullan - sonra backend endpoint eklenecek
+                const mockForexData = [
+                    { id: 1, symbol: 'EURUSD', display_name: 'EUR/USD', category: 'major', current_price: 1.08500, bid_price: 1.08480, ask_price: 1.08520, spread: 4.0, pip_value: 0.0001, max_leverage: 500 },
+                    { id: 2, symbol: 'GBPUSD', display_name: 'GBP/USD', category: 'major', current_price: 1.26800, bid_price: 1.26780, ask_price: 1.26820, spread: 4.0, pip_value: 0.0001, max_leverage: 500 },
+                    { id: 3, symbol: 'USDJPY', display_name: 'USD/JPY', category: 'major', current_price: 148.250, bid_price: 148.230, ask_price: 148.270, spread: 4.0, pip_value: 0.01, max_leverage: 500 },
+                    { id: 4, symbol: 'XAUUSD', display_name: 'Gold', category: 'commodities', current_price: 2685.50, bid_price: 2685.00, ask_price: 2686.00, spread: 10.0, pip_value: 0.01, max_leverage: 200 },
+                    { id: 5, symbol: 'US30', display_name: 'Dow Jones', category: 'indices', current_price: 42580.50, bid_price: 42578.0, ask_price: 42583.0, spread: 5.0, pip_value: 1.0, max_leverage: 100 }
+                ];
+
+                renderForexPairs(mockForexData);
+                forexLoader.style.display = 'none';
+                forexPairsList.style.display = 'block';
+
+            } catch (error) {
+                console.error('Forex pairs yükleme hatası:', error);
+                forexPairsList.innerHTML = '<p style="color: #ff4757; text-align: center; padding: 20px;">Forex verileri yüklenemedi</p>';
+                forexLoader.style.display = 'none';
+                forexPairsList.style.display = 'block';
+            }
+        }
+
+        // Forex pair'leri renderla
+        function renderForexPairs(pairs) {
+            const container = document.getElementById('forexPairsList');
+            container.innerHTML = '';
+
+            pairs.forEach(pair => {
+                const priceDirection = Math.random() > 0.5 ? 'up' : 'down';
+                const priceColor = priceDirection === 'up' ? '#00d4aa' : '#ff4757';
+                const priceIcon = priceDirection === 'up' ? '▲' : '▼';
+
+                const pairElement = document.createElement('div');
+                pairElement.className = 'forex-pair-item';
+                pairElement.dataset.pairId = pair.id;
+                pairElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; color: #ffffff; margin-bottom: 2px;">${pair.display_name}</div>
+                            <div style="font-size: 12px; color: #8b8fa3;">${pair.category.toUpperCase()} • Maks Kaldıraç: 1:${pair.max_leverage}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 600; color: ${priceColor};">
+                                ${pair.current_price} ${priceIcon}
+                            </div>
+                            <div style="font-size: 12px; color: #8b8fa3;">Spread: ${pair.spread} pips</div>
+                        </div>
+                    </div>
+                `;
+
+                pairElement.addEventListener('click', () => selectForexPair(pair));
+                container.appendChild(pairElement);
+            });
+        }
+
+        // Forex pair seç
+        function selectForexPair(pair) {
+            selectedForexPair = pair;
+
+            // Seçili pair'i görsel olarak işaretle
+            document.querySelectorAll('.forex-pair-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelector(`[data-pair-id="${pair.id}"]`).classList.add('selected');
+
+            // Trading form'unu aktif et
+            document.getElementById('tradingForm').style.display = 'block';
+            document.getElementById('noSelectionMessage').style.display = 'none';
+
+            // Pair bilgilerini güncelle
+            document.getElementById('selectedPairInfo').innerHTML = `
+                <strong>${pair.display_name}</strong> • Fiyat: ${pair.current_price} • Spread: ${pair.spread} pips
+            `;
+
+            // Kaldıraç seçeneklerini güncelle
+            updateLeverageOptions(pair.max_leverage);
+
+            // Hesaplamaları güncelle
+            updateTradeCalculations();
+        }
+
+        // Kaldıraç seçeneklerini güncelle
+        function updateLeverageOptions(maxLeverage) {
+            const leverageSelect = document.getElementById('leverageRatio');
+            leverageSelect.innerHTML = '';
+
+            const leverageOptions = [10, 50, 100, 200, 500].filter(lev => lev <= maxLeverage);
+            leverageOptions.forEach(leverage => {
+                const option = document.createElement('option');
+                option.value = leverage;
+                option.textContent = `1:${leverage}`;
+                if (leverage === 100 && leverage <= maxLeverage) option.selected = true;
+                leverageSelect.appendChild(option);
+            });
+        }
+
+        // Trade hesaplamalarını güncelle
+        function updateTradeCalculations() {
+            if (!selectedForexPair) return;
+
+            const lotSize = parseFloat(document.getElementById('lotSize').value);
+            const leverage = parseInt(document.getElementById('leverageRatio').value);
+
+            // Basit margin hesaplaması
+            const contractSize = 100000; // Standard lot size
+            const price = selectedForexPair.current_price;
+            const requiredMargin = (lotSize * contractSize * price) / leverage;
+
+            // Pip değeri hesaplama
+            const pipValue = lotSize * contractSize * selectedForexPair.pip_value;
+
+            // DOM'u güncelle
+            document.getElementById('requiredMargin').textContent = `$${requiredMargin.toFixed(2)}`;
+            document.getElementById('pipValue').textContent = `$${pipValue.toFixed(2)}`;
+            document.getElementById('spreadValue').textContent = `${selectedForexPair.spread} pips`;
+
+            // Trade butonunu aktif et
+            document.getElementById('openTradeBtn').disabled = false;
+        }
+
+        // Trading event listener'ları kurulum
+        function setupTradingEventListeners() {
+            // Direction buttons
+            document.getElementById('longBtn').addEventListener('click', function() {
+                setTradeDirection('long');
+            });
+            document.getElementById('shortBtn').addEventListener('click', function() {
+                setTradeDirection('short');
+            });
+
+            // Form değişiklikleri
+            ['lotSize', 'leverageRatio'].forEach(id => {
+                document.getElementById(id).addEventListener('change', updateTradeCalculations);
+            });
+
+            // Trade açma butonu
+            document.getElementById('openTradeBtn').addEventListener('click', openTrade);
+
+            // Kategori filtreleri
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Filter logic burada eklenecek
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // Trade direction değiştir
+        function setTradeDirection(direction) {
+            currentTradeDirection = direction;
+            document.querySelectorAll('.trade-direction-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(direction + 'Btn').classList.add('active');
+        }
+
+        // Trade aç
+        async function openTrade() {
+            if (!selectedForexPair) {
+                alert('Lütfen bir forex pair seçin');
+                return;
+            }
+
+            const tradeData = {
+                pair_id: selectedForexPair.id,
+                trade_type: currentTradeDirection,
+                lot_size: parseFloat(document.getElementById('lotSize').value),
+                leverage_ratio: parseInt(document.getElementById('leverageRatio').value),
+                stop_loss: document.getElementById('stopLoss').value || null,
+                take_profit: document.getElementById('takeProfit').value || null
+            };
+
+            try {
+                // Şimdilik mock response - sonra gerçek backend endpoint eklenecek
+                console.log('Trade açılıyor:', tradeData);
+                
+                alert(`🚀 ${selectedForexPair.display_name} için ${currentTradeDirection.toUpperCase()} pozisyonu açıldı!\n\nLot: ${tradeData.lot_size}\nKaldıraç: 1:${tradeData.leverage_ratio}\n\nPozisyon yönetimi için backend entegrasyonu yakında...`);
+                
+                // Form'u resetle
+                resetTradingForm();
+                
+            } catch (error) {
+                console.error('Trade açma hatası:', error);
+                alert('Trade açılırken hata oluştu');
+            }
+        }
+
+        // Trading form'unu resetle
+        function resetTradingForm() {
+            document.getElementById('stopLoss').value = '';
+            document.getElementById('takeProfit').value = '';
+            updateTradeCalculations();
+        }
+
+        // Pozisyonları yenile
+        function refreshPositions() {
+            const positionsLoader = document.getElementById('positionsLoader');
+            const positionsList = document.getElementById('openPositionsList');
+            
+            positionsLoader.style.display = 'block';
+            positionsList.style.display = 'none';
+            
+            // Mock pozisyon verisi
+            setTimeout(() => {
+                positionsList.innerHTML = `
+                    <div style="text-align: center; color: #8b8fa3; padding: 30px;">
+                        <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                        <p>Açık pozisyon bulunmuyor</p>
+                        <small>Forex pair seçerek trading başlayabilirsiniz</small>
+                    </div>
+                `;
+                positionsLoader.style.display = 'none';
+                positionsList.style.display = 'block';
+            }, 1000);
         }
     </script>
 </body>
