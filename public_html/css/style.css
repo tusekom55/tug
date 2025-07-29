@@ -202,17 +202,20 @@ body {
 .hero-slider {
     margin-top: 0;
     position: relative;
-    height: 100vh;
-    min-height: 700px;
+    height: 80vh;
+    min-height: 600px;
     overflow: hidden;
     background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .slider-container {
     position: relative;
     width: 100%;
     height: 100%;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -263,8 +266,8 @@ body {
 .slide-content {
     text-align: center;
     color: white;
-    max-width: 800px;
-    padding: 0 40px;
+    max-width: 700px;
+    padding: 0 30px;
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -275,7 +278,7 @@ body {
 }
 
 .slide-title {
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
     line-height: 1.1;
@@ -285,13 +288,13 @@ body {
 }
 
 .slide-description {
-    font-size: 1.4rem;
-    margin-bottom: 2.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
     opacity: 0.9;
     color: white;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.6);
     font-weight: 400;
-    max-width: 600px;
+    max-width: 500px;
 }
 
 .slide-buttons {
@@ -771,19 +774,26 @@ body {
 
     /* Hero Slider */
     .hero-slider {
-        height: 500px;
+        height: 400px;
+        min-height: 400px;
     }
     
     .slider-container {
         padding: 0 15px;
+        max-width: 100%;
+    }
+    
+    .slide-content {
+        max-width: 100%;
+        padding: 0 20px;
     }
 
     .slide-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .slide-description {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .slide-content {
