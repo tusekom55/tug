@@ -114,7 +114,6 @@ function setupRegisterValidation(form) {
     const firstNameInput = form.querySelector('#firstName');
     const lastNameInput = form.querySelector('#lastName');
     const emailInput = form.querySelector('#email');
-    const phoneInput = form.querySelector('#phone');
     const passwordInput = form.querySelector('#password');
     const confirmPasswordInput = form.querySelector('#confirmPassword');
     const termsCheckbox = form.querySelector('#terms');
@@ -129,13 +128,15 @@ function setupRegisterValidation(form) {
         validateName(this);
     });
     
-    emailInput.addEventListener('input', function() {
-        validateEmail(this);
-    });
-    
-    phoneInput.addEventListener('input', function() {
-        validatePhone(this);
-    });
+    if (emailInput) {
+        emailInput.addEventListener('input', function() {
+            if (this.value.trim()) { // Sadece değer varsa validate et
+                validateEmail(this);
+            } else {
+                showSuccess(this, document.getElementById(this.id + 'Error'));
+            }
+        });
+    }
     
     passwordInput.addEventListener('input', function() {
         validatePassword(this, true); // true for register (strict)
@@ -152,13 +153,13 @@ function setupRegisterValidation(form) {
         validateTerms(this);
     });
     
-    // Form submission
+    // Form submission - email artık zorunlu değil
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
         const isFirstNameValid = validateName(firstNameInput);
         const isLastNameValid = validateName(lastNameInput);
-        const isEmailValid = validateEmail(emailInput);
+        const isEmailValid = !emailInput.value.trim() || validateEmail(emailInput); // Email boşsa veya geçerliyse OK
         const isPasswordValid = validatePassword(passwordInput, true);
         const isConfirmPasswordValid = validateConfirmPassword(confirmPasswordInput, passwordInput);
         const isTermsValid = validateTerms(termsCheckbox);

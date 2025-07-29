@@ -95,6 +95,8 @@
                         </div>
 
                         <form class="register-form" id="registerForm">
+                            <div id="registerResult" style="margin-bottom:10px;color:#c00;font-weight:bold;"></div>
+                            
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="firstName">
@@ -130,43 +132,28 @@
                             <div class="form-group">
                                 <label for="email">
                                     <i class="fas fa-envelope"></i>
-                                    Email Adresi
+                                    Email Adresi (İsteğe bağlı)
                                 </label>
                                 <input 
                                     type="email" 
                                     id="email" 
                                     name="email" 
                                     placeholder="ornek@email.com"
-                                    required
                                 >
                                 <span class="error-message" id="emailError"></span>
                             </div>
 
                             <div class="form-group">
-                                <label for="phone">
-                                    <i class="fas fa-phone"></i>
-                                    Telefon Numarası
-                                </label>
-                                <input 
-                                    type="tel" 
-                                    id="phone" 
-                                    name="phone" 
-                                    placeholder="+90 555 123 45 67"
-                                >
-                                <span class="error-message" id="phoneError"></span>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="password">
                                     <i class="fas fa-lock"></i>
-                                    Şifre
+                                    Şifre (En az 8 karakter)
                                 </label>
                                 <div class="password-input">
                                     <input 
                                         type="password" 
                                         id="password" 
                                         name="password" 
-                                        placeholder="Güçlü bir şifre oluşturun"
+                                        placeholder="En az 8 karakter"
                                         required
                                     >
                                     <button type="button" class="password-toggle" id="passwordToggle">
@@ -209,14 +196,6 @@
                                     <a href="#terms" target="_blank">Kullanım Şartları</a> ve <a href="#privacy" target="_blank">Gizlilik Politikası</a>'nı okudum ve kabul ediyorum
                                 </label>
                                 <span class="error-message" id="termsError"></span>
-                            </div>
-
-                            <div class="form-checkbox">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="newsletter">
-                                    <span class="checkmark"></span>
-                                    Piyasa analizleri ve kampanya bildirimlerini email ile almak istiyorum
-                                </label>
                             </div>
 
                             <button type="submit" class="btn-submit" id="registerBtn">
@@ -276,10 +255,35 @@
       e.preventDefault();
       var form = this;
       var formData = new FormData();
-      // Sadece backend'in beklediği alanları ekle
-      formData.append('username', form.firstName.value + form.lastName.value); // örnek: ad+soyad birleştirildi
-      formData.append('email', form.email.value);
-      formData.append('password', form.password.value);
+      
+      // Ad ve soyad zorunlu, email isteğe bağlı
+      var firstName = form.firstName.value.trim();
+      var lastName = form.lastName.value.trim();
+      var email = form.email.value.trim() || firstName.toLowerCase() + lastName.toLowerCase() + '@example.com'; // Test için otomatik email
+      var password = form.password.value;
+      var confirmPassword = form.confirmPassword.value;
+      
+      // Basit validasyon
+      if (!firstName || !lastName) {
+        document.getElementById('registerResult').innerText = 'Ad ve soyad zorunludur';
+        return;
+      }
+      
+      if (password.length < 8) {
+        document.getElementById('registerResult').innerText = 'Şifre en az 8 karakter olmalıdır';
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        document.getElementById('registerResult').innerText = 'Şifreler eşleşmiyor';
+        return;
+      }
+      
+      // Backend'e gönder
+      formData.append('username', firstName + lastName); // username = ad+soyad
+      formData.append('email', email);
+      formData.append('password', password);
+      
       fetch('/backend/public/register.php', {
         method: 'POST',
         credentials: 'include',
@@ -287,10 +291,16 @@
       })
       .then(r => r.json())
       .then(data => {
-        document.getElementById('registerResult').innerText = data.message;
+        var resultDiv = document.getElementById('registerResult');
+        resultDiv.innerText = data.message;
+        resultDiv.style.color = data.success ? '#22c55e' : '#ef4444';
         if(data.success){
           setTimeout(function(){ window.location.href = 'login.html'; }, 1200);
         }
+      })
+      .catch(err => {
+        document.getElementById('registerResult').innerText = 'Bağlantı hatası';
+        document.getElementById('registerResult').style.color = '#ef4444';
       });
     });
     </script>
