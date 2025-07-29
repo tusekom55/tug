@@ -48,12 +48,12 @@ body {
     gap: 8px;
     cursor: pointer;
     color: #6b7280;
+    position: relative;
 }
 
-.flag-icon {
-    width: 16px;
-    height: 12px;
-    border-radius: 2px;
+.flag-emoji {
+    font-size: 16px;
+    margin-right: 4px;
 }
 
 /* ===== NAVBAR ===== */
@@ -268,21 +268,50 @@ body {
     position: relative;
 }
 
-.widget-slide {
+/* ===== CRYPTO WIDGET SECTION ===== */
+.crypto-widget-section {
+    background: #0f172a;
+    padding: 60px 0;
+    position: relative;
+}
+
+.widget-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
     max-width: 1200px;
-    padding: 20px;
+    margin: 0 auto;
+}
+
+.widget-content {
+    flex: 1;
+    max-width: 400px;
+}
+
+.widget-content h2 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.widget-content p {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
 }
 
 .widget-container {
-    background: rgba(0, 0, 0, 0.3);
+    flex: 2;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
+    padding: 30px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 20px;
-    width: 100%;
-    max-width: 1000px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 .slide-title {
@@ -690,14 +719,23 @@ body {
         max-width: 90%;
     }
     
-    .widget-slide {
+    .widget-wrapper {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+    
+    .widget-content {
         max-width: 100%;
-        padding: 10px;
+    }
+    
+    .widget-content h2 {
+        font-size: 2rem;
     }
     
     .widget-container {
-        padding: 15px;
-        margin-top: 15px;
+        width: 100%;
+        padding: 20px;
     }
 
     .slider-btn {

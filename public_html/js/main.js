@@ -46,7 +46,7 @@ class HeroSlider {
                     }
                 }, 100);
             }
-        }, 1000);
+        }, 2000);
     }
     
     adjustWidgetStyles() {
@@ -54,8 +54,8 @@ class HeroSlider {
         if (widget) {
             // Widget'ın stillerini ayarla
             widget.style.width = '100%';
-            widget.style.maxWidth = '1000px';
-            widget.style.margin = '0 auto';
+            widget.style.height = '400px';
+            widget.style.margin = '0';
             widget.style.display = 'block';
         }
     }
@@ -72,12 +72,7 @@ class HeroSlider {
         this.slides[this.currentSlide].classList.add('active');
         this.dots[this.currentSlide].classList.add('active');
         
-        // Widget slide'ına geçildiğinde widget'ı yeniden ayarla
-        if (index === 1) {
-            setTimeout(() => {
-                this.adjustWidgetStyles();
-            }, 300);
-        }
+
     }
     
     nextSlide() {
