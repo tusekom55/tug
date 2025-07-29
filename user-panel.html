@@ -240,6 +240,38 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* Market Table Styles */
+        .market-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .add-to-portfolio-btn {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a87a 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .add-to-portfolio-btn:hover {
+            background: linear-gradient(135deg, #00a87a 0%, #008a66 100%);
+            transform: translateY(-1px);
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #1a1f2e;
+            transition: background-color 0.2s ease;
+        }
+        
+        tbody tr:hover {
+            background-color: #1a1f2e;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -424,10 +456,44 @@
                 <section class="content-section" id="markets">
                     <div class="section-header">
                         <h2 class="section-title">Piyasalar</h2>
-                        <p class="section-subtitle">Crypto para fiyatları</p>
+                        <p class="section-subtitle">Crypto para fiyatları ve piyasa verileri</p>
                     </div>
+                    
                     <div class="card">
-                        <p>Piyasa verileri yakında eklenecek...</p>
+                        <div class="card-header">
+                            <h3 class="card-title">Kripto Para Piyasası</h3>
+                            <div class="market-controls">
+                                <input type="text" id="coinSearch" placeholder="Coin ara..." style="padding: 8px 12px; border: 1px solid #2a2f3e; background: #1e2530; color: white; border-radius: 6px; width: 200px;">
+                                <button onclick="refreshMarketData()" style="padding: 8px 12px; background: #00d4aa; color: white; border: none; border-radius: 6px; margin-left: 10px; cursor: pointer;">
+                                    <i class="fas fa-sync-alt"></i> Yenile
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="marketLoader" class="loading">
+                            <div class="spinner"></div>
+                            Piyasa verileri yükleniyor...
+                        </div>
+                        
+                        <div id="marketTable" style="display: none;">
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="border-bottom: 1px solid #2a2f3e;">
+                                            <th style="padding: 12px; text-align: left; color: #8b8fa3; font-weight: 600;">#</th>
+                                            <th style="padding: 12px; text-align: left; color: #8b8fa3; font-weight: 600;">Coin</th>
+                                            <th style="padding: 12px; text-align: right; color: #8b8fa3; font-weight: 600;">Fiyat</th>
+                                            <th style="padding: 12px; text-align: right; color: #8b8fa3; font-weight: 600;">24s %</th>
+                                            <th style="padding: 12px; text-align: right; color: #8b8fa3; font-weight: 600;">Piyasa Değeri</th>
+                                            <th style="padding: 12px; text-align: center; color: #8b8fa3; font-weight: 600;">İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="marketTableBody">
+                                        <!-- Coin verileri buraya yüklenecek -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </section>
                 
@@ -483,6 +549,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadUserInfo();
             setupNavigation();
+            refreshMarketData(); // Sayfa yüklendiğinde piyasaları yükle
+            
+            // Arama kutusu için event listener
+            const searchInput = document.getElementById('coinSearch');
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    refreshMarketData();
+                }, 500); // 500ms gecikme ile arama yap
+            });
         });
 
         // Navigasyon sistemi
@@ -587,6 +664,101 @@
             .then(() => {
                 window.location.href = 'login.html';
             });
+        }
+
+                 // CoinGecko API'den piyasa verilerini çek
+         async function fetchMarketData() {
+             const searchInput = document.getElementById('coinSearch').value.toLowerCase();
+             const marketLoader = document.getElementById('marketLoader');
+             const marketTable = document.getElementById('marketTable');
+             const marketTableBody = document.getElementById('marketTableBody');
+
+             marketLoader.style.display = 'block';
+             marketTable.style.display = 'none';
+             marketTableBody.innerHTML = '';
+
+             try {
+                 let response;
+                 let data;
+
+                 if (searchInput) {
+                     // Arama yapıldıysa filtreleme yap
+                     response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false');
+                     const allData = await response.json();
+                     data = allData.filter(coin => 
+                         coin.name.toLowerCase().includes(searchInput) || 
+                         coin.symbol.toLowerCase().includes(searchInput)
+                     ).slice(0, 50);
+                 } else {
+                     // Tüm popüler coinleri göster
+                     response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false');
+                     data = await response.json();
+                 }
+
+                 if (data && data.length > 0) {
+                     data.forEach((coin, index) => {
+                         const priceChangeColor = coin.price_change_percentage_24h >= 0 ? '#00d4aa' : '#ff4757';
+                         const priceChangeIcon = coin.price_change_percentage_24h >= 0 ? '▲' : '▼';
+                         
+                         const row = document.createElement('tr');
+                         row.innerHTML = `
+                             <td style="padding: 12px; text-align: left; color: #8b8fa3;">${coin.market_cap_rank || index + 1}</td>
+                             <td style="padding: 12px; text-align: left;">
+                                 <div style="display: flex; align-items: center; gap: 8px;">
+                                     <img src="${coin.image}" alt="${coin.name}" style="width: 24px; height: 24px; border-radius: 50%;">
+                                     <div>
+                                         <div style="color: #ffffff; font-weight: 600;">${coin.name}</div>
+                                         <div style="color: #8b8fa3; font-size: 12px;">${coin.symbol.toUpperCase()}</div>
+                                     </div>
+                                 </div>
+                             </td>
+                             <td style="padding: 12px; text-align: right; color: #ffffff; font-weight: 600;">$${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}</td>
+                             <td style="padding: 12px; text-align: right; color: ${priceChangeColor}; font-weight: 600;">
+                                 ${priceChangeIcon} ${Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
+                             </td>
+                             <td style="padding: 12px; text-align: right; color: #8b8fa3;">$${(coin.market_cap || 0).toLocaleString()}</td>
+                             <td style="padding: 12px; text-align: center;">
+                                 <button onclick="openTradingModal('${coin.id}', '${coin.name}', '${coin.current_price}')" class="add-to-portfolio-btn">
+                                     <i class="fas fa-exchange-alt"></i> İşlem
+                                 </button>
+                             </td>
+                         `;
+                         marketTableBody.appendChild(row);
+                     });
+                     marketTable.style.display = 'block';
+                 } else {
+                     marketTableBody.innerHTML = `
+                         <tr>
+                             <td colspan="6" style="text-align: center; color: #8b8fa3; padding: 40px;">
+                                 ${searchInput ? 'Aradığınız kripto para bulunamadı.' : 'Piyasa verileri yüklenemedi.'}
+                             </td>
+                         </tr>
+                     `;
+                     marketTable.style.display = 'block';
+                 }
+             } catch (error) {
+                 console.error('Error fetching market data:', error);
+                 marketTableBody.innerHTML = `
+                     <tr>
+                         <td colspan="6" style="text-align: center; color: #ff4757; padding: 40px;">
+                             <i class="fas fa-exclamation-triangle"></i> Veri çekme hatası oluştu.
+                         </td>
+                     </tr>
+                 `;
+                 marketTable.style.display = 'block';
+             } finally {
+                 marketLoader.style.display = 'none';
+             }
+         }
+
+                 // Trading modalını aç
+         function openTradingModal(coinId, coinName, currentPrice) {
+             alert(`🚀 ${coinName} için trading sistemi yakında aktif olacak!\n\nMevcut Fiyat: $${currentPrice}\n\nSonraki adımda al/sat işlemleri için trading arayüzü eklenecek.`);
+         }
+
+        // Sayfa yüklendiğinde piyasaları yükle
+        async function refreshMarketData() {
+            await fetchMarketData();
         }
     </script>
 </body>
