@@ -410,26 +410,29 @@ body {
 .coins-scroll-container {
     overflow: hidden;
     position: relative;
+    width: 100%;
 }
 
 .coins-scroll {
     display: flex;
     gap: 20px;
-    animation: scrollCoins 30s linear infinite;
+    animation: scrollCoins 20s linear infinite;
     width: max-content;
+    will-change: transform;
 }
 
 .coin-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    padding: 20px;
-    min-width: 250px;
+    padding: 15px 20px;
+    min-width: 280px;
     display: flex;
     align-items: center;
     gap: 15px;
     backdrop-filter: blur(10px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-shrink: 0;
 }
 
 .coin-card:hover {
@@ -836,12 +839,12 @@ body {
     
     /* Scrolling coins responsive */
     .coins-scroll {
-        animation-duration: 20s;
+        animation-duration: 15s;
     }
     
     .coin-card {
-        min-width: 200px;
-        padding: 15px;
+        min-width: 220px;
+        padding: 12px 15px;
     }
     
     .coin-icon {
