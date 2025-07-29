@@ -13,7 +13,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     line-height: 1.6;
     color: #333;
-    overflow-x: hidden;
+    background: #ffffff;
 }
 
 .container {
@@ -61,7 +61,7 @@ body {
     position: sticky;
     top: 0;
     width: 100%;
-    background: #0f172a;
+    background: #1e3799;
     z-index: 1000;
     padding: 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -78,22 +78,24 @@ body {
 }
 
 .nav-logo a {
+    text-decoration: none;
     display: flex;
     flex-direction: column;
-    text-decoration: none;
-    color: white;
+    align-items: flex-start;
 }
 
 .logo-text {
+    color: #ff3f34;
     font-size: 1.8rem;
-    font-weight: 700;
-    color: #ef4444;
+    font-weight: 800;
+    line-height: 1;
 }
 
 .logo-subtitle {
-    font-size: 0.7rem;
     color: white;
+    font-size: 0.75rem;
     font-weight: 400;
+    letter-spacing: 1px;
 }
 
 .nav-menu {
@@ -119,13 +121,12 @@ body {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
     transition: color 0.3s ease;
     position: relative;
 }
 
 .nav-link:hover {
-    color: #60a5fa;
+    color: #ff3f34;
 }
 
 .nav-link::after {
@@ -135,7 +136,7 @@ body {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: #60a5fa;
+    background-color: #ff3f34;
     transition: width 0.3s ease;
 }
 
@@ -162,7 +163,7 @@ body {
 
 .btn-login:hover {
     background: white;
-    color: #0f172a;
+    color: #1e3799;
 }
 
 .btn-primary {
@@ -192,7 +193,7 @@ body {
 .bar {
     width: 25px;
     height: 3px;
-    background-color: white;
+    background: white;
     margin: 3px 0;
     transition: 0.3s;
 }
@@ -221,7 +222,6 @@ body {
     height: 100%;
     opacity: 0;
     transition: opacity 0.8s ease;
-    /* İçerik ortalaması */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -260,58 +260,11 @@ body {
     max-width: 900px;
     padding: 0;
     z-index: 2;
-    /* İçerik ortalaması için flex */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-}
-
-/* ===== CRYPTO WIDGET SECTION ===== */
-.crypto-widget-section {
-    background: #0f172a;
-    padding: 60px 0;
-    position: relative;
-}
-
-.widget-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.widget-content {
-    flex: 1;
-    max-width: 400px;
-}
-
-.widget-content h2 {
-    color: white;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-}
-
-.widget-content p {
-    color: #cbd5e1;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 0;
-}
-
-.widget-container {
-    flex: 2;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    padding: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
 }
 
 .slide-title {
@@ -355,10 +308,13 @@ body {
     color: white;
     padding: 16px 32px;
     border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
     font-size: 1.1rem;
-    /* Buton için gölge efekti */
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-    /* Buton için text-shadow */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -371,9 +327,7 @@ body {
 .slide-note {
     font-size: 0.8rem;
     opacity: 0.8;
-    /* Not metni için text-shadow */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-    /* Yazı rengi beyaz kalır */
     color: white;
 }
 
@@ -432,7 +386,7 @@ body {
 /* ===== FEATURES SECTION ===== */
 .features {
     padding: 80px 0;
-    background: #f8fafc;
+    background: #f8f9fa;
 }
 
 .features-grid {
@@ -444,20 +398,20 @@ body {
 .feature-card {
     background: white;
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .feature-icon {
     font-size: 3rem;
-    color: #2563eb;
+    color: #1e3799;
     margin-bottom: 1rem;
 }
 
@@ -494,23 +448,23 @@ body {
 }
 
 .instrument-card {
-    background: #1e3a8a;
-    color: white;
+    background: #f8f9fa;
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .instrument-card:hover {
     transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
 }
 
 .instrument-icon {
     font-size: 2rem;
-    color: #60a5fa;
+    color: #1e3799;
 }
 
 .instrument-info {
@@ -518,14 +472,14 @@ body {
 }
 
 .instrument-name {
-    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
+    color: #333;
 }
 
 .instrument-desc {
     font-size: 0.9rem;
-    opacity: 0.8;
+    color: #666;
 }
 
 .instrument-price {
@@ -533,14 +487,13 @@ body {
 }
 
 .price {
-    display: block;
-    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
+    color: #333;
 }
 
 .change {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 500;
 }
 
@@ -555,7 +508,7 @@ body {
 /* ===== ABOUT SECTION ===== */
 .about {
     padding: 80px 0;
-    background: #f8fafc;
+    background: #f8f9fa;
 }
 
 .about-content {
@@ -571,9 +524,9 @@ body {
 
 .about-description {
     font-size: 1.1rem;
+    line-height: 1.8;
     color: #666;
     margin-bottom: 2rem;
-    line-height: 1.6;
 }
 
 .about-stats {
@@ -587,10 +540,9 @@ body {
 }
 
 .stat-number {
-    display: block;
     font-size: 2.5rem;
     font-weight: 700;
-    color: #2563eb;
+    color: #1e3799;
     margin-bottom: 0.5rem;
 }
 
@@ -602,13 +554,14 @@ body {
 
 .about-image img {
     width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* ===== FOOTER ===== */
 .footer {
-    background: #1f2937;
+    background: #1e3799;
     color: white;
     padding: 60px 0 20px;
 }
@@ -632,27 +585,25 @@ body {
 }
 
 .footer-links li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.8rem;
 }
 
 .footer-links a {
-    color: #d1d5db;
+    color: #cbd5e1;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: #60a5fa;
+    color: #ff3f34;
 }
 
 .footer-bottom {
-    border-top: 1px solid #374151;
+    border-top: 1px solid #334155;
     padding-top: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
 }
 
 .footer-info p {
@@ -673,7 +624,7 @@ body {
 }
 
 .social-link:hover {
-    color: #60a5fa;
+    color: #ff3f34;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
@@ -688,7 +639,7 @@ body {
         left: -100%;
         top: 70px;
         flex-direction: column;
-        background-color: #1e3a8a;
+        background-color: #1e3799;
         width: 100%;
         text-align: center;
         transition: 0.3s;
@@ -717,25 +668,6 @@ body {
     .slide-content {
         padding: 20px;
         max-width: 90%;
-    }
-    
-    .widget-wrapper {
-        flex-direction: column;
-        text-align: center;
-        gap: 30px;
-    }
-    
-    .widget-content {
-        max-width: 100%;
-    }
-    
-    .widget-content h2 {
-        font-size: 2rem;
-    }
-    
-    .widget-container {
-        width: 100%;
-        padding: 20px;
     }
 
     .slider-btn {
@@ -793,7 +725,6 @@ body {
 
     .about-stats {
         grid-template-columns: 1fr;
-        gap: 1rem;
     }
 
     .stat-number {

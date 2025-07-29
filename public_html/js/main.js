@@ -29,35 +29,11 @@ class HeroSlider {
         sliderContainer.addEventListener('mouseenter', () => this.stopAutoSlide());
         sliderContainer.addEventListener('mouseleave', () => this.startAutoSlide());
         
-        // Load widget when slider is ready
-        this.loadWidget();
-    }
-    
-    loadWidget() {
-        // Widget'ın yüklenmesini bekle
-        setTimeout(() => {
-            const widget = document.querySelector('gecko-coin-heatmap-widget');
-            if (widget) {
-                // Widget'ın tam yüklenmesini bekle
-                const checkWidget = setInterval(() => {
-                    if (widget.shadowRoot || widget.children.length > 0) {
-                        clearInterval(checkWidget);
-                        this.adjustWidgetStyles();
-                    }
-                }, 100);
-            }
-        }, 2000);
-    }
-    
-    adjustWidgetStyles() {
-        const widget = document.querySelector('gecko-coin-heatmap-widget');
-        if (widget) {
-            // Widget'ın stillerini ayarla
-            widget.style.width = '100%';
-            widget.style.height = '400px';
-            widget.style.margin = '0';
-            widget.style.display = 'block';
-        }
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') this.prevSlide();
+            if (e.key === 'ArrowRight') this.nextSlide();
+        });
     }
     
     goToSlide(index) {
@@ -71,8 +47,6 @@ class HeroSlider {
         // Add active class to new slide and dot
         this.slides[this.currentSlide].classList.add('active');
         this.dots[this.currentSlide].classList.add('active');
-        
-
     }
     
     nextSlide() {
@@ -124,6 +98,13 @@ class MobileMenu {
                 this.closeMenu();
             }
         });
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeMenu();
+            }
+        });
     }
     
     toggleMenu() {
@@ -164,13 +145,13 @@ class SmoothScroll {
     }
     
     init() {
-        // Smooth scroll for navigation links
+        // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {
                 e.preventDefault();
                 const target = document.querySelector(anchor.getAttribute('href'));
                 if (target) {
-                    const offsetTop = target.offsetTop - 70; // Account for fixed navbar
+                    const offsetTop = target.offsetTop - 80; // Account for fixed navbar
                     window.scrollTo({
                         top: offsetTop,
                         behavior: 'smooth'
@@ -184,26 +165,27 @@ class SmoothScroll {
 // ===== SCROLL ANIMATIONS =====
 class ScrollAnimations {
     constructor() {
-        this.observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
         this.init();
     }
     
     init() {
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in-up');
                 }
             });
-        }, this.observerOptions);
+        }, observerOptions);
         
         // Observe elements for animation
-        const animatedElements = document.querySelectorAll('.feature-card, .instrument-card, .about-content, .footer-column');
-        animatedElements.forEach(el => observer.observe(el));
+        const animateElements = document.querySelectorAll('.feature-card, .instrument-card, .about-content, .section-title');
+        animateElements.forEach(el => observer.observe(el));
     }
 }
 
@@ -216,48 +198,55 @@ class NavbarScroll {
     
     init() {
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                this.navbar.style.background = 'rgba(30, 58, 138, 0.95)';
+            if (window.scrollY > 100) {
+                this.navbar.style.background = 'rgba(30, 55, 153, 0.95)';
                 this.navbar.style.backdropFilter = 'blur(10px)';
             } else {
-                this.navbar.style.background = '#1e3a8a';
+                this.navbar.style.background = '#1e3799';
                 this.navbar.style.backdropFilter = 'none';
             }
         });
     }
 }
 
-// ===== INSTRUMENT PRICE UPDATES =====
+// ===== PRICE UPDATES SIMULATION =====
 class PriceUpdates {
     constructor() {
-        this.instruments = document.querySelectorAll('.instrument-card');
         this.init();
     }
     
     init() {
-        // Simulate price updates every 3 seconds
+        // Simulate live price updates
         setInterval(() => {
             this.updatePrices();
         }, 3000);
     }
     
     updatePrices() {
-        this.instruments.forEach(instrument => {
-            const priceElement = instrument.querySelector('.price');
-            const changeElement = instrument.querySelector('.change');
+        const priceElements = document.querySelectorAll('.price');
+        const changeElements = document.querySelectorAll('.change');
+        
+        priceElements.forEach((priceEl, index) => {
+            const currentPrice = parseFloat(priceEl.textContent.replace(/[^\d.]/g, ''));
+            const change = (Math.random() - 0.5) * 0.02; // Random change between -1% and +1%
+            const newPrice = currentPrice * (1 + change);
             
-            if (priceElement && changeElement) {
-                const currentPrice = parseFloat(priceElement.textContent.replace(',', ''));
-                const change = (Math.random() - 0.5) * 0.01; // Random change between -0.5% and +0.5%
-                const newPrice = currentPrice * (1 + change);
+            // Update price with animation
+            priceEl.style.transition = 'color 0.3s ease';
+            priceEl.style.color = change > 0 ? '#10b981' : '#ef4444';
+            
+            setTimeout(() => {
+                priceEl.style.color = '#333';
+            }, 300);
+            
+            // Update change indicator
+            if (changeElements[index]) {
+                const changeEl = changeElements[index];
+                const changePercent = (change * 100).toFixed(2);
+                const isPositive = change > 0;
                 
-                // Update price
-                priceElement.textContent = newPrice.toFixed(4);
-                
-                // Update change indicator
-                const changeValue = (change * 100).toFixed(2);
-                changeElement.textContent = change > 0 ? `+${changeValue}%` : `${changeValue}%`;
-                changeElement.className = `change ${change > 0 ? 'positive' : 'negative'}`;
+                changeEl.textContent = `${isPositive ? '+' : ''}${changePercent}%`;
+                changeEl.className = `change ${isPositive ? 'positive' : 'negative'}`;
             }
         });
     }
@@ -280,25 +269,29 @@ class FormValidation {
     handleSubmit(e) {
         e.preventDefault();
         
+        // Basic form validation
         const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
+        const email = formData.get('email');
+        const name = formData.get('name');
         
-        // Basic validation
-        if (!data.name || !data.email || !data.message) {
+        if (!email || !name) {
             this.showMessage('Lütfen tüm alanları doldurun.', 'error');
             return;
         }
         
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(data.email)) {
-            this.showMessage('Lütfen geçerli bir e-posta adresi girin.', 'error');
+        if (!this.isValidEmail(email)) {
+            this.showMessage('Geçerli bir e-posta adresi girin.', 'error');
             return;
         }
         
-        // Success message
-        this.showMessage('Mesajınız başarıyla gönderildi!', 'success');
+        // Simulate form submission
+        this.showMessage('Form başarıyla gönderildi!', 'success');
         e.target.reset();
+    }
+    
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
     
     showMessage(message, type) {
@@ -311,18 +304,13 @@ class FormValidation {
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             color: white;
             font-weight: 500;
             z-index: 10000;
             animation: slideIn 0.3s ease;
+            background: ${type === 'success' ? '#10b981' : '#ef4444'};
         `;
-        
-        if (type === 'success') {
-            messageEl.style.background = '#10b981';
-        } else {
-            messageEl.style.background = '#ef4444';
-        }
         
         document.body.appendChild(messageEl);
         
@@ -361,45 +349,28 @@ class Utils {
     }
 }
 
-// ===== INITIALIZATION =====
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all components
-    new HeroSlider();
-    new MobileMenu();
-    new SmoothScroll();
-    new ScrollAnimations();
-    new NavbarScroll();
-    new PriceUpdates();
-    new FormValidation();
-    
-    // Add loading animation
-    document.body.classList.add('loaded');
-    
-    // Add scroll to top functionality
-    createScrollToTopButton();
-});
-
 // ===== SCROLL TO TOP BUTTON =====
 function createScrollToTopButton() {
     const button = document.createElement('button');
-    button.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    button.innerHTML = '<i class="fas fa-chevron-up"></i>';
     button.className = 'scroll-to-top';
     button.style.cssText = `
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: 30px;
+        right: 30px;
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        background: #2563eb;
+        background: #1e3799;
         color: white;
         border: none;
         cursor: pointer;
-        display: none;
-        z-index: 1000;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         font-size: 1.2rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(30, 55, 153, 0.3);
     `;
     
     document.body.appendChild(button);
@@ -407,13 +378,15 @@ function createScrollToTopButton() {
     // Show/hide button based on scroll position
     window.addEventListener('scroll', Utils.throttle(() => {
         if (window.scrollY > 300) {
-            button.style.display = 'block';
+            button.style.opacity = '1';
+            button.style.visibility = 'visible';
         } else {
-            button.style.display = 'none';
+            button.style.opacity = '0';
+            button.style.visibility = 'hidden';
         }
     }, 100));
     
-    // Scroll to top when clicked
+    // Scroll to top on click
     button.addEventListener('click', () => {
         window.scrollTo({
             top: 0,
@@ -423,72 +396,95 @@ function createScrollToTopButton() {
     
     // Hover effects
     button.addEventListener('mouseenter', () => {
-        button.style.transform = 'scale(1.1)';
-        button.style.background = '#1d4ed8';
+        button.style.transform = 'translateY(-3px)';
+        button.style.boxShadow = '0 6px 20px rgba(30, 55, 153, 0.4)';
     });
     
     button.addEventListener('mouseleave', () => {
-        button.style.transform = 'scale(1)';
-        button.style.background = '#2563eb';
+        button.style.transform = 'translateY(0)';
+        button.style.boxShadow = '0 4px 15px rgba(30, 55, 153, 0.3)';
     });
 }
 
-// ===== KEYBOARD NAVIGATION =====
-document.addEventListener('keydown', (e) => {
-    // Arrow key navigation for slider
-    if (e.key === 'ArrowLeft') {
-        document.querySelector('.prev-btn').click();
-    } else if (e.key === 'ArrowRight') {
-        document.querySelector('.next-btn').click();
+// ===== ANALYTICS SIMULATION =====
+class Analytics {
+    static trackEvent(eventName, data = {}) {
+        // Simulate analytics tracking
+        console.log('Analytics Event:', eventName, data);
     }
     
-    // Escape key to close mobile menu
-    if (e.key === 'Escape') {
-        const mobileMenu = document.querySelector('.nav-menu');
-        if (mobileMenu.classList.contains('active')) {
-            document.querySelector('.hamburger').click();
-        }
+    static trackPageView() {
+        this.trackEvent('page_view', {
+            page: window.location.pathname,
+            title: document.title
+        });
     }
-});
+}
 
-// ===== PERFORMANCE OPTIMIZATION =====
-// Lazy loading for images
-if ('IntersectionObserver' in window) {
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize all classes
+    new HeroSlider();
+    new MobileMenu();
+    new SmoothScroll();
+    new ScrollAnimations();
+    new NavbarScroll();
+    new PriceUpdates();
+    new FormValidation();
+    
+    // Create scroll to top button
+    createScrollToTopButton();
+    
+    // Track page view
+    Analytics.trackPageView();
+    
+    // Performance optimization: Lazy load images
+    const images = document.querySelectorAll('img[data-src]');
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 img.src = img.dataset.src;
                 img.classList.remove('lazy');
-                imageObserver.unobserve(img);
+                observer.unobserve(img);
             }
         });
     });
     
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
+    images.forEach(img => imageObserver.observe(img));
+    
+    // Error handling
+    window.addEventListener('error', (e) => {
+        console.error('JavaScript Error:', e.error);
+        Analytics.trackEvent('error', {
+            message: e.error.message,
+            filename: e.filename,
+            lineno: e.lineno
+        });
     });
-}
-
-// ===== ERROR HANDLING =====
-window.addEventListener('error', (e) => {
-    console.error('JavaScript Error:', e.error);
 });
 
-// ===== ANALYTICS SIMULATION =====
-class Analytics {
-    static trackEvent(eventName, data = {}) {
-        console.log('Analytics Event:', eventName, data);
-        // In a real application, this would send data to analytics service
+// ===== CSS ANIMATIONS =====
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
     
-    static trackPageView() {
-        this.trackEvent('page_view', {
-            url: window.location.href,
-            title: document.title
-        });
+    .lazy {
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
-}
-
-// Track page view on load
-Analytics.trackPageView(); 
+    
+    .lazy.loaded {
+        opacity: 1;
+    }
+`;
+document.head.appendChild(style); 
