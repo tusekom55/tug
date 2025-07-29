@@ -7,9 +7,9 @@ function register_user($username, $email, $password) {
     $conn = db_connect();
     $username = sanitize_input($conn, $username);
     $email = sanitize_input($conn, $email);
-    $hash = hash_password($password);
+    // Şifreyi hashlemeden düz metin olarak kaydet
     $stmt = $conn->prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
-    $stmt->bind_param('sss', $username, $email, $hash);
+    $stmt->bind_param('sss', $username, $email, $password);
     $result = $stmt->execute();
     $stmt->close();
     $conn->close();
@@ -25,9 +25,10 @@ function login_user($username, $password) {
     $stmt->execute();
     $stmt->store_result();
     if ($stmt->num_rows === 1) {
-        $stmt->bind_result($id, $hash, $role);
+        $stmt->bind_result($id, $stored_password, $role);
         $stmt->fetch();
-        if (verify_password($password, $hash)) {
+        // Düz metin şifre kontrolü
+        if ($password === $stored_password) {
             $_SESSION['user_id'] = $id;
             $_SESSION['role'] = $role;
             $stmt->close();
