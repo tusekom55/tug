@@ -398,6 +398,10 @@ body {
 .coins-intro {
     text-align: center;
     margin-bottom: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
 }
 
 .coins-intro h2 {
@@ -415,10 +419,11 @@ body {
 
 .coins-scroll {
     display: flex;
-    gap: 20px;
-    animation: scrollCoins 20s linear infinite;
+    gap: 30px;
+    animation: scrollCoins 25s linear infinite;
     width: max-content;
     will-change: transform;
+    padding-left: 100%;
 }
 
 .coin-card {
@@ -492,7 +497,7 @@ body {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-100%);
     }
 }
 
