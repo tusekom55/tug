@@ -212,9 +212,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 30% 70%, rgba(37, 99, 235, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
-                linear-gradient(135deg, rgba(10, 22, 40, 0.6) 0%, rgba(30, 64, 175, 0.4) 100%);
+    background: radial-gradient(circle at 30% 70%, rgba(37, 99, 235, 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(10, 22, 40, 0.7) 0%, rgba(30, 64, 175, 0.5) 100%);
 }
 
 @keyframes gradientShift {
@@ -242,22 +242,24 @@ body {
 }
 
 .hero-content-panel {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    border-radius: 25px;
-    padding: 50px;
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.15),
-                inset 0 2px 0 rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    z-index: 15;
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 3px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 20px !important;
+    padding: 60px 50px !important;
+    max-width: 700px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.4),
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    z-index: 100 !important;
 }
 
 .hero-content-panel::before {
@@ -400,37 +402,38 @@ body {
 }
 
 .ticker-container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    overflow: hidden;
-    position: relative;
-    padding: 0 20px;
-    mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
-    -webkit-mask: linear-gradient(90deg, transparent, white 5%, white 95%, transparent);
+    width: 100% !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    position: relative !important;
+    padding: 0 20px !important;
+    mask: linear-gradient(90deg, transparent, white 10%, white 90%, transparent) !important;
+    -webkit-mask: linear-gradient(90deg, transparent, white 10%, white 90%, transparent) !important;
 }
 
 .ticker-track {
-    display: flex;
-    animation: scroll-left 30s linear infinite;
-    white-space: nowrap;
-    width: fit-content;
+    display: flex !important;
+    animation: ticker-scroll 25s linear infinite !important;
+    white-space: nowrap !important;
+    width: max-content !important;
+    flex-wrap: nowrap !important;
 }
 
 .coin-item {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    padding: 15px 20px;
-    margin-right: 20px;
-    min-width: 250px;
-    flex-shrink: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-flex !important;
+    align-items: center !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 12px !important;
+    padding: 15px 20px !important;
+    margin-right: 20px !important;
+    min-width: 250px !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .coin-item:hover {
@@ -471,6 +474,15 @@ body {
     font-weight: 400;
 }
 
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 @keyframes scroll-left {
     0% {
         transform: translateX(0);
@@ -482,7 +494,11 @@ body {
 
 /* Pause animation on hover */
 .coin-ticker:hover .ticker-track {
-    animation-play-state: paused;
+    animation-play-state: paused !important;
+}
+
+.ticker-container:hover .ticker-track {
+    animation-play-state: paused !important;
 }
 
 /* ===== SERVICES SECTION ===== */
