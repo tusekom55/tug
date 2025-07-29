@@ -144,11 +144,15 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    /* Arka plan görsel ayarları - tam ekran kapsama */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    /* Fallback koyu mavi arka plan rengi */
+    background-color: #0f172a;
     opacity: 0;
     transition: opacity 0.8s ease;
+    /* İçerik ortalaması */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -162,11 +166,20 @@ body {
     text-align: center;
     color: white;
     max-width: 800px;
-    padding: 20px;
+    padding: 30px;
     z-index: 2;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    backdrop-filter: blur(5px);
+    /* Yarı saydam siyah arka plan - yazıları görünür yapar */
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
+    /* Blur efekti ile modern görünüm */
+    backdrop-filter: blur(10px);
+    /* Gölge efekti */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* İçerik ortalaması için flex */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .slide-title {
@@ -174,14 +187,20 @@ body {
     font-weight: 700;
     margin-bottom: 1rem;
     line-height: 1.2;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    /* Güçlü text-shadow ile yazı görünürlüğü */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.5);
+    /* Yazı rengi beyaz kalır */
+    color: white;
 }
 
 .slide-description {
     font-size: 1.2rem;
     margin-bottom: 2rem;
-    opacity: 0.9;
-    text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    opacity: 0.95;
+    /* Açıklama metni için text-shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 0, 0, 0.4);
+    /* Yazı rengi beyaz kalır */
+    color: white;
 }
 
 .slide-buttons {
@@ -203,18 +222,25 @@ body {
 .btn-primary {
     background: #2563eb;
     color: white;
+    /* Buton için gölge efekti */
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    /* Buton için text-shadow */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary:hover {
     background: #1d4ed8;
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.5);
 }
 
 .slide-note {
     font-size: 0.8rem;
-    opacity: 0.7;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
+    /* Not metni için text-shadow */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    /* Yazı rengi beyaz kalır */
+    color: white;
 }
 
 /* Slider Controls */
@@ -552,6 +578,11 @@ body {
 
     .slide-description {
         font-size: 1rem;
+    }
+
+    .slide-content {
+        padding: 20px;
+        max-width: 90%;
     }
 
     .slider-btn {
