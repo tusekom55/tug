@@ -28,19 +28,18 @@ function initNavbar() {
 // ===== HERO SLIDER =====
 function initHeroSlider() {
     const slides = document.querySelectorAll('.slide');
-    const dots = document.querySelectorAll('.slider-dot');
     let currentSlide = 0;
     let slideInterval;
+    let touchStartX = 0;
+    let touchEndX = 0;
 
     // Function to show specific slide
     function showSlide(index) {
-        // Remove active class from all slides and dots
+        // Remove active class from all slides
         slides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
         
-        // Add active class to current slide and dot
+        // Add active class to current slide
         slides[index].classList.add('active');
-        dots[index].classList.add('active');
         
         currentSlide = index;
     }
@@ -58,19 +57,60 @@ function initHeroSlider() {
         clearInterval(slideInterval);
     }
 
-    // Add click event to dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            showSlide(index);
-            stopAutoSlide();
-            setTimeout(startAutoSlide, 10000); // Restart auto-slide after 10 seconds
-        });
-    });
+    // Navigation functions
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+        stopAutoSlide();
+        setTimeout(startAutoSlide, 10000);
+    }
+
+    function prevSlide() {
+        currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+        showSlide(currentSlide);
+        stopAutoSlide();
+        setTimeout(startAutoSlide, 10000);
+    }
+
+    // Handle touch gestures
+    function handleTouchStart(e) {
+        touchStartX = e.touches[0].clientX;
+    }
+
+    function handleTouchMove(e) {
+        touchEndX = e.touches[0].clientX;
+    }
+
+    function handleTouchEnd(e) {
+        if (!touchStartX || !touchEndX) return;
+        
+        const touchDiff = touchStartX - touchEndX;
+        const minSwipeDistance = 50;
+        
+        if (Math.abs(touchDiff) > minSwipeDistance) {
+            if (touchDiff > 0) {
+                // Swipe left - next slide
+                nextSlide();
+            } else {
+                // Swipe right - previous slide
+                prevSlide();
+            }
+        }
+        
+        // Reset touch values
+        touchStartX = 0;
+        touchEndX = 0;
+    }
 
     // Pause on hover
     const sliderContainer = document.querySelector('.slider-container');
     sliderContainer.addEventListener('mouseenter', stopAutoSlide);
     sliderContainer.addEventListener('mouseleave', startAutoSlide);
+
+    // Touch events for mobile swiping
+    sliderContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+    sliderContainer.addEventListener('touchmove', handleTouchMove, { passive: true });
+    sliderContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     // Initialize auto-slide
     startAutoSlide();
@@ -78,15 +118,9 @@ function initHeroSlider() {
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft') {
-            currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
-            showSlide(currentSlide);
-            stopAutoSlide();
-            setTimeout(startAutoSlide, 10000);
+            prevSlide();
         } else if (e.key === 'ArrowRight') {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-            stopAutoSlide();
-            setTimeout(startAutoSlide, 10000);
+            nextSlide();
         }
     });
 }
@@ -786,9 +820,6 @@ function initCardAnimations() {
 class EnhancedHeroSlider {
     constructor() {
         this.slides = document.querySelectorAll('.slide');
-        this.dots = document.querySelectorAll('.slider-dot');
-        this.prevBtn = document.getElementById('prevSlide');
-        this.nextBtn = document.getElementById('nextSlide');
         this.progressBar = document.getElementById('sliderProgress');
         this.currentSlide = 0;
         this.totalSlides = this.slides.length;
@@ -801,15 +832,6 @@ class EnhancedHeroSlider {
     }
     
     init() {
-        // Navigation buttons
-        this.prevBtn.addEventListener('click', () => this.previousSlide());
-        this.nextBtn.addEventListener('click', () => this.nextSlide());
-        
-        // Dots navigation
-        this.dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => this.goToSlide(index));
-        });
-        
         // Touch/swipe support
         this.addTouchSupport();
         
@@ -825,14 +847,12 @@ class EnhancedHeroSlider {
     goToSlide(slideIndex) {
         // Remove active class from current slide
         this.slides[this.currentSlide].classList.remove('active');
-        this.dots[this.currentSlide].classList.remove('active');
         
         // Set new current slide
         this.currentSlide = slideIndex;
         
         // Add active class to new slide
         this.slides[this.currentSlide].classList.add('active');
-        this.dots[this.currentSlide].classList.add('active');
         
         // Restart progress bar
         this.resetProgress();
