@@ -115,17 +115,31 @@ function fetchPricesFromAPI($coingecko_ids) {
         $ids_string = implode(',', $coingecko_ids);
         $url = "https://api.coingecko.com/api/v3/simple/price?ids={$ids_string}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true";
         
-        $context = stream_context_create([
-            'http' => [
-                'timeout' => 10,
-                'user_agent' => 'TradePro/1.0'
-            ]
+        // cURL kullanarak daha güvenilir API çağrısı
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'TradePro/1.0 (PHP)');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: application/json'
         ]);
         
-        $response = file_get_contents($url, false, $context);
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
         
-        if ($response === FALSE) {
-            error_log('CoinGecko API erişim hatası');
+        if ($response === FALSE || !empty($curl_error)) {
+            error_log('CoinGecko API cURL hatası: ' . $curl_error);
+            return [];
+        }
+        
+        if ($http_code !== 200) {
+            error_log('CoinGecko API HTTP hatası: ' . $http_code);
             return [];
         }
         
