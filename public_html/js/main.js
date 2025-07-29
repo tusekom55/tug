@@ -236,7 +236,7 @@ class PriceUpdates {
             priceEl.style.color = change > 0 ? '#10b981' : '#ef4444';
             
             setTimeout(() => {
-                priceEl.style.color = '#333';
+                priceEl.style.color = change > 0 ? '#10b981' : '#ef4444';
             }, 300);
             
             // Update change indicator
@@ -249,6 +249,47 @@ class PriceUpdates {
                 changeEl.className = `change ${isPositive ? 'positive' : 'negative'}`;
             }
         });
+    }
+}
+
+// ===== SCROLLING COINS ANIMATION =====
+class ScrollingCoins {
+    constructor() {
+        this.init();
+    }
+    
+    init() {
+        // Add hover pause functionality
+        const scrollContainer = document.querySelector('.coins-scroll-container');
+        const scrollElement = document.querySelector('.coins-scroll');
+        
+        if (scrollContainer && scrollElement) {
+            // Pause on hover
+            scrollContainer.addEventListener('mouseenter', () => {
+                scrollElement.style.animationPlayState = 'paused';
+            });
+            
+            scrollContainer.addEventListener('mouseleave', () => {
+                scrollElement.style.animationPlayState = 'running';
+            });
+            
+            // Add touch support for mobile
+            let isTouching = false;
+            
+            scrollContainer.addEventListener('touchstart', () => {
+                isTouching = true;
+                scrollElement.style.animationPlayState = 'paused';
+            });
+            
+            scrollContainer.addEventListener('touchend', () => {
+                isTouching = false;
+                setTimeout(() => {
+                    if (!isTouching) {
+                        scrollElement.style.animationPlayState = 'running';
+                    }
+                }, 1000);
+            });
+        }
     }
 }
 
@@ -430,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new ScrollAnimations();
     new NavbarScroll();
     new PriceUpdates();
+    new ScrollingCoins();
     new FormValidation();
     
     // Create scroll to top button
