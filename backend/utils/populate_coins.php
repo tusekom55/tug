@@ -1,4 +1,9 @@
 <?php
+// Debug için error reporting aç
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/../config.php';
 
 // CoinGecko'dan popüler coinleri çek ve veritabanına kaydet
@@ -313,10 +318,15 @@ function addManualCoins($conn) {
 }
 
 // Script çalıştırılırsa
-if (basename(__FILE__) == basename($_SERVER['SCRIPT_NAME'])) {
+if (php_sapi_name() === 'cli' || basename(__FILE__) == basename($_SERVER['SCRIPT_NAME'] ?? '')) {
     echo "🪙 COIN VERİTABANI POPULATE İŞLEMİ\n";
     echo "=" . str_repeat("=", 40) . "\n\n";
     
-    populateCoinsFromAPI();
+    try {
+        populateCoinsFromAPI();
+    } catch (Exception $e) {
+        echo "❌ Genel Hata: " . $e->getMessage() . "\n";
+        echo "📍 Dosya: " . $e->getFile() . ":" . $e->getLine() . "\n";
+    }
 }
 ?> 
