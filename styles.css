@@ -289,6 +289,105 @@ body {
     transform: scale(1.2);
 }
 
+/* ===== COIN TICKER SECTION ===== */
+.coin-ticker {
+    background: #1a1a1a;
+    padding: 40px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.ticker-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.ticker-header h2 {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.ticker-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.ticker-track {
+    display: flex;
+    animation: scroll-left 30s linear infinite;
+    white-space: nowrap;
+}
+
+.coin-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-right: 20px;
+    min-width: 250px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.coin-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 1);
+}
+
+.coin-flag {
+    font-size: 2rem;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(37, 99, 235, 0.1);
+    border-radius: 50%;
+}
+
+.coin-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.coin-symbol {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0d1b4c;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+}
+
+.coin-name {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 400;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pause animation on hover */
+.ticker-container:hover .ticker-track {
+    animation-play-state: paused;
+}
+
 /* ===== SERVICES SECTION ===== */
 .services {
     padding: 80px 0;
@@ -805,6 +904,41 @@ body {
         font-size: 1rem;
     }
 
+    /* Coin Ticker Responsive */
+    .ticker-header h2 {
+        font-size: 1.4rem;
+        padding: 0 15px;
+    }
+
+    .coin-ticker {
+        padding: 30px 0;
+    }
+
+    .coin-item {
+        min-width: 200px;
+        padding: 12px 15px;
+        margin-right: 15px;
+    }
+
+    .coin-flag {
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+    }
+
+    .coin-symbol {
+        font-size: 1rem;
+    }
+
+    .coin-name {
+        font-size: 0.8rem;
+    }
+
+    .ticker-track {
+        animation-duration: 25s;
+    }
+
     .services-grid {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -860,6 +994,37 @@ body {
 
     .section-title {
         font-size: 2rem;
+    }
+
+    /* Coin Ticker Small Mobile */
+    .ticker-header h2 {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    .coin-item {
+        min-width: 180px;
+        padding: 10px 12px;
+        margin-right: 12px;
+    }
+
+    .coin-flag {
+        font-size: 1.3rem;
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
+    }
+
+    .coin-symbol {
+        font-size: 0.9rem;
+    }
+
+    .coin-name {
+        font-size: 0.75rem;
+    }
+
+    .ticker-track {
+        animation-duration: 20s;
     }
 
     .indicators-grid {
