@@ -666,7 +666,7 @@
             });
         }
 
-                 // CoinGecko API'den piyasa verilerini çek
+                 // Hibrit sistem - Veritabanı + API kombinasyonu
          async function fetchMarketData() {
              const searchInput = document.getElementById('coinSearch').value.toLowerCase();
              const marketLoader = document.getElementById('marketLoader');
@@ -678,59 +678,80 @@
              marketTableBody.innerHTML = '';
 
              try {
-                 let response;
-                 let data;
+                 // Hibrit endpoint'den veri çek
+                 const params = new URLSearchParams({
+                     limit: 50,
+                     search: searchInput
+                 });
+                 
+                 const response = await fetch(`backend/user/coins_hybrid.php?${params}`, {
+                     method: 'GET',
+                     credentials: 'include'
+                 });
+                 
+                 const result = await response.json();
 
-                 if (searchInput) {
-                     // Arama yapıldıysa filtreleme yap
-                     response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false');
-                     const allData = await response.json();
-                     data = allData.filter(coin => 
-                         coin.name.toLowerCase().includes(searchInput) || 
-                         coin.symbol.toLowerCase().includes(searchInput)
-                     ).slice(0, 50);
-                 } else {
-                     // Tüm popüler coinleri göster
-                     response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false');
-                     data = await response.json();
-                 }
-
-                 if (data && data.length > 0) {
-                     data.forEach((coin, index) => {
-                         const priceChangeColor = coin.price_change_percentage_24h >= 0 ? '#00d4aa' : '#ff4757';
-                         const priceChangeIcon = coin.price_change_percentage_24h >= 0 ? '▲' : '▼';
+                 if (result.success && result.coins && result.coins.length > 0) {
+                     result.coins.forEach((coin, index) => {
+                         const priceChangeColor = coin.price_change_24h >= 0 ? '#00d4aa' : '#ff4757';
+                         const priceChangeIcon = coin.price_change_24h >= 0 ? '▲' : '▼';
+                         const priceSourceIcon = coin.price_source === 'api' ? '🟢' : '🔴';
+                         const priceSourceText = coin.price_source === 'api' ? 'Canlı' : 'Sabit';
                          
                          const row = document.createElement('tr');
                          row.innerHTML = `
-                             <td style="padding: 12px; text-align: left; color: #8b8fa3;">${coin.market_cap_rank || index + 1}</td>
+                             <td style="padding: 12px; text-align: left; color: #8b8fa3;">${coin.sira || index + 1}</td>
                              <td style="padding: 12px; text-align: left;">
                                  <div style="display: flex; align-items: center; gap: 8px;">
-                                     <img src="${coin.image}" alt="${coin.name}" style="width: 24px; height: 24px; border-radius: 50%;">
+                                     <img src="${coin.logo_url}" alt="${coin.coin_adi}" style="width: 24px; height: 24px; border-radius: 50%;" onerror="this.src='https://via.placeholder.com/24x24/444/fff?text=${coin.coin_kodu.charAt(0)}'">
                                      <div>
-                                         <div style="color: #ffffff; font-weight: 600;">${coin.name}</div>
-                                         <div style="color: #8b8fa3; font-size: 12px;">${coin.symbol.toUpperCase()}</div>
+                                         <div style="color: #ffffff; font-weight: 600;">${coin.coin_adi}</div>
+                                         <div style="color: #8b8fa3; font-size: 12px;">
+                                             ${coin.coin_kodu} 
+                                             <span style="font-size: 10px; margin-left: 4px;" title="Fiyat Kaynağı: ${priceSourceText}">
+                                                 ${priceSourceIcon}
+                                             </span>
+                                         </div>
                                      </div>
                                  </div>
                              </td>
-                             <td style="padding: 12px; text-align: right; color: #ffffff; font-weight: 600;">$${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}</td>
-                             <td style="padding: 12px; text-align: right; color: ${priceChangeColor}; font-weight: 600;">
-                                 ${priceChangeIcon} ${Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
+                             <td style="padding: 12px; text-align: right; color: #ffffff; font-weight: 600;">
+                                 $${parseFloat(coin.current_price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}
                              </td>
-                             <td style="padding: 12px; text-align: right; color: #8b8fa3;">$${(coin.market_cap || 0).toLocaleString()}</td>
+                             <td style="padding: 12px; text-align: right; color: ${priceChangeColor}; font-weight: 600;">
+                                 ${priceChangeIcon} ${Math.abs(coin.price_change_24h).toFixed(2)}%
+                             </td>
+                             <td style="padding: 12px; text-align: right; color: #8b8fa3;">
+                                 $${parseInt(coin.market_cap || 0).toLocaleString()}
+                             </td>
                              <td style="padding: 12px; text-align: center;">
-                                 <button onclick="openTradingModal('${coin.id}', '${coin.name}', '${coin.current_price}')" class="add-to-portfolio-btn">
+                                 <button onclick="openTradingModal('${coin.coingecko_id}', '${coin.coin_adi}', '${coin.current_price}')" class="add-to-portfolio-btn">
                                      <i class="fas fa-exchange-alt"></i> İşlem
                                  </button>
                              </td>
                          `;
                          marketTableBody.appendChild(row);
                      });
+                     
                      marketTable.style.display = 'block';
+                     
+                     // API aktif coin sayısını göster
+                     if (result.api_active_count > 0) {
+                         const infoRow = document.createElement('tr');
+                         infoRow.innerHTML = `
+                             <td colspan="6" style="text-align: center; padding: 10px; background: #1a1f2e; color: #8b8fa3; font-size: 12px;">
+                                 📊 ${result.total_count} coin yüklendi | 🟢 ${result.api_active_count} canlı fiyat | 🔴 ${result.total_count - result.api_active_count} sabit fiyat
+                             </td>
+                         `;
+                         marketTableBody.appendChild(infoRow);
+                     }
+                     
                  } else {
                      marketTableBody.innerHTML = `
                          <tr>
                              <td colspan="6" style="text-align: center; color: #8b8fa3; padding: 40px;">
-                                 ${searchInput ? 'Aradığınız kripto para bulunamadı.' : 'Piyasa verileri yüklenemedi.'}
+                                 ${searchInput ? 'Aradığınız kripto para bulunamadı.' : 'Coin listesi yüklenemedi.'}
+                                 <br><small style="color: #666;">Veritabanında coin bulunamadı. populate_coins.php çalıştırın.</small>
                              </td>
                          </tr>
                      `;
@@ -742,6 +763,7 @@
                      <tr>
                          <td colspan="6" style="text-align: center; color: #ff4757; padding: 40px;">
                              <i class="fas fa-exclamation-triangle"></i> Veri çekme hatası oluştu.
+                             <br><small style="color: #888;">Backend bağlantısı kontrol edin.</small>
                          </td>
                      </tr>
                  `;
