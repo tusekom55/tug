@@ -5,6 +5,13 @@ require_once __DIR__ . '/../config.php';
 function populateCoinsFromAPI() {
     $conn = db_connect();
     
+    // Önce şema kontrolü yap
+    if (!checkSchema($conn)) {
+        echo "❌ Veritabanı şeması güncel değil!\n";
+        echo "📋 Lütfen önce 'update_schema.sql' dosyasını phpMyAdmin'de çalıştırın.\n\n";
+        return;
+    }
+    
     // Önce kategorilerin ID'lerini alalım
     $categories = [
         'Major Coins' => 1,
@@ -131,6 +138,13 @@ function populateCoinsFromAPI() {
     }
 }
 
+// Şema kontrolü - gerekli kolonların varlığını kontrol et
+function checkSchema($conn) {
+    $query = "SHOW COLUMNS FROM coins LIKE 'coingecko_id'";
+    $result = $conn->query($query);
+    return $result->num_rows > 0;
+}
+
 // Coin kategorisini belirle (basit logic)
 function getCoinCategory($name, $symbol) {
     $name_lower = strtolower($name);
@@ -204,6 +218,12 @@ function showStats($conn) {
 
 // Manuel coin ekleme - API olmadan
 function addManualCoins($conn) {
+    // Şema kontrolü
+    if (!checkSchema($conn)) {
+        echo "❌ Veritabanı şeması güncel değil! Manuel ekleme yapılamıyor.\n";
+        echo "📋 Lütfen önce 'update_schema.sql' dosyasını phpMyAdmin'de çalıştırın.\n\n";
+        return;
+    }
     $manual_coins = [
         // Major Coins
         ['bitcoin', 'Bitcoin', 'BTC', 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', 45000, 2.5, 850000000000, 1],
