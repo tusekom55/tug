@@ -1176,7 +1176,34 @@
            }
            
            .content-area {
-               padding: 20px;
+               padding: 8px;
+           }
+           
+           .card {
+               margin: 0 !important;
+               border-radius: 12px !important;
+           }
+           
+           .card-header {
+               padding: 16px !important;
+           }
+           
+           .market-controls {
+               flex-direction: column !important;
+               gap: 12px !important;
+               align-items: stretch !important;
+           }
+           
+           .market-controls input {
+               width: 100% !important;
+               max-width: none !important;
+               box-sizing: border-box !important;
+           }
+           
+           .market-controls button {
+               width: 100% !important;
+               margin-left: 0 !important;
+               justify-content: center !important;
            }
            
            .grid-2, .grid-3 {
@@ -1311,17 +1338,23 @@
            .mobile-coins-grid {
                display: grid !important;
                grid-template-columns: 1fr;
-               gap: 12px;
-               padding: 16px;
+               gap: 8px;
+               padding: 8px;
+               margin: 0;
+               width: 100%;
+               box-sizing: border-box;
            }
            
            .mobile-coin-card {
                background: linear-gradient(135deg, #1e2530 0%, #2a3441 100%);
                border: 1px solid rgba(255, 255, 255, 0.1);
-               border-radius: 12px;
-               padding: 16px;
+               border-radius: 16px;
+               padding: 20px;
                position: relative;
                overflow: hidden;
+               width: 100%;
+               box-sizing: border-box;
+               min-height: 120px;
            }
            
            .mobile-coin-header {
@@ -1338,8 +1371,8 @@
            }
            
            .mobile-coin-logo {
-               width: 40px;
-               height: 40px;
+               width: 50px;
+               height: 50px;
                border-radius: 50%;
                background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
                display: flex;
@@ -1347,25 +1380,27 @@
                justify-content: center;
                color: white;
                font-weight: bold;
-               font-size: 16px;
+               font-size: 20px;
+               flex-shrink: 0;
            }
            
            .mobile-coin-details h3 {
                color: #ffffff;
-               font-size: 16px;
+               font-size: 18px;
                font-weight: 600;
-               margin-bottom: 4px;
+               margin-bottom: 6px;
            }
            
            .mobile-coin-details .coin-symbol {
                color: #8896ab;
-               font-size: 12px;
+               font-size: 14px;
                text-transform: uppercase;
+               font-weight: 500;
            }
            
            .mobile-coin-price {
                color: #ffffff;
-               font-size: 18px;
+               font-size: 20px;
                font-weight: 700;
                text-align: right;
            }
@@ -1374,13 +1409,13 @@
                display: flex;
                justify-content: space-between;
                align-items: center;
-               margin-bottom: 12px;
+               margin-bottom: 16px;
            }
            
            .mobile-coin-change {
-               padding: 4px 8px;
-               border-radius: 6px;
-               font-size: 12px;
+               padding: 6px 12px;
+               border-radius: 8px;
+               font-size: 14px;
                font-weight: 600;
            }
            
@@ -1396,23 +1431,29 @@
            
            .mobile-coin-volume {
                color: #8896ab;
-               font-size: 11px;
+               font-size: 13px;
+               font-weight: 500;
            }
            
            .mobile-coin-actions {
                display: flex;
-               gap: 8px;
+               gap: 12px;
            }
            
            .mobile-trade-btn {
                flex: 1;
-               padding: 10px;
+               padding: 14px;
                border: none;
-               border-radius: 8px;
-               font-size: 13px;
+               border-radius: 10px;
+               font-size: 15px;
                font-weight: 600;
                cursor: pointer;
                transition: all 0.3s ease;
+               min-height: 48px;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               gap: 6px;
            }
            
            .mobile-trade-btn.buy {
@@ -1597,16 +1638,38 @@
                margin-bottom: 12px;
            }
            
-           .coin-card {
-               padding: 10px;
+           .content-area {
+               padding: 4px !important;
            }
            
-           .coin-info h3 {
-               font-size: 13px;
+           .mobile-coins-grid {
+               padding: 4px !important;
+               gap: 6px !important;
            }
            
-           .coin-price {
-               font-size: 12px;
+           .mobile-coin-card {
+               padding: 16px !important;
+               min-height: 110px !important;
+           }
+           
+           .mobile-coin-logo {
+               width: 45px !important;
+               height: 45px !important;
+               font-size: 18px !important;
+           }
+           
+           .mobile-coin-details h3 {
+               font-size: 16px !important;
+           }
+           
+           .mobile-coin-price {
+               font-size: 18px !important;
+           }
+           
+           .mobile-trade-btn {
+               padding: 12px !important;
+               font-size: 14px !important;
+               min-height: 44px !important;
            }
        }
 
