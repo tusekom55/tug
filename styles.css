@@ -242,20 +242,22 @@ body {
 }
 
 .hero-content-panel {
-    background: rgba(255, 255, 255, 0.12) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 16px !important;
-    padding: 40px 35px !important;
-    max-width: 580px !important;
+    background: linear-gradient(145deg, 
+        rgba(255, 255, 255, 0.1), 
+        rgba(255, 255, 255, 0.05)) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border-radius: 24px !important;
+    padding: 48px 40px !important;
+    max-width: 620px !important;
     margin: 0 auto !important;
     text-align: center !important;
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        0 4px 16px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    transition: all 0.4s ease !important;
+        0 20px 50px rgba(0, 0, 0, 0.1),
+        0 10px 25px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     position: relative !important;
     overflow: hidden !important;
     z-index: 100 !important;
@@ -264,93 +266,145 @@ body {
 .hero-content-panel::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.08) 0%, 
-                rgba(255, 255, 255, 0.02) 50%, 
-                rgba(255, 255, 255, 0.08) 100%);
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(255, 255, 255, 0.03) 45deg,
+        transparent 90deg,
+        rgba(255, 255, 255, 0.03) 135deg,
+        transparent 180deg,
+        rgba(255, 255, 255, 0.03) 225deg,
+        transparent 270deg,
+        rgba(255, 255, 255, 0.03) 315deg,
+        transparent 360deg
+    );
+    animation: rotate 20s linear infinite;
     pointer-events: none;
-    border-radius: 16px;
-    opacity: 0.8;
+    border-radius: 50%;
+    opacity: 0.5;
 }
 
 .hero-content-panel:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.15),
-        0 6px 20px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
-    background: rgba(255, 255, 255, 0.16) !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
+        0 25px 60px rgba(0, 0, 0, 0.15),
+        0 15px 35px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+    background: linear-gradient(145deg, 
+        rgba(255, 255, 255, 0.15), 
+        rgba(255, 255, 255, 0.08)) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .hero-title {
-    font-size: 2.8rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 16px;
-    line-height: 1.3;
+    font-size: 3.2rem;
+    font-weight: 300;
+    color: #ffffff;
+    margin-bottom: 24px;
+    line-height: 1.15;
     position: relative;
-    z-index: 1;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
-    letter-spacing: -0.02em;
+    z-index: 10;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.025em;
 }
 
 .hero-title .highlight {
-    color: #60a5fa;
-    font-weight: 700;
-    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    font-weight: 600;
+    background: linear-gradient(135deg, #a855f7, #3b82f6, #06b6d4);
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease-in-out infinite;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    position: relative;
 }
 
 .hero-description {
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 28px;
-    max-width: 480px;
-    line-height: 1.5;
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 36px;
+    max-width: 520px;
+    line-height: 1.6;
     position: relative;
-    z-index: 1;
+    z-index: 10;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .btn-cta {
-    background: rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, 
+        rgba(168, 85, 247, 0.8), 
+        rgba(59, 130, 246, 0.8));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 14px 32px;
-    font-size: 1rem;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 16px 36px;
+    font-size: 1.05rem;
     font-weight: 500;
-    border-radius: 12px;
+    border-radius: 16px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: none;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.5px;
     position: relative;
-    z-index: 1;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    box-shadow: 
+        0 8px 25px rgba(168, 85, 247, 0.3),
+        0 4px 12px rgba(59, 130, 246, 0.2);
+    overflow: hidden;
+}
+
+.btn-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-cta:hover::before {
+    left: 100%;
 }
 
 .btn-cta:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: linear-gradient(135deg, 
+        rgba(168, 85, 247, 0.9), 
+        rgba(59, 130, 246, 0.9));
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 15px 35px rgba(168, 85, 247, 0.4),
+        0 8px 20px rgba(59, 130, 246, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .btn-cta:active {
-    transform: translateY(0px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(0px) scale(1.02);
+    box-shadow: 
+        0 5px 15px rgba(168, 85, 247, 0.3),
+        0 2px 8px rgba(59, 130, 246, 0.2);
 }
 
 .slider-nav {
@@ -1012,31 +1066,30 @@ body {
     }
 
     .hero-title {
-        font-size: 2.2rem;
-        margin-bottom: 14px;
+        font-size: 2.4rem;
+        margin-bottom: 20px;
+        letter-spacing: -0.02em;
     }
 
     .hero-description {
-        font-size: 1rem;
-        max-width: 400px;
-        margin-bottom: 24px;
+        font-size: 1.05rem;
+        max-width: 450px;
+        margin-bottom: 32px;
+        line-height: 1.5;
     }
 
     .hero-content-panel {
-        padding: 32px 28px;
+        padding: 40px 32px;
         max-width: 90%;
         margin: 0 auto;
-        border-radius: 14px;
+        border-radius: 20px;
         text-align: center;
     }
 
-    .hero-content-panel::before {
-        border-radius: 14px;
-    }
-
     .btn-cta {
-        padding: 12px 28px;
-        font-size: 0.95rem;
+        padding: 14px 32px;
+        font-size: 1rem;
+        border-radius: 14px;
     }
 
     /* Coin Ticker Responsive */
@@ -1134,34 +1187,31 @@ body {
     }
 
     .hero-title {
-        font-size: 1.8rem;
-        margin-bottom: 12px;
-        letter-spacing: -0.01em;
+        font-size: 2rem;
+        margin-bottom: 16px;
+        letter-spacing: -0.015em;
+        line-height: 1.2;
     }
 
     .hero-description {
-        font-size: 0.95rem;
-        max-width: 320px;
-        margin-bottom: 20px;
-        line-height: 1.4;
+        font-size: 1rem;
+        max-width: 360px;
+        margin-bottom: 28px;
+        line-height: 1.5;
     }
 
     .hero-content-panel {
-        padding: 28px 22px;
+        padding: 36px 24px;
         max-width: 95%;
-        border-radius: 12px;
+        border-radius: 18px;
         text-align: center;
         margin: 0 auto;
     }
 
-    .hero-content-panel::before {
-        border-radius: 12px;
-    }
-
     .btn-cta {
-        padding: 12px 24px;
-        font-size: 0.9rem;
-        border-radius: 10px;
+        padding: 14px 28px;
+        font-size: 0.95rem;
+        border-radius: 12px;
     }
 
     .section-title {
