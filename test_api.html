@@ -50,17 +50,27 @@
             const resultDiv = document.getElementById(action + '-result');
             resultDiv.innerHTML = 'Yükleniyor...';
             
+            const url = `backend/admin/test_api.php?action=${action}`;
+            console.log('Calling API:', url);
+            
             try {
-                const response = await fetch(`backend/admin/test_api.php?action=${action}`);
+                const response = await fetch(url);
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
                 const data = await response.json();
+                console.log('Response data:', data);
                 
                 resultDiv.innerHTML = `
+                    <strong>URL:</strong> ${url}<br>
                     <strong>Status:</strong> ${response.status}<br>
                     <strong>Success:</strong> ${data.success}<br>
                     <strong>Data:</strong> <pre>${JSON.stringify(data, null, 2)}</pre>
                 `;
             } catch (error) {
+                console.error('API Error:', error);
                 resultDiv.innerHTML = `
+                    <strong>URL:</strong> ${url}<br>
                     <strong>Error:</strong> ${error.message}<br>
                     <strong>Stack:</strong> <pre>${error.stack}</pre>
                 `;

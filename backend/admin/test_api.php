@@ -14,7 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $action = $_GET['action'] ?? '';
 
 // Debug için action'ı logla
-error_log("Test API called with action: " . $action);
+error_log("Test API called with action: '" . $action . "'");
+error_log("GET parameters: " . print_r($_GET, true));
+
+// Action boşsa hata döndür
+if (empty($action)) {
+    echo json_encode(['error' => 'Action parametresi gerekli']);
+    exit;
+}
 
 try {
     switch ($action) {
