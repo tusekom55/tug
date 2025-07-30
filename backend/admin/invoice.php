@@ -32,12 +32,52 @@ error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
 error_log("POST data: " . print_r($_POST, true));
 
 switch ($action) {
+    case 'test':
+        // API bağlantı testi
+        echo json_encode(['success' => true, 'message' => 'API bağlantısı başarılı', 'timestamp' => date('Y-m-d H:i:s')]);
+        break;
+        
+    case 'test_db':
+        // Veritabanı bağlantı testi
+        try {
+            $conn = db_connect();
+            echo json_encode(['success' => true, 'message' => 'Veritabanı bağlantısı başarılı', 'timestamp' => date('Y-m-d H:i:s')]);
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'Veritabanı bağlantısı başarısız: ' . $e->getMessage()]);
+        }
+        break;
+        
+    case 'test_user':
+        // Kullanıcı testi
+        $user_id = $_GET['user_id'] ?? 0;
+        try {
+            $conn = db_connect();
+            $sql = "SELECT id, username, email, ad_soyad FROM users WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('i', $user_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
+            
+            if ($user) {
+                echo json_encode(['success' => true, 'message' => 'Kullanıcı bulundu', 'user' => $user]);
+            } else {
+                echo json_encode(['error' => 'Kullanıcı bulunamadı (ID: ' . $user_id . ')']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['error' => 'Kullanıcı sorgusu başarısız: ' . $e->getMessage()]);
+        }
+        break;
+        
     case 'create':
         // Fatura oluştur
-        $user_id = $_POST['user_id'] ?? 0;
-        $islem_tipi = $_POST['islem_tipi'] ?? '';
-        $islem_id = $_POST['islem_id'] ?? 0;
-        $tutar = $_POST['tutar'] ?? 0;
+        // JSON verilerini al
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        $user_id = $input['user_id'] ?? $_POST['user_id'] ?? 0;
+        $islem_tipi = $input['islem_tipi'] ?? $_POST['islem_tipi'] ?? '';
+        $islem_id = $input['islem_id'] ?? $_POST['islem_id'] ?? 0;
+        $tutar = $input['tutar'] ?? $_POST['tutar'] ?? 0;
         
         error_log("Creating invoice with data: user_id=$user_id, islem_tipi=$islem_tipi, islem_id=$islem_id, tutar=$tutar");
         
