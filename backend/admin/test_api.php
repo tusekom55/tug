@@ -11,14 +11,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
+// Debug için tüm request bilgilerini logla
+error_log("=== API DEBUG START ===");
+error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("Request URI: " . $_SERVER['REQUEST_URI']);
+error_log("Query String: " . $_SERVER['QUERY_STRING']);
+error_log("GET parameters: " . print_r($_GET, true));
+error_log("POST parameters: " . print_r($_POST, true));
+
 $action = $_GET['action'] ?? '';
 
-// Debug için action'ı logla
-error_log("Test API called with action: '" . $action . "'");
-error_log("GET parameters: " . print_r($_GET, true));
+error_log("Action value: '" . $action . "'");
+error_log("Action empty check: " . (empty($action) ? 'TRUE' : 'FALSE'));
 
 // Action boşsa hata döndür
 if (empty($action)) {
+    error_log("ERROR: Action parametresi boş!");
     echo json_encode(['error' => 'Action parametresi gerekli']);
     exit;
 }
