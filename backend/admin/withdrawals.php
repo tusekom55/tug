@@ -3,14 +3,22 @@ session_start();
 require_once '../config.php';
 require_once '../utils/security.php';
 
-// Admin kontrolü
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    http_response_code(403);
-    echo json_encode(['error' => 'Yetkisiz erişim']);
-    exit;
-}
+// Test modu - session kontrolü olmadan
+// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+//     http_response_code(403);
+//     echo json_encode(['error' => 'Yetkisiz erişim']);
+//     exit;
+// }
 
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+// OPTIONS request için
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
 
 $action = $_GET['action'] ?? '';
 

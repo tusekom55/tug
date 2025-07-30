@@ -199,7 +199,244 @@
             color: white;
             padding: 15px;
             text-align: left;
-            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-invoice {
+            background: #6f42c1;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        #user-modal-content,
+        #withdrawal-modal-content,
+        #settings-modal-content {
+            padding: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 15px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .admin-info {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .data-table {
+                min-width: 600px;
+            }
+
+            .action-btn {
+                padding: 8px 12px;
+                font-size: 11px;
+                margin: 1px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .nav-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-link {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-area {
+                padding: 15px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+
+            .nav-link {
+                min-width: 100px;
+                font-size: 12px;
+                padding: 10px 6px;
+            }
+
+            .action-btn {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
         }
 
         .data-table td {
@@ -1186,6 +1423,112 @@
             } catch (error) {
                 console.error('Fatura oluşturma hatası:', error);
                 alert('Fatura oluşturulamadı');
+            }
+        }
+
+        // Approve withdrawal
+        async function approveWithdrawal(withdrawalId) {
+            if (!confirm('Bu para çekme talebini onaylamak istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            try {
+                const formData = new FormData();
+                formData.append('withdrawal_id', withdrawalId);
+                formData.append('action', 'approve');
+                
+                const response = await fetch('backend/admin/withdrawals.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Para çekme talebi onaylandı');
+                    loadWithdrawals();
+                    loadDashboard();
+                } else {
+                    alert('Hata: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Para çekme onaylama hatası:', error);
+                alert('Para çekme talebi onaylanamadı');
+            }
+        }
+
+        // Reject withdrawal
+        async function rejectWithdrawal(withdrawalId) {
+            if (!confirm('Bu para çekme talebini reddetmek istediğinizden emin misiniz?')) {
+                return;
+            }
+            
+            try {
+                const formData = new FormData();
+                formData.append('withdrawal_id', withdrawalId);
+                formData.append('action', 'reject');
+                
+                const response = await fetch('backend/admin/withdrawals.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Para çekme talebi reddedildi');
+                    loadWithdrawals();
+                    loadDashboard();
+                } else {
+                    alert('Hata: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Para çekme reddetme hatası:', error);
+                alert('Para çekme talebi reddedilemedi');
+            }
+        }
+
+        // View withdrawal details
+        async function viewWithdrawal(withdrawalId) {
+            try {
+                const withdrawal = withdrawals.find(w => w.id == withdrawalId);
+                if (!withdrawal) {
+                    alert('Para çekme talebi bulunamadı');
+                    return;
+                }
+                
+                const modalContent = document.getElementById('withdrawal-modal-content');
+                
+                modalContent.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #2c3e50; margin-bottom: 15px;">Para Çekme Talebi Detayları</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div><strong>Kullanıcı:</strong> ${withdrawal.username}</div>
+                            <div><strong>Yöntem:</strong> ${withdrawal.yontem}</div>
+                            <div><strong>Tutar:</strong> ₺${parseFloat(withdrawal.tutar).toLocaleString()}</div>
+                            <div><strong>Durum:</strong> <span class="status-badge ${withdrawal.durum === 'beklemede' ? 'status-pending' : withdrawal.durum === 'onaylandi' ? 'status-approved' : 'status-rejected'}">${withdrawal.durum}</span></div>
+                            <div><strong>IBAN:</strong> ${withdrawal.iban || '-'}</div>
+                            <div><strong>Hesap Sahibi:</strong> ${withdrawal.hesap_sahibi}</div>
+                            <div><strong>Tarih:</strong> ${new Date(withdrawal.tarih).toLocaleDateString('tr-TR')}</div>
+                        </div>
+                    </div>
+                    
+                    ${withdrawal.durum === 'beklemede' ? `
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn-primary" onclick="approveWithdrawal(${withdrawal.id})" style="margin-right: 10px;">
+                                <i class="fas fa-check"></i> Onayla
+                            </button>
+                            <button class="btn-danger" onclick="rejectWithdrawal(${withdrawal.id})">
+                                <i class="fas fa-times"></i> Reddet
+                            </button>
+                        </div>
+                    ` : ''}
+                `;
+                
+                document.getElementById('withdrawal-modal').style.display = 'block';
+            } catch (error) {
+                console.error('Para çekme detayları yüklenirken hata:', error);
+                alert('Para çekme detayları yüklenemedi');
             }
         }
 
