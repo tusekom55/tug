@@ -35,8 +35,9 @@
     
     <div class="test-section">
         <h3>3. Invoice API Test</h3>
-        <button onclick="testInvoiceAPI()">Invoice API Test</button>
+        <button onclick="testInvoiceAPI()">Invoice API Test (Original)</button>
         <button onclick="testSimpleInvoice()">Basit Invoice Test</button>
+        <button onclick="testFixedInvoice()">Fixed Invoice Test</button>
         <div id="invoice-result"></div>
     </div>
     
@@ -51,7 +52,8 @@
     
     <div class="test-section">
         <h3>5. Detaylı Test</h3>
-        <button onclick="testWithDetails()">Detaylı Test</button>
+        <button onclick="testWithDetails()">Detaylı Test (Original)</button>
+        <button onclick="testFixedWithDetails()">Detaylı Test (Fixed)</button>
         <div id="detail-result"></div>
     </div>
     
@@ -158,6 +160,21 @@
             }
         }
         
+        async function testFixedInvoice() {
+            const result = await makeRequest('backend/admin/invoice_fixed.php?action=test');
+            
+            if (result.success) {
+                try {
+                    const data = JSON.parse(result.text);
+                    showResult('invoice-result', `✅ Fixed Invoice Test Başarılı!\n\nStatus: ${result.status}\nResponse: ${JSON.stringify(data, null, 2)}`);
+                } catch (parseError) {
+                    showResult('invoice-result', `❌ Fixed Invoice JSON Parse Hatası!\n\nStatus: ${result.status}\nRaw Response: ${result.text}\n\nParse Error: ${parseError.message}`, false);
+                }
+            } else {
+                showResult('invoice-result', `❌ Fixed Invoice Bağlantı Hatası!\n\nStatus: ${result.status}\nResponse: ${result.text}`, false);
+            }
+        }
+        
         async function testValidJSON() {
             const result = await makeRequest('backend/admin/simple_test.php?action=test');
             showResult('response-result', `Geçerli JSON Test:\n\nStatus: ${result.status}\nResponse: ${result.text}`);
@@ -186,7 +203,36 @@
                 tutar: 100
             });
             
-            let details = `Detaylı Test Sonucu:\n\n`;
+            let details = `Detaylı Test Sonucu (Original):\n\n`;
+            details += `Status: ${result.status}\n`;
+            details += `Success: ${result.success}\n`;
+            details += `Response Length: ${result.text.length}\n`;
+            details += `Raw Response: ${result.text}\n\n`;
+            
+            if (result.text.length > 0) {
+                try {
+                    const data = JSON.parse(result.text);
+                    details += `Parsed JSON: ${JSON.stringify(data, null, 2)}`;
+                    showResult('detail-result', details);
+                } catch (parseError) {
+                    details += `JSON Parse Error: ${parseError.message}`;
+                    showResult('detail-result', details, false);
+                }
+            } else {
+                details += `Boş yanıt alındı!`;
+                showResult('detail-result', details, false);
+            }
+        }
+        
+        async function testFixedWithDetails() {
+            const result = await makeRequest('backend/admin/invoice_fixed.php?action=create', 'POST', {
+                user_id: 2,
+                islem_tipi: 'para_cekme',
+                islem_id: 1,
+                tutar: 100
+            });
+            
+            let details = `Detaylı Test Sonucu (Fixed):\n\n`;
             details += `Status: ${result.status}\n`;
             details += `Success: ${result.success}\n`;
             details += `Response Length: ${result.text.length}\n`;
