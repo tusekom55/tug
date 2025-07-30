@@ -892,9 +892,47 @@
              height: calc(100% - 80px);
          }
          
+         /* Grafik alanını küçült */
          .chart-panel {
              background: linear-gradient(135deg, #141927 0%, #1e2742 100%);
              border-right: 1px solid rgba(255, 255, 255, 0.1);
+             max-height: 60vh;
+             overflow: hidden;
+         }
+         
+         /* Order content'e scroll ekle */
+         .order-content {
+             padding: 24px;
+             flex: 1;
+             overflow-y: auto;
+             max-height: 70vh;
+             scrollbar-width: thin;
+             scrollbar-color: #00d4aa #1e293b;
+         }
+         
+         .order-content::-webkit-scrollbar {
+             width: 6px;
+         }
+         
+         .order-content::-webkit-scrollbar-track {
+             background: #1e293b;
+             border-radius: 3px;
+         }
+         
+         .order-content::-webkit-scrollbar-thumb {
+             background: #00d4aa;
+             border-radius: 3px;
+         }
+         
+         .order-content::-webkit-scrollbar-thumb:hover {
+             background: #00b894;
+         }
+         
+         .chart-panel {
+             background: linear-gradient(135deg, #141927 0%, #1e2742 100%);
+             border-right: 1px solid rgba(255, 255, 255, 0.1);
+             max-height: 60vh;
+             overflow: hidden;
          }
          
          .chart-header {
@@ -1037,6 +1075,28 @@
              padding: 24px;
              flex: 1;
              overflow-y: auto;
+             max-height: 70vh;
+             scrollbar-width: thin;
+             scrollbar-color: #00d4aa #1e293b;
+         }
+         
+         .order-content::-webkit-scrollbar {
+             width: 6px;
+         }
+         
+         .order-content::-webkit-scrollbar-track {
+             background: #1e293b;
+             border-radius: 3px;
+         }
+         
+         .order-content::-webkit-scrollbar-thumb {
+             background: #00d4aa;
+             background: #00d4aa;
+             border-radius: 3px;
+         }
+         
+         .order-content::-webkit-scrollbar-thumb:hover {
+             background: #00b894;
          }
          
          .order-direction-toggle {
@@ -1486,20 +1546,28 @@
            
            .modal-container {
                width: 100%;
-               height: 100%;
-               max-height: 100vh;
+               height: 95vh;
+               max-height: 95vh;
                border-radius: 16px;
+               margin: 10px;
            }
            
            .modal-content {
                grid-template-columns: 1fr;
-               grid-template-rows: 1fr 1fr;
+               grid-template-rows: 40% 60%;
                height: calc(100% - 80px);
            }
            
            .chart-panel {
                border-right: none;
                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+               max-height: 40vh;
+           }
+           
+           .order-content {
+               max-height: 50vh;
+               padding: 16px;
+               font-size: 14px;
            }
            
            .chart-header {
@@ -2674,11 +2742,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- TradingView Widget -->
-                                    <div id="tradingview-widget" style="display: none; width: 100%; height: 100%;">
-                                        <div class="tradingview-widget-container">
-                                            <div id="tradingview_chart"></div>
-                                        </div>
+                                    <!-- Sahte Grafik -->
+                                    <div id="fake-chart" style="display: none; width: 100%; height: 100%;">
+                                        <canvas id="priceChart" width="800" height="400" style="width: 100%; height: 100%; background: #141927; border-radius: 8px;"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -3328,8 +3394,8 @@
              // Grafik çiz
              drawPriceChart(coinId, currentPrice);
              
-             // TradingView widget'ını yükle
-             loadTradingViewWidget(coinId);
+             // Sahte grafik yükle
+             loadFakeChart(coinId);
          }
 
          // Trading modalını kapat
@@ -3348,9 +3414,9 @@
                  
                  // Chart'ı sıfırla
                  const placeholder = document.getElementById('chartPlaceholder');
-                 const widgetContainer = document.getElementById('tradingview-widget');
-                 if (placeholder && widgetContainer) {
-                     widgetContainer.style.display = 'none';
+                 const fakeChart = document.getElementById('fake-chart');
+                 if (placeholder && fakeChart) {
+                     fakeChart.style.display = 'none';
                      placeholder.style.display = 'flex';
                  }
              }, 200);
@@ -3489,52 +3555,110 @@
              closeTradingModal();
          }
 
-                 // TradingView Widget yükle
-         function loadTradingViewWidget(symbol) {
-             const widgetContainer = document.getElementById('tradingview-widget');
+                 // Sahte grafik yükle
+         function loadFakeChart(symbol) {
+             const fakeChart = document.getElementById('fake-chart');
              const placeholder = document.getElementById('chartPlaceholder');
              
              // Placeholder'ı gizle
              placeholder.style.display = 'none';
-             widgetContainer.style.display = 'block';
+             fakeChart.style.display = 'block';
              
-             // TradingView script'ini yükle
-             if (!window.TradingView) {
-                 const script = document.createElement('script');
-                 script.src = 'https://s3.tradingview.com/tv.js';
-                 script.onload = () => {
-                     createTradingViewWidget(symbol);
-                 };
-                 document.head.appendChild(script);
-             } else {
-                 createTradingViewWidget(symbol);
-             }
+             // Canvas grafik çiz
+             createFakePriceChart(symbol);
          }
          
-         // TradingView Widget oluştur
-         function createTradingViewWidget(symbol) {
-             new TradingView.widget({
-                 "width": "100%",
-                 "height": "100%",
-                 "symbol": `BINANCE:${symbol.toUpperCase()}USDT`,
-                 "interval": "1H",
-                 "timezone": "Europe/Istanbul",
-                 "theme": "dark",
-                 "style": "1",
-                 "locale": "tr",
-                 "toolbar_bg": "#f1f3f6",
-                 "enable_publishing": false,
-                 "hide_side_toolbar": false,
-                 "allow_symbol_change": true,
-                 "container_id": "tradingview_chart",
-                 "studies": [
-                     "RSI@tv-basicstudies",
-                     "MACD@tv-basicstudies"
-                 ],
-                 "show_popup_button": true,
-                 "popup_width": "1000",
-                 "popup_height": "650"
+         // Sahte fiyat grafiği oluştur
+         function createFakePriceChart(symbol) {
+             const canvas = document.getElementById('priceChart');
+             const ctx = canvas.getContext('2d');
+             
+             // Canvas boyutlarını ayarla
+             canvas.width = canvas.offsetWidth;
+             canvas.height = canvas.offsetHeight;
+             
+             // Gerçekçi fiyat verisi oluştur
+             const prices = generateFakePriceData();
+             drawPriceChart(ctx, prices, symbol);
+             
+             // Animasyonlu fiyat güncellemesi
+             setInterval(() => {
+                 updateFakePrice(ctx, symbol);
+             }, 3000);
+         }
+         
+         // Sahte fiyat verisi oluştur
+         function generateFakePriceData() {
+             const data = [];
+             let price = 45000 + Math.random() * 5000;
+             
+             for (let i = 0; i < 100; i++) {
+                 price += (Math.random() - 0.5) * 200;
+                 data.push({
+                     x: i,
+                     y: price
+                 });
+             }
+             
+             return data;
+         }
+         
+         // Grafik çiz
+         function drawPriceChart(ctx, data, symbol) {
+             const width = ctx.canvas.width;
+             const height = ctx.canvas.height;
+             
+             // Arka plan
+             ctx.fillStyle = '#141927';
+             ctx.fillRect(0, 0, width, height);
+             
+             // Grid çizgileri
+             ctx.strokeStyle = '#2a2f3e';
+             ctx.lineWidth = 1;
+             
+             for (let i = 0; i <= 10; i++) {
+                 const y = (height / 10) * i;
+                 ctx.beginPath();
+                 ctx.moveTo(0, y);
+                 ctx.lineTo(width, y);
+                 ctx.stroke();
+             }
+             
+             // Fiyat çizgisi
+             ctx.strokeStyle = '#00d4aa';
+             ctx.lineWidth = 2;
+             ctx.beginPath();
+             
+             data.forEach((point, index) => {
+                 const x = (width / data.length) * index;
+                 const y = height - ((point.y - 40000) / 10000) * height;
+                 
+                 if (index === 0) {
+                     ctx.moveTo(x, y);
+                 } else {
+                     ctx.lineTo(x, y);
+                 }
              });
+             
+             ctx.stroke();
+             
+             // Fiyat etiketi
+             ctx.fillStyle = '#ffffff';
+             ctx.font = '14px Arial';
+             ctx.fillText(`${symbol.toUpperCase()}: ₺${data[data.length - 1].y.toFixed(2)}`, 10, 20);
+         }
+         
+         // Fiyat güncelle
+         function updateFakePrice(ctx, symbol) {
+             const currentPrice = 45000 + Math.random() * 5000;
+             
+             // Fiyat etiketini güncelle
+             ctx.fillStyle = '#141927';
+             ctx.fillRect(0, 0, 200, 30);
+             
+             ctx.fillStyle = '#ffffff';
+             ctx.font = '14px Arial';
+             ctx.fillText(`${symbol.toUpperCase()}: ₺${currentPrice.toFixed(2)}`, 10, 20);
          }
          
          // Advanced options toggle
