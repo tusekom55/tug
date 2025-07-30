@@ -1,19 +1,12 @@
 <?php
-session_start();
-require_once '../config.php';
-require_once '../utils/security.php';
-
 // Hata raporlamayı aç
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Test modu - session kontrolü olmadan
-// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-//     http_response_code(403);
-//     echo json_encode(['error' => 'Yetkisiz erişim']);
-//     exit;
-// }
+// Session başlat
+session_start();
 
+// CORS headers
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -24,18 +17,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
+// Debug log
+error_log("=== INVOICE API CALLED ===");
+error_log("Action: " . ($_GET['action'] ?? 'none'));
+error_log("Method: " . $_SERVER['REQUEST_METHOD']);
+error_log("POST data: " . print_r($_POST, true));
+error_log("GET data: " . print_r($_GET, true));
+
+try {
+    // Dosyaları kontrol et
+    if (!file_exists('../config.php')) {
+        throw new Exception('config.php dosyası bulunamadı');
+    }
+    
+    if (!file_exists('../utils/security.php')) {
+        throw new Exception('security.php dosyası bulunamadı');
+    }
+    
+    require_once '../config.php';
+    require_once '../utils/security.php';
+    
+    error_log("Dosyalar başarıyla yüklendi");
+    
+} catch (Exception $e) {
+    error_log("Dosya yükleme hatası: " . $e->getMessage());
+    echo json_encode(['error' => 'Dosya yükleme hatası: ' . $e->getMessage()]);
+    exit;
+}
+
 $action = $_GET['action'] ?? '';
 
-// Debug log
-error_log("Invoice API called with action: " . $action);
-error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
-error_log("POST data: " . print_r($_POST, true));
-
-switch ($action) {
-    case 'test':
-        // API bağlantı testi
-        echo json_encode(['success' => true, 'message' => 'API bağlantısı başarılı', 'timestamp' => date('Y-m-d H:i:s')]);
-        break;
+try {
+    switch ($action) {
+        case 'test':
+            // API bağlantı testi
+            error_log("Test action called");
+            echo json_encode(['success' => true, 'message' => 'API bağlantısı başarılı', 'timestamp' => date('Y-m-d H:i:s')]);
+            break;
         
     case 'test_db':
         // Veritabanı bağlantı testi
@@ -292,9 +310,15 @@ switch ($action) {
         echo $html;
         break;
         
-    default:
-        echo json_encode(['error' => 'Geçersiz işlem']);
-        break;
+        default:
+            error_log("Geçersiz action: " . $action);
+            echo json_encode(['error' => 'Geçersiz işlem: ' . $action]);
+            break;
+    }
+} catch (Exception $e) {
+    error_log("Invoice API genel hata: " . $e->getMessage());
+    error_log("Stack trace: " . $e->getTraceAsString());
+    echo json_encode(['error' => 'Sistem hatası: ' . $e->getMessage()]);
 }
 
 function generateInvoiceHTML($fatura, $fatura_ayarlari) {
