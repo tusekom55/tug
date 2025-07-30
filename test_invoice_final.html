@@ -106,6 +106,15 @@
                 </div>
                 <div id="quick-result" class="result"></div>
             </div>
+            
+            <!-- Veritabanı Düzeltme -->
+            <div class="test-card">
+                <h3>🔧 Veritabanı Düzeltme</h3>
+                <div class="test-buttons">
+                    <button class="btn btn-warning" onclick="addIbanColumn()">IBAN Sütunu Ekle</button>
+                </div>
+                <div id="db-fix-result" class="result"></div>
+            </div>
         </div>
 
         <!-- Sistem Durumu -->
@@ -337,6 +346,28 @@
                 status.textContent = 'Test Edilmedi';
                 status.className = 'status-badge';
             });
+        }
+        
+        async function addIbanColumn() {
+            showResult('db-fix-result', '⏳ IBAN sütunu ekleniyor...');
+            
+            try {
+                const response = await fetch('backend/add_iban_column.php');
+                const text = await response.text();
+                
+                if (response.ok) {
+                    showResult('db-fix-result', `✅ IBAN Sütunu İşlemi Tamamlandı!\n\nDetaylar:\n${text}`);
+                    
+                    // Başarılı olduysa user test'i tekrar çalıştır
+                    setTimeout(() => {
+                        testUser();
+                    }, 1000);
+                } else {
+                    showResult('db-fix-result', `❌ IBAN Sütunu İşlemi Başarısız!\n\nStatus: ${response.status}\nResponse: ${text}`, false);
+                }
+            } catch (error) {
+                showResult('db-fix-result', `❌ Bağlantı Hatası!\n\nHata: ${error.message}`, false);
+            }
         }
 
         // Sayfa yüklendiğinde otomatik API testi
