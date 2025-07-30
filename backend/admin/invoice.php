@@ -3,9 +3,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Session başlat
-session_start();
-
 // CORS headers
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
