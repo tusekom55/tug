@@ -3,6 +3,10 @@ session_start();
 require_once '../config.php';
 require_once '../utils/security.php';
 
+// Hata raporlamayı aç
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Test modu - session kontrolü olmadan
 // if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 //     http_response_code(403);
@@ -22,6 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $action = $_GET['action'] ?? '';
 
+// Debug log
+error_log("Invoice API called with action: " . $action);
+error_log("Request method: " . $_SERVER['REQUEST_METHOD']);
+error_log("POST data: " . print_r($_POST, true));
+
 switch ($action) {
     case 'create':
         // Fatura oluştur
@@ -30,21 +39,43 @@ switch ($action) {
         $islem_id = $_POST['islem_id'] ?? 0;
         $tutar = $_POST['tutar'] ?? 0;
         
+        error_log("Creating invoice with data: user_id=$user_id, islem_tipi=$islem_tipi, islem_id=$islem_id, tutar=$tutar");
+        
         // Veritabanı bağlantısını oluştur
-        $conn = db_connect();
+        try {
+            $conn = db_connect();
+            error_log("Database connection successful");
+        } catch (Exception $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+            echo json_encode(['error' => 'Veritabanı bağlantısı başarısız: ' . $e->getMessage()]);
+            exit;
+        }
         
         // Kullanıcı bilgilerini al
         $sql = "SELECT * FROM users WHERE id = ?";
+        error_log("Executing user query: $sql with user_id=$user_id");
+        
         $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            error_log("User query prepare failed: " . $conn->error);
+            echo json_encode(['error' => 'Kullanıcı sorgusu hazırlanamadı: ' . $conn->error]);
+            exit;
+        }
+        
         $stmt->bind_param('i', $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
         
+        error_log("User query result: " . print_r($user, true));
+        
         if (!$user) {
+            error_log("User not found for ID: $user_id");
             echo json_encode(['error' => 'Kullanıcı bulunamadı']);
             exit;
         }
+        
+        error_log("User found: " . $user['username']);
         
         // Fatura ayarlarını al
         $sql = "SELECT ayar_adi, ayar_degeri FROM sistem_ayarlari WHERE ayar_adi LIKE 'fatura_%'";
@@ -67,9 +98,13 @@ switch ($action) {
         // Faturayı veritabanına kaydet
         $sql = "INSERT INTO faturalar (user_id, islem_tipi, islem_id, fatura_no, tutar, kdv_orani, kdv_tutari, toplam_tutar) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        error_log("Executing invoice insert: $sql");
+        error_log("Parameters: user_id=$user_id, islem_tipi=$islem_tipi, islem_id=$islem_id, fatura_no=$fatura_no, tutar=$tutar, kdv_orani=$kdv_orani, kdv_tutari=$kdv_tutari, toplam_tutar=$toplam_tutar");
+        
         $stmt = $conn->prepare($sql);
         
         if (!$stmt) {
+            error_log("Invoice insert prepare failed: " . $conn->error);
             echo json_encode(['error' => 'SQL hazırlama hatası: ' . $conn->error]);
             exit;
         }
@@ -79,6 +114,7 @@ switch ($action) {
         
         if ($result) {
             $fatura_id = $conn->insert_id;
+            error_log("Invoice created successfully with ID: $fatura_id");
             
             // Fatura verilerini hazırla
             $fatura_data = [
@@ -99,8 +135,10 @@ switch ($action) {
                 'fatura_ayarlari' => $fatura_ayarlari
             ];
             
+            error_log("Sending success response: " . json_encode(['success' => true, 'data' => $fatura_data]));
             echo json_encode(['success' => true, 'data' => $fatura_data]);
         } else {
+            error_log("Invoice insert failed: " . $stmt->error);
             echo json_encode(['error' => 'Fatura oluşturulamadı: ' . $stmt->error]);
         }
         break;
