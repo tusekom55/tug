@@ -13,6 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $action = $_GET['action'] ?? '';
 
+// Debug için action'ı logla
+error_log("Test API called with action: " . $action);
+
 try {
     switch ($action) {
         case 'users':
@@ -102,7 +105,7 @@ try {
             break;
             
         default:
-            echo json_encode(['error' => 'Geçersiz işlem']);
+            echo json_encode(['error' => 'Geçersiz işlem: ' . $action]);
             break;
     }
 } catch (Exception $e) {
