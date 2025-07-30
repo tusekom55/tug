@@ -1539,158 +1539,288 @@
            }
        }
 
-       /* Extra Small Mobile Devices */
-       @media (max-width: 480px) {
-           .main-content {
-               width: 100%;
-           }
-           
-           .top-bar {
-               padding: 12px 16px;
-           }
-           
-           .mobile-menu-btn {
-               display: block;
-           }
-           
-           .user-profile .user-name {
-               font-size: 14px;
-           }
-           
-           .user-profile .user-balance {
-               font-size: 12px;
-           }
-           
-           /* Full Screen Mobile Trading Modal */
-           .modal-container {
-               width: 100%;
-               height: 100%;
-               border-radius: 0;
-               max-height: 100vh;
-           }
-           
-           .modal-header {
-               padding: 16px 20px;
-           }
-           
-           .modal-title-section h2 {
-               font-size: 18px;
-               margin-bottom: 6px;
-           }
-           
-           .modal-coin-info {
-               gap: 10px;
-           }
-           
-           .modal-coin-info span {
-               font-size: 12px;
-           }
-           
-           #modalCoinPrice {
-               font-size: 15px;
-           }
-           
-           .chart-panel {
-               min-height: 220px;
-           }
-           
-           .chart-header {
-               padding: 10px 16px;
-           }
-           
-           .timeframe-buttons {
-               gap: 3px;
-           }
-           
-           .timeframe-btn {
-               padding: 5px 6px;
-               font-size: 10px;
-           }
-           
-           .order-content {
-               padding: 12px;
-           }
-           
-           .order-direction-toggle {
-               margin-bottom: 16px;
-           }
-           
-           .direction-btn {
-               padding: 10px;
-           }
-           
-           .direction-btn .btn-text {
-               font-size: 13px;
-           }
-           
-           .form-group {
-               margin-bottom: 12px;
-           }
-           
-           .form-select, .form-input {
-               padding: 8px 10px;
-               font-size: 12px;
-           }
-           
-           .execute-btn {
-               padding: 12px;
-               font-size: 14px;
-               margin-bottom: 12px;
-           }
-           
-           .content-area {
-               padding: 4px !important;
-           }
-           
-           .mobile-coins-grid {
-               padding: 4px !important;
-               gap: 6px !important;
-           }
-           
-           .mobile-coin-card {
-               padding: 16px !important;
-               min-height: 110px !important;
-           }
-           
-           .mobile-coin-logo {
-               width: 45px !important;
-               height: 45px !important;
-               font-size: 18px !important;
-           }
-           
-           .mobile-coin-details h3 {
-               font-size: 16px !important;
-           }
-           
-           .mobile-coin-price {
-               font-size: 18px !important;
-           }
-           
-           .mobile-trade-btn {
-               padding: 12px !important;
-               font-size: 14px !important;
-               min-height: 44px !important;
-           }
-       }
+               /* Profile Page Styles */
+        .profile-info-card, .balance-card {
+            background: linear-gradient(135deg, #1e2530 0%, #2a3441 100%);
+            border: 1px solid #2a2f3e;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
 
-       /* Landscape Mobile */
-       @media (max-width: 768px) and (orientation: landscape) {
-           .modal-content {
-               grid-template-columns: 1fr 320px;
-               grid-template-rows: 1fr;
-           }
-           
-           .chart-panel {
-               border-right: 1px solid rgba(255, 255, 255, 0.1);
-               border-bottom: none;
-               min-height: auto;
-           }
-           
-           .order-panel {
-               min-height: auto;
-               max-height: none;
-           }
-       }
+        .profile-info-card:hover, .balance-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e2530 0%, #2a3441 100%);
+            border: 1px solid #2a2f3e;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00d4aa 0%, #00a87a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #8b8fa3;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .transaction-history-card {
+            background: linear-gradient(135deg, #1e2530 0%, #2a3441 100%);
+            border: 1px solid #2a2f3e;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a87a 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 212, 170, 0.3);
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .transaction-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .transaction-details {
+            color: #8b8fa3;
+            font-size: 0.9rem;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .transaction-amount.positive {
+            color: #00d4aa;
+        }
+
+        .transaction-amount.negative {
+            color: #ff4757;
+        }
+
+        /* Extra Small Mobile Devices */
+        @media (max-width: 480px) {
+            .main-content {
+                width: 100%;
+            }
+            
+            .top-bar {
+                padding: 12px 16px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .user-profile .user-name {
+                font-size: 14px;
+            }
+            
+            .user-profile .user-balance {
+                font-size: 12px;
+            }
+            
+            /* Full Screen Mobile Trading Modal */
+            .modal-container {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            
+            .modal-header {
+                padding: 16px 20px;
+            }
+            
+            .modal-title-section h2 {
+                font-size: 18px;
+                margin-bottom: 6px;
+            }
+            
+            .modal-coin-info {
+                gap: 10px;
+            }
+            
+            .modal-coin-info span {
+                font-size: 12px;
+            }
+            
+            #modalCoinPrice {
+                font-size: 15px;
+            }
+            
+            .chart-panel {
+                min-height: 220px;
+            }
+            
+            .chart-header {
+                padding: 10px 16px;
+            }
+            
+            .timeframe-buttons {
+                gap: 3px;
+            }
+            
+            .timeframe-btn {
+                padding: 5px 6px;
+                font-size: 10px;
+            }
+            
+            .order-content {
+                padding: 12px;
+            }
+            
+            .order-direction-toggle {
+                margin-bottom: 16px;
+            }
+            
+            .direction-btn {
+                padding: 10px;
+            }
+            
+            .direction-btn .btn-text {
+                font-size: 13px;
+            }
+            
+            .form-group {
+                margin-bottom: 12px;
+            }
+            
+            .form-select, .form-input {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .execute-btn {
+                padding: 12px;
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+            
+            .content-area {
+                padding: 4px !important;
+            }
+            
+            .mobile-coins-grid {
+                padding: 4px !important;
+                gap: 6px !important;
+            }
+            
+            .mobile-coin-card {
+                padding: 16px !important;
+                min-height: 110px !important;
+            }
+            
+            .mobile-coin-logo {
+                width: 45px !important;
+                height: 45px !important;
+                font-size: 18px !important;
+            }
+            
+            .mobile-coin-details h3 {
+                font-size: 16px !important;
+            }
+            
+            .mobile-coin-price {
+                font-size: 18px !important;
+            }
+            
+            .mobile-trade-btn {
+                padding: 12px !important;
+                font-size: 14px !important;
+                min-height: 44px !important;
+            }
+        }
+
+        /* Landscape Mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .modal-content {
+                grid-template-columns: 1fr 320px;
+                grid-template-rows: 1fr;
+            }
+            
+            .chart-panel {
+                border-right: 1px solid rgba(255, 255, 255, 0.1);
+                border-bottom: none;
+                min-height: auto;
+            }
+            
+            .order-panel {
+                min-height: auto;
+                max-height: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2260,12 +2390,87 @@
                 <section class="content-section" id="profile">
                     <div class="section-header">
                         <h2 class="section-title">Profil</h2>
-                        <p class="section-subtitle">Hesap ayarları</p>
+                        <p class="section-subtitle">Hesap bilgileri ve işlem geçmişi</p>
                     </div>
-                    <div class="card">
-                        <div id="userInfo" class="loading">
+                    
+                    <div class="grid grid-2">
+                        <!-- Kullanıcı Bilgileri Kartı -->
+                        <div class="card profile-info-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-user" style="color: #00d4aa; margin-right: 10px;"></i>
+                                    Kullanıcı Bilgileri
+                                </h3>
+                            </div>
+                            <div id="userInfo" class="loading">
+                                <div class="spinner"></div>
+                                Yükleniyor...
+                            </div>
+                        </div>
+                        
+                        <!-- Bakiye Kartı -->
+                        <div class="card balance-card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-wallet" style="color: #00d4aa; margin-right: 10px;"></i>
+                                    Hesap Bakiyesi
+                                </h3>
+                            </div>
+                            <div id="balanceInfo" class="loading">
+                                <div class="spinner"></div>
+                                Yükleniyor...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hesap İstatistikleri -->
+                    <div class="grid grid-3">
+                        <div class="card stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value" id="totalTrades">0</h4>
+                                <p class="stat-label">Toplam İşlem</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value" id="profitLoss">₺0</h4>
+                                <p class="stat-label">Toplam Kar/Zarar</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h4 class="stat-value" id="memberSince">-</h4>
+                                <p class="stat-label">Üyelik Süresi</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- İşlem Geçmişi -->
+                    <div class="card transaction-history-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-history" style="color: #00d4aa; margin-right: 10px;"></i>
+                                İşlem Geçmişi
+                            </h3>
+                            <button class="refresh-btn" onclick="loadTransactionHistory()">
+                                <i class="fas fa-sync-alt"></i>
+                                Yenile
+                            </button>
+                        </div>
+                        <div id="transactionHistory" class="loading">
                             <div class="spinner"></div>
-                            Yükleniyor...
+                            İşlem geçmişi yükleniyor...
                         </div>
                     </div>
                 </section>
@@ -2363,6 +2568,26 @@
                         </div>
                     `;
                     
+                    // Bakiye kartı
+                    document.getElementById('balanceInfo').innerHTML = `
+                        <div style="text-align: center;">
+                            <h1 style="font-size: 2.5rem; color: #00d4aa; margin-bottom: 10px;">₺${balance.toLocaleString()}</h1>
+                            <p style="color: #8b8fa3; margin-bottom: 15px;">Mevcut Bakiye</p>
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <span style="color: #00d4aa; font-weight: 600;">+₺156.24</span>
+                                <span style="color: #8b8fa3;">bugün</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // İstatistikler
+                    document.getElementById('totalTrades').textContent = '12';
+                    document.getElementById('profitLoss').textContent = '₺2,450';
+                    document.getElementById('memberSince').textContent = '3 ay';
+                    
+                    // İşlem geçmişi yükle
+                    loadTransactionHistory();
+                    
                     // Diğer dashboard verilerini simüle et
                     setTimeout(() => {
                         document.getElementById('dailyPnl').innerHTML = 
@@ -2385,6 +2610,67 @@
             .catch(err => {
                 window.location.href = 'login.html';
             });
+        }
+
+        // İşlem geçmişi yükle
+        function loadTransactionHistory() {
+            const historyContainer = document.getElementById('transactionHistory');
+            
+            // Simüle edilmiş işlem geçmişi
+            const transactions = [
+                {
+                    type: 'BTC Alış',
+                    details: 'Bitcoin 0.05 BTC @ $45,000',
+                    amount: '+₺2,250',
+                    date: '2024-01-15 14:30',
+                    isPositive: true
+                },
+                {
+                    type: 'ETH Satış',
+                    details: 'Ethereum 0.5 ETH @ $3,200',
+                    amount: '+₺1,600',
+                    date: '2024-01-14 09:15',
+                    isPositive: true
+                },
+                {
+                    type: 'Para Yatırma',
+                    details: 'Kredi Kartı ile yatırma',
+                    amount: '+₺5,000',
+                    date: '2024-01-12 16:45',
+                    isPositive: true
+                },
+                {
+                    type: 'ADA Alış',
+                    details: 'Cardano 100 ADA @ $0.50',
+                    amount: '-₺50',
+                    date: '2024-01-10 11:20',
+                    isPositive: false
+                },
+                {
+                    type: 'DOT Satış',
+                    details: 'Polkadot 10 DOT @ $7.50',
+                    amount: '+₺75',
+                    date: '2024-01-08 13:45',
+                    isPositive: true
+                }
+            ];
+            
+            let historyHTML = '';
+            transactions.forEach(transaction => {
+                historyHTML += `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-type">${transaction.type}</div>
+                            <div class="transaction-details">${transaction.details} • ${transaction.date}</div>
+                        </div>
+                        <div class="transaction-amount ${transaction.isPositive ? 'positive' : 'negative'}">
+                            ${transaction.amount}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            historyContainer.innerHTML = historyHTML;
         }
 
         // Çıkış yap

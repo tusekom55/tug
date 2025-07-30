@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initLiveSupport();
     initScrollAnimations();
     initMarketIndicators();
+    initInvestmentTips();
 });
 
 // ===== NAVBAR FUNCTIONALITY =====
@@ -417,6 +418,79 @@ function initScrollAnimations() {
         }
         observer.observe(element);
     });
+}
+
+// ===== INVESTMENT TIPS =====
+const investmentTips = [
+    {
+        title: "Çeşitlendirilmiş Portföy",
+        description: "Yatırımlarınızı farklı varlık sınıfları arasında dağıtarak riskinizi azaltın. Sadece bir sektöre yatırım yapmaktan kaçının."
+    },
+    {
+        title: "Uzun Vadeli Düşünün",
+        description: "Başarılı yatırımcılar sabırlıdır. Kısa vadeli dalgalanmalara odaklanmak yerine uzun vadeli hedeflerinizi belirleyin."
+    },
+    {
+        title: "Risk Yönetimi",
+        description: "Kaybetmeyi göze alamayacağınız parayla yatırım yapmayın. Her zaman acil durum fonu ayırın."
+    },
+    {
+        title: "Düzenli Yatırım",
+        description: "Maaşınızın belirli bir kısmını düzenli olarak yatırıma yönlendirin. Bu, dolar maliyet ortalaması stratejisidir."
+    },
+    {
+        title: "Araştırma Yapın",
+        description: "Yatırım yapmadan önce o varlık hakkında detaylı araştırma yapın. Başkalarının tavsiyelerine körü körüne uymayın."
+    },
+    {
+        title: "Duygusal Kararlardan Kaçının",
+        description: "Korku ve açgözlülük yatırımcının en büyük düşmanlarıdır. Disiplinli kalın ve planınıza sadık kalın."
+    },
+    {
+        title: "Maliyetleri Düşük Tutun",
+        description: "Yüksek işlem ücretleri getirilerinizi olumsuz etkiler. Düşük komisyonlu aracı kurumları tercih edin."
+    },
+    {
+        title: "Enflasyonu Hesaplayın",
+        description: "Gerçek getiriyiniz enflasyon düşüldükten sonraki getiridir. Enflasyonla başa çıkabilecek yatırımlar yapın."
+    },
+    {
+        title: "Teknoloji Trendlerini İzleyin",
+        description: "Blockchain, yapay zeka, yeşil enerji gibi gelecek teknolojilerine yatırım fırsatlarını değerlendirin."
+    },
+    {
+        title: "Vergi Optimizasyonu",
+        description: "Yatırım kazançlarınızın vergi yükünü optimize etmek için vergi avantajlı hesapları kullanın."
+    }
+];
+
+function initInvestmentTips() {
+    loadRandomTip();
+    // Her sayfa yenilendiğinde yeni bir tavsiye göster
+    setInterval(loadRandomTip, 300000); // 5 dakikada bir değiştir
+}
+
+function loadRandomTip() {
+    const randomIndex = Math.floor(Math.random() * investmentTips.length);
+    const tip = investmentTips[randomIndex];
+    
+    const titleElement = document.getElementById('tip-title');
+    const descriptionElement = document.getElementById('tip-description');
+    
+    if (titleElement && descriptionElement) {
+        // Fade out effect
+        titleElement.style.opacity = '0';
+        descriptionElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            titleElement.textContent = tip.title;
+            descriptionElement.textContent = tip.description;
+            
+            // Fade in effect
+            titleElement.style.opacity = '1';
+            descriptionElement.style.opacity = '1';
+        }, 300);
+    }
 }
 
 // ===== MARKET INDICATORS ANIMATION =====
