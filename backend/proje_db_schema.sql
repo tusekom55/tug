@@ -6,6 +6,10 @@ CREATE TABLE users (
     password VARCHAR(255),
     role ENUM('user','admin') DEFAULT 'user',
     balance DECIMAL(16,2) DEFAULT 0,
+    ad_soyad VARCHAR(100),
+    tc_no VARCHAR(11),
+    telefon VARCHAR(20),
+    iban VARCHAR(50),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -100,4 +104,10 @@ INSERT INTO coin_kategorileri (kategori_adi) VALUES
 ('DeFi'),
 ('NFT'),
 ('Meme Coins'),
-('Stablecoins'); 
+('Stablecoins');
+
+-- Örnek kullanıcılar
+INSERT INTO users (username, email, password, role, balance, ad_soyad, tc_no, telefon, iban) VALUES 
+('admin', 'admin@cryptofinance.com', 'password', 'admin', 10000.00, 'Admin User', '12345678901', '+905551234567', 'TR63 0006 4000 0019 3001 9751 44'),
+('user1', 'user1@example.com', 'password', 'user', 5000.00, 'Ahmet Yılmaz', '12345678902', '+905551234568', 'TR63 0006 4000 0019 3001 9751 45'),
+('user2', 'user2@example.com', 'password', 'user', 3000.00, 'Fatma Demir', '12345678903', '+905551234569', 'TR63 0006 4000 0019 3001 9751 46'); 
