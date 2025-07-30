@@ -68,34 +68,40 @@ switch ($action) {
         $sql = "INSERT INTO faturalar (user_id, islem_tipi, islem_id, fatura_no, tutar, kdv_orani, kdv_tutari, toplam_tutar) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
+        
+        if (!$stmt) {
+            echo json_encode(['error' => 'SQL hazırlama hatası: ' . $conn->error]);
+            exit;
+        }
+        
         $stmt->bind_param('issisdd', $user_id, $islem_tipi, $islem_id, $fatura_no, $tutar, $kdv_orani, $kdv_tutari, $toplam_tutar);
         $result = $stmt->execute();
         
         if ($result) {
             $fatura_id = $conn->insert_id;
             
-                    // Fatura verilerini hazırla
-        $fatura_data = [
-            'fatura_id' => $fatura_id,
-            'fatura_no' => $fatura_no,
-            'tarih' => date('Y-m-d H:i:s'),
-            'username' => $user['username'],
-            'email' => $user['email'],
-            'ad_soyad' => $user['ad_soyad'] ?? $user['username'],
-            'tc_no' => $user['tc_no'] ?? '',
-            'telefon' => $user['telefon'] ?? '',
-            'iban' => $user['iban'] ?? '',
-            'tutar' => $tutar,
-            'kdv_orani' => $kdv_orani,
-            'kdv_tutari' => $kdv_tutari,
-            'toplam_tutar' => $toplam_tutar,
-            'islem_tipi' => $islem_tipi,
-            'fatura_ayarlari' => $fatura_ayarlari
-        ];
+            // Fatura verilerini hazırla
+            $fatura_data = [
+                'fatura_id' => $fatura_id,
+                'fatura_no' => $fatura_no,
+                'tarih' => date('Y-m-d H:i:s'),
+                'username' => $user['username'],
+                'email' => $user['email'],
+                'ad_soyad' => $user['ad_soyad'] ?? $user['username'],
+                'tc_no' => $user['tc_no'] ?? '',
+                'telefon' => $user['telefon'] ?? '',
+                'iban' => $user['iban'] ?? '',
+                'tutar' => $tutar,
+                'kdv_orani' => $kdv_orani,
+                'kdv_tutari' => $kdv_tutari,
+                'toplam_tutar' => $toplam_tutar,
+                'islem_tipi' => $islem_tipi,
+                'fatura_ayarlari' => $fatura_ayarlari
+            ];
             
             echo json_encode(['success' => true, 'data' => $fatura_data]);
         } else {
-            echo json_encode(['error' => 'Fatura oluşturulamadı']);
+            echo json_encode(['error' => 'Fatura oluşturulamadı: ' . $stmt->error]);
         }
         break;
         
