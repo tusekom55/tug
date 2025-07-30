@@ -28,13 +28,19 @@
     </div>
     
     <div class="test-section">
-        <h3>2. Invoice API Test</h3>
+        <h3>2. Config Test</h3>
+        <button onclick="testConfig()">Config Dosyası Test</button>
+        <div id="config-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Invoice API Test</h3>
         <button onclick="testInvoiceAPI()">Invoice API Test</button>
         <div id="invoice-result"></div>
     </div>
     
     <div class="test-section">
-        <h3>3. Farklı Yanıt Türleri</h3>
+        <h3>4. Farklı Yanıt Türleri</h3>
         <button onclick="testValidJSON()">Geçerli JSON</button>
         <button onclick="testEmptyResponse()">Boş Yanıt</button>
         <button onclick="testInvalidJSON()">Geçersiz JSON</button>
@@ -43,7 +49,7 @@
     </div>
     
     <div class="test-section">
-        <h3>4. Detaylı Test</h3>
+        <h3>5. Detaylı Test</h3>
         <button onclick="testWithDetails()">Detaylı Test</button>
         <div id="detail-result"></div>
     </div>
@@ -108,6 +114,16 @@
                 }
             } else {
                 showResult('simple-result', `❌ Bağlantı Hatası!\n\nStatus: ${result.status}\nResponse: ${result.text}`, false);
+            }
+        }
+        
+        async function testConfig() {
+            const result = await makeRequest('backend/admin/config_test.php');
+            
+            if (result.success) {
+                showResult('config-result', `✅ Config Test Başarılı!\n\nStatus: ${result.status}\nResponse: ${result.text}`);
+            } else {
+                showResult('config-result', `❌ Config Test Başarısız!\n\nStatus: ${result.status}\nResponse: ${result.text}`, false);
             }
         }
         

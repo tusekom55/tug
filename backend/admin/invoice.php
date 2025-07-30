@@ -25,23 +25,42 @@ error_log("POST data: " . print_r($_POST, true));
 error_log("GET data: " . print_r($_GET, true));
 
 try {
-    // Dosyaları kontrol et
-    if (!file_exists('../config.php')) {
-        throw new Exception('config.php dosyası bulunamadı');
+    // Dosya yollarını kontrol et
+    $config_path = __DIR__ . '/../config.php';
+    $security_path = __DIR__ . '/../utils/security.php';
+    
+    error_log("Config path: " . $config_path);
+    error_log("Security path: " . $security_path);
+    error_log("Config exists: " . (file_exists($config_path) ? 'yes' : 'no'));
+    error_log("Security exists: " . (file_exists($security_path) ? 'yes' : 'no'));
+    
+    if (!file_exists($config_path)) {
+        throw new Exception('config.php dosyası bulunamadı: ' . $config_path);
     }
     
-    if (!file_exists('../utils/security.php')) {
-        throw new Exception('security.php dosyası bulunamadı');
+    if (!file_exists($security_path)) {
+        throw new Exception('security.php dosyası bulunamadı: ' . $security_path);
     }
     
-    require_once '../config.php';
-    require_once '../utils/security.php';
+    require_once $config_path;
+    require_once $security_path;
     
     error_log("Dosyalar başarıyla yüklendi");
+    
+    // Fonksiyon kontrolü
+    if (!function_exists('db_connect')) {
+        throw new Exception('db_connect fonksiyonu bulunamadı');
+    }
+    
+    error_log("db_connect fonksiyonu mevcut");
     
 } catch (Exception $e) {
     error_log("Dosya yükleme hatası: " . $e->getMessage());
     echo json_encode(['error' => 'Dosya yükleme hatası: ' . $e->getMessage()]);
+    exit;
+} catch (Error $e) {
+    error_log("PHP Fatal Error: " . $e->getMessage());
+    echo json_encode(['error' => 'PHP Fatal Error: ' . $e->getMessage()]);
     exit;
 }
 
@@ -88,24 +107,36 @@ try {
         break;
         
     case 'create':
-        // Fatura oluştur
-        // JSON verilerini al
-        $input = json_decode(file_get_contents('php://input'), true);
-        
-        $user_id = $input['user_id'] ?? $_POST['user_id'] ?? 0;
-        $islem_tipi = $input['islem_tipi'] ?? $_POST['islem_tipi'] ?? '';
-        $islem_id = $input['islem_id'] ?? $_POST['islem_id'] ?? 0;
-        $tutar = $input['tutar'] ?? $_POST['tutar'] ?? 0;
-        
-        error_log("Creating invoice with data: user_id=$user_id, islem_tipi=$islem_tipi, islem_id=$islem_id, tutar=$tutar");
-        
-        // Veritabanı bağlantısını oluştur
         try {
+            error_log("=== CREATE CASE STARTED ===");
+            
+            // JSON verilerini al
+            $raw_input = file_get_contents('php://input');
+            error_log("Raw input: " . $raw_input);
+            
+            $input = json_decode($raw_input, true);
+            error_log("Decoded input: " . print_r($input, true));
+            
+            $user_id = $input['user_id'] ?? $_POST['user_id'] ?? 0;
+            $islem_tipi = $input['islem_tipi'] ?? $_POST['islem_tipi'] ?? '';
+            $islem_id = $input['islem_id'] ?? $_POST['islem_id'] ?? 0;
+            $tutar = $input['tutar'] ?? $_POST['tutar'] ?? 0;
+            
+            error_log("Creating invoice with data: user_id=$user_id, islem_tipi=$islem_tipi, islem_id=$islem_id, tutar=$tutar");
+            
+            // Parametreleri kontrol et
+            if (empty($user_id) || empty($islem_tipi) || empty($tutar)) {
+                throw new Exception('Eksik parametreler: user_id, islem_tipi ve tutar gerekli');
+            }
+            
+            // Veritabanı bağlantısını oluştur
+            error_log("Attempting database connection...");
             $conn = db_connect();
             error_log("Database connection successful");
+            
         } catch (Exception $e) {
-            error_log("Database connection failed: " . $e->getMessage());
-            echo json_encode(['error' => 'Veritabanı bağlantısı başarısız: ' . $e->getMessage()]);
+            error_log("Create case error: " . $e->getMessage());
+            echo json_encode(['error' => 'Create hatası: ' . $e->getMessage()]);
             exit;
         }
         
