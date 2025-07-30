@@ -667,6 +667,8 @@
 
         // Initialize admin panel
         document.addEventListener('DOMContentLoaded', function() {
+            // Test modu - session kontrolü olmadan
+            console.log('Admin panel test modunda çalışıyor');
             loadDashboard();
             setupNavigation();
         });
@@ -1259,7 +1261,7 @@
         // Logout
         function logout() {
             if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
-                window.location.href = 'login.html';
+                window.location.href = 'admin-login.html';
             }
         }
 
