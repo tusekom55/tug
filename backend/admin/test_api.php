@@ -31,6 +31,16 @@ if (empty($action)) {
     exit;
 }
 
+// Veritabanı bağlantısını oluştur
+try {
+    $conn = db_connect();
+    error_log("Database connection successful");
+} catch (Exception $e) {
+    error_log("Database connection failed: " . $e->getMessage());
+    echo json_encode(['error' => 'Veritabanı bağlantı hatası: ' . $e->getMessage()]);
+    exit;
+}
+
 try {
     switch ($action) {
         case 'users':
@@ -44,7 +54,11 @@ try {
             
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->get_result();
+            $users = [];
+            while ($row = $result->fetch_assoc()) {
+                $users[] = $row;
+            }
             
             echo json_encode(['success' => true, 'data' => $users]);
             break;
@@ -62,7 +76,11 @@ try {
             
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $withdrawals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->get_result();
+            $withdrawals = [];
+            while ($row = $result->fetch_assoc()) {
+                $withdrawals[] = $row;
+            }
             
             echo json_encode(['success' => true, 'data' => $withdrawals]);
             break;
@@ -76,7 +94,11 @@ try {
             
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $invoices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->get_result();
+            $invoices = [];
+            while ($row = $result->fetch_assoc()) {
+                $invoices[] = $row;
+            }
             
             echo json_encode(['success' => true, 'data' => $invoices]);
             break;
@@ -86,7 +108,11 @@ try {
             $sql = "SELECT * FROM sistem_ayarlari ORDER BY ayar_adi";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $settings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->get_result();
+            $settings = [];
+            while ($row = $result->fetch_assoc()) {
+                $settings[] = $row;
+            }
             
             echo json_encode(['success' => true, 'data' => $settings]);
             break;
@@ -96,17 +122,20 @@ try {
             $sql = "SELECT COUNT(*) as total_users FROM users WHERE role = 'user'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $total_users = $stmt->fetchColumn();
+            $result = $stmt->get_result();
+            $total_users = $result->fetch_row()[0];
             
             $sql = "SELECT COUNT(*) as pending_withdrawals FROM para_cekme_talepleri WHERE durum = 'beklemede'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $pending_withdrawals = $stmt->fetchColumn();
+            $result = $stmt->get_result();
+            $pending_withdrawals = $result->fetch_row()[0];
             
             $sql = "SELECT COUNT(*) as total_invoices FROM faturalar";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            $total_invoices = $stmt->fetchColumn();
+            $result = $stmt->get_result();
+            $total_invoices = $result->fetch_row()[0];
             
             echo json_encode([
                 'success' => true,
