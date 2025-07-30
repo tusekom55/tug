@@ -197,50 +197,67 @@ function generateInvoiceHTML($fatura, $fatura_ayarlari) {
     <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>E-Fatura - ' . $fatura['fatura_no'] . '</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font-family: "Segoe UI", Arial, sans-serif; background: #f8f9fa; color: #333; }
-            .invoice-container { max-width: 800px; margin: 20px auto; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+            .invoice-container { max-width: 800px; margin: 20px auto; background: white; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; }
             
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; position: relative; }
-            .company-logo { display: flex; align-items: center; margin-bottom: 20px; }
-            .logo-icon { width: 50px; height: 50px; background: linear-gradient(45deg, #ffd700, #ffed4e); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #333; margin-right: 15px; }
-            .company-name { font-size: 28px; font-weight: 700; margin-bottom: 5px; }
-            .company-info { font-size: 14px; opacity: 0.9; }
-            .qr-code { position: absolute; top: 30px; right: 30px; text-align: center; }
-            .qr-placeholder { width: 80px; height: 80px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-size: 12px; color: #333; }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; position: relative; }
+            .company-logo { display: flex; align-items: center; margin-bottom: 25px; }
+            .logo-icon { width: 60px; height: 60px; background: linear-gradient(45deg, #ffd700, #ffed4e); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #333; margin-right: 20px; }
+            .company-name { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+            .company-info { font-size: 16px; opacity: 0.9; line-height: 1.5; }
+            .qr-code { position: absolute; top: 40px; right: 40px; text-align: center; }
+            .qr-placeholder { width: 100px; height: 100px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 14px; color: #333; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
             
-            .content { padding: 30px; }
-            .section { margin-bottom: 30px; }
-            .section-title { font-size: 18px; font-weight: 600; color: #2c3e50; margin-bottom: 15px; display: flex; align-items: center; }
-            .section-title i { margin-right: 10px; color: #667eea; }
+            .content { padding: 40px; }
+            .section { margin-bottom: 35px; }
+            .section-title { font-size: 22px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; }
+            .section-title i { margin-right: 15px; color: #667eea; font-size: 24px; }
             
-            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-            .info-item { margin-bottom: 15px; }
-            .info-label { font-size: 12px; color: #7f8c8d; margin-bottom: 5px; text-transform: uppercase; font-weight: 600; }
-            .info-value { font-size: 16px; font-weight: 500; color: #2c3e50; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+            .info-item { margin-bottom: 20px; }
+            .info-label { font-size: 13px; color: #7f8c8d; margin-bottom: 8px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+            .info-value { font-size: 18px; font-weight: 500; color: #2c3e50; }
             
-            .amount-highlight { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
-            .amount-label { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
-            .amount-value { font-size: 32px; font-weight: 700; }
+            .amount-highlight { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin: 30px 0; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
+            .amount-label { font-size: 16px; opacity: 0.9; margin-bottom: 8px; }
+            .amount-value { font-size: 42px; font-weight: 700; }
             
-            .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-            .items-table th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; text-align: left; font-weight: 600; }
-            .items-table td { padding: 15px; border-bottom: 1px solid #ecf0f1; }
+            .items-table { width: 100%; border-collapse: collapse; margin: 25px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+            .items-table th { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: left; font-weight: 600; font-size: 16px; }
+            .items-table td { padding: 18px 20px; border-bottom: 1px solid #ecf0f1; font-size: 15px; }
             .items-table tr:hover { background: #f8f9fa; }
             
-            .payment-methods { display: flex; justify-content: center; gap: 15px; margin: 30px 0; }
-            .payment-method { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+            .payment-methods { display: flex; justify-content: center; gap: 20px; margin: 40px 0; }
+            .payment-method { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
             .payment-btc { background: linear-gradient(45deg, #f7931a, #ffd700); }
             .payment-eth { background: linear-gradient(45deg, #627eea, #764ba2); }
             .payment-usdt { background: linear-gradient(45deg, #26a69a, #4db6ac); }
             
-            .footer { background: #ecf0f1; padding: 20px; text-align: center; color: #7f8c8d; font-size: 12px; }
+            .footer { background: #ecf0f1; padding: 30px; text-align: center; color: #7f8c8d; font-size: 14px; }
+            
+            .invoice-number { background: rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 10px; display: inline-block; margin-bottom: 20px; }
+            .invoice-number h2 { font-size: 24px; font-weight: 600; margin: 0; }
+            
+            .status-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+            .status-paid { background: #d4edda; color: #155724; }
             
             @media print {
                 body { background: white; }
                 .invoice-container { box-shadow: none; margin: 0; }
+            }
+            
+            @media (max-width: 768px) {
+                .invoice-container { margin: 10px; border-radius: 15px; }
+                .header { padding: 25px; }
+                .content { padding: 25px; }
+                .company-name { font-size: 24px; }
+                .amount-value { font-size: 32px; }
+                .info-grid { grid-template-columns: 1fr; gap: 15px; }
+                .qr-code { position: static; margin-top: 20px; }
             }
         </style>
     </head>
@@ -260,12 +277,19 @@ function generateInvoiceHTML($fatura, $fatura_ayarlari) {
                 </div>
                 <div class="qr-code">
                     <div class="qr-placeholder">QR</div>
-                    <div style="font-size: 10px; opacity: 0.8;">coinovamarket.com</div>
-                    <div style="font-size: 8px; opacity: 0.6;">Gi</div>
+                    <div style="font-size: 12px; opacity: 0.8;">coinovamarket.com</div>
+                    <div style="font-size: 10px; opacity: 0.6;">Güvenli Ödeme</div>
                 </div>
             </div>
             
             <div class="content">
+                <div class="section">
+                    <div class="invoice-number">
+                        <h2>FATURA NO: ' . $fatura['fatura_no'] . '</h2>
+                        <span class="status-badge status-paid">ÖDENDİ</span>
+                    </div>
+                </div>
+                
                 <div class="section">
                     <div class="section-title">
                         <i class="fas fa-user"></i>
@@ -274,11 +298,11 @@ function generateInvoiceHTML($fatura, $fatura_ayarlari) {
                     <div class="info-grid">
                         <div class="info-item">
                             <div class="info-label">Ad Soyad</div>
-                            <div class="info-value">' . $fatura['ad_soyad'] . '</div>
+                            <div class="info-value">' . ($fatura['ad_soyad'] ?? $fatura['username']) . '</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">TC Kimlik No</div>
-                            <div class="info-value">' . ($fatura['tc_no'] ?? 'Belirtilmemiş') . '</div>
+                            <div class="info-label">Kullanıcı Adı</div>
+                            <div class="info-value">' . $fatura['username'] . '</div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">E-posta</div>
@@ -286,36 +310,15 @@ function generateInvoiceHTML($fatura, $fatura_ayarlari) {
                         </div>
                         <div class="info-item">
                             <div class="info-label">Telefon</div>
-                            <div class="info-value">' . $fatura['telefon'] . '</div>
+                            <div class="info-value">' . ($fatura['telefon'] ?? 'Belirtilmemiş') . '</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">IBAN</div>
-                            <div class="info-value">' . ($fatura['iban'] ?? 'Belirtilmemiş') . '</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">
-                        <i class="fas fa-file-invoice"></i>
-                        Fatura Bilgileri
-                    </div>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">Fatura No</div>
-                            <div class="info-value">' . $fatura['fatura_no'] . '</div>
+                            <div class="info-label">İşlem Tarihi</div>
+                            <div class="info-value">' . date('d.m.Y H:i', strtotime($fatura['tarih'])) . '</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Tarih</div>
-                            <div class="info-value">' . date('d.m.Y', strtotime($fatura['tarih'])) . '</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Çekim Saati</div>
-                            <div class="info-value">' . date('H:i', strtotime($fatura['tarih'])) . '</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Ödenecek Tutar</div>
-                            <div class="info-value">' . number_format($fatura['toplam_tutar'], 2, ',', '.') . ' ₺</div>
+                            <div class="info-label">İşlem Tipi</div>
+                            <div class="info-value">' . ucfirst(str_replace('_', ' ', $fatura['islem_tipi'])) . '</div>
                         </div>
                     </div>
                 </div>
@@ -331,6 +334,48 @@ function generateInvoiceHTML($fatura, $fatura_ayarlari) {
                             <th>AÇIKLAMA</th>
                             <th>MİKTAR</th>
                             <th>BİRİM FİYAT</th>
+                            <th>TOPLAM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Para Çekme İşlemi</td>
+                            <td>1</td>
+                            <td>' . number_format($fatura['tutar'], 2, ',', '.') . ' ₺</td>
+                            <td>' . number_format($fatura['tutar'], 2, ',', '.') . ' ₺</td>
+                        </tr>
+                        <tr>
+                            <td>KDV (%' . $fatura['kdv_orani'] . ')</td>
+                            <td>1</td>
+                            <td>' . number_format($fatura['kdv_tutari'], 2, ',', '.') . ' ₺</td>
+                            <td>' . number_format($fatura['kdv_tutari'], 2, ',', '.') . ' ₺</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-credit-card"></i>
+                        Ödeme Yöntemleri
+                    </div>
+                    <div class="payment-methods">
+                        <div class="payment-method payment-btc">₿</div>
+                        <div class="payment-method payment-eth">Ξ</div>
+                        <div class="payment-method payment-usdt">₮</div>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>Bu fatura elektronik ortamda oluşturulmuştur ve imza gerektirmez.</p>
+                    <p>© 2024 ' . ($fatura_ayarlari['fatura_sirket_adi'] ?? 'Crypto Finance Ltd.') . ' - Tüm hakları saklıdır.</p>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>';
+    
+    return $html;
+}
                             <th>TOPLAM</th>
                         </tr>
                     </thead>
