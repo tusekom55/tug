@@ -785,6 +785,7 @@
              display: flex;
              align-items: center;
              justify-content: center;
+             padding: 20px;
          }
          
          .modal-overlay {
@@ -793,23 +794,24 @@
              left: 0;
              width: 100%;
              height: 100%;
-             background: rgba(0, 0, 0, 0.8);
-             backdrop-filter: blur(10px);
+             background: rgba(0, 0, 0, 0.85);
+             backdrop-filter: blur(15px);
          }
          
          .modal-container {
              position: relative;
-             width: 95%;
-             height: 90%;
+             width: 100%;
+             height: 100%;
              max-width: 1400px;
-             background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
-             border-radius: 16px;
+             max-height: 90vh;
+             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+             border-radius: 20px;
              overflow: hidden;
-             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
              border: 1px solid rgba(255, 255, 255, 0.1);
              transform: scale(0.95);
              opacity: 0;
-             transition: all 0.3s ease;
+             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
          }
          
          .modal-header {
@@ -996,31 +998,43 @@
              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
          }
          
-         .order-tabs {
+         .trading-tabs {
              display: flex;
-             gap: 8px;
+             gap: 12px;
+             padding: 16px 20px;
+             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
          }
          
-         .order-tab {
-             padding: 8px 16px;
+         .trading-tab {
+             display: flex;
+             align-items: center;
+             gap: 8px;
+             padding: 12px 20px;
              background: rgba(255, 255, 255, 0.05);
              color: #8896ab;
              border: 1px solid rgba(255, 255, 255, 0.1);
-             border-radius: 6px;
+             border-radius: 12px;
              font-size: 14px;
              font-weight: 600;
              cursor: pointer;
              transition: all 0.3s ease;
+             min-width: 120px;
+             justify-content: center;
          }
          
-         .order-tab.active {
-             background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%);
-             border-color: #4fc3f7;
+         .trading-tab i {
+             font-size: 16px;
+         }
+         
+         .trading-tab.active {
+             background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+             border-color: #00d4aa;
              color: #ffffff;
+             box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
          }
          
          .order-content {
-             padding: 20px;
+             padding: 24px;
              flex: 1;
              overflow-y: auto;
          }
@@ -1028,54 +1042,82 @@
          .order-direction-toggle {
              display: grid;
              grid-template-columns: 1fr 1fr;
-             gap: 12px;
-             margin-bottom: 24px;
+             gap: 16px;
+             margin-bottom: 28px;
          }
          
          .direction-btn {
-             padding: 16px;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             gap: 8px;
+             padding: 20px 16px;
              border: 2px solid rgba(255, 255, 255, 0.1);
              background: rgba(255, 255, 255, 0.05);
-             border-radius: 8px;
+             border-radius: 12px;
              cursor: pointer;
              transition: all 0.3s ease;
              text-align: center;
+             position: relative;
+             overflow: hidden;
+         }
+         
+         .direction-btn::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: -100%;
+             width: 100%;
+             height: 100%;
+             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+             transition: left 0.5s ease;
+         }
+         
+         .direction-btn:hover::before {
+             left: 100%;
+         }
+         
+         .direction-btn i {
+             font-size: 20px;
+             margin-bottom: 4px;
          }
          
          .direction-btn .btn-text {
              display: block;
              font-weight: 700;
-             font-size: 16px;
+             font-size: 18px;
              margin-bottom: 4px;
          }
          
          .direction-btn .btn-subtitle {
-             font-size: 12px;
+             font-size: 13px;
              opacity: 0.8;
          }
          
          .buy-btn {
-             color: #4caf50;
+             color: #00d4aa;
          }
          
          .buy-btn.active {
-             background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
-             border-color: #4caf50;
+             background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+             border-color: #00d4aa;
              color: #ffffff;
+             box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
          }
          
          .sell-btn {
-             color: #f44336;
+             color: #ff6b6b;
          }
          
          .sell-btn.active {
-             background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-             border-color: #f44336;
+             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+             border-color: #ff6b6b;
              color: #ffffff;
+             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
          }
          
          .form-group {
-             margin-bottom: 20px;
+             margin-bottom: 24px;
          }
          
          .form-label {
@@ -1083,18 +1125,26 @@
              color: #8896ab;
              font-size: 14px;
              font-weight: 600;
-             margin-bottom: 8px;
+             margin-bottom: 10px;
          }
          
          .form-select, .form-input {
              width: 100%;
-             padding: 12px 16px;
+             padding: 16px 20px;
              background: rgba(255, 255, 255, 0.05);
-             border: 1px solid rgba(255, 255, 255, 0.1);
-             border-radius: 8px;
+             border: 2px solid rgba(255, 255, 255, 0.1);
+             border-radius: 12px;
              color: #ffffff;
-             font-size: 14px;
+             font-size: 15px;
              transition: all 0.3s ease;
+             backdrop-filter: blur(10px);
+         }
+         
+         .form-select:focus, .form-input:focus {
+             outline: none;
+             border-color: #00d4aa;
+             box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+             background: rgba(255, 255, 255, 0.08);
          }
          
          .form-select:focus, .form-input:focus {
@@ -1149,36 +1199,76 @@
              margin-top: 12px;
          }
          
-         .percent-btn {
-             padding: 8px;
+         .amount-tabs {
+             display: flex;
+             gap: 8px;
+             margin-bottom: 16px;
+         }
+         
+         .amount-tab {
+             display: flex;
+             align-items: center;
+             gap: 6px;
+             padding: 10px 16px;
              background: rgba(255, 255, 255, 0.05);
              color: #8896ab;
              border: 1px solid rgba(255, 255, 255, 0.1);
-             border-radius: 6px;
-             font-size: 12px;
+             border-radius: 10px;
+             font-size: 13px;
              font-weight: 600;
              cursor: pointer;
              transition: all 0.3s ease;
+             flex: 1;
+             justify-content: center;
+         }
+         
+         .amount-tab.active {
+             background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+             border-color: #00d4aa;
+             color: #ffffff;
+             box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+         }
+         
+         .percentage-buttons {
+             display: grid;
+             grid-template-columns: repeat(4, 1fr);
+             gap: 8px;
+             margin-top: 12px;
+         }
+         
+         .percent-btn {
+             padding: 12px 8px;
+             background: rgba(255, 255, 255, 0.05);
+             color: #8896ab;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             border-radius: 10px;
+             font-size: 13px;
+             font-weight: 600;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             text-align: center;
          }
          
          .percent-btn:hover {
-             background: #4fc3f7;
-             border-color: #4fc3f7;
+             background: #00d4aa;
+             border-color: #00d4aa;
              color: #ffffff;
+             transform: translateY(-1px);
          }
          
          .order-summary {
-             background: rgba(79, 195, 247, 0.1);
-             border: 1px solid rgba(79, 195, 247, 0.2);
-             border-radius: 8px;
-             padding: 16px;
-             margin-bottom: 20px;
+             background: rgba(0, 212, 170, 0.1);
+             border: 1px solid rgba(0, 212, 170, 0.2);
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 24px;
          }
          
          .summary-row {
              display: flex;
              justify-content: space-between;
-             margin-bottom: 8px;
+             margin-bottom: 12px;
+             align-items: center;
          }
          
          .summary-row:last-child {
@@ -1193,40 +1283,64 @@
          .summary-value {
              color: #ffffff;
              font-weight: 600;
-             font-size: 14px;
+             font-size: 15px;
          }
          
          .execute-btn {
              width: 100%;
-             padding: 16px;
+             padding: 20px;
              border: none;
-             border-radius: 8px;
+             border-radius: 12px;
              font-size: 16px;
              font-weight: 700;
              cursor: pointer;
              transition: all 0.3s ease;
-             margin-bottom: 20px;
+             margin-bottom: 24px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             gap: 10px;
+             position: relative;
+             overflow: hidden;
+         }
+         
+         .execute-btn::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: -100%;
+             width: 100%;
+             height: 100%;
+             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+             transition: left 0.6s ease;
+         }
+         
+         .execute-btn:hover::before {
+             left: 100%;
          }
          
          .execute-btn.buy-order {
-             background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+             background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
              color: #ffffff;
+             box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
          }
          
          .execute-btn.sell-order {
-             background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
              color: #ffffff;
+             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
          }
          
          .execute-btn:hover:not(:disabled) {
-             transform: translateY(-2px);
-             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+             transform: translateY(-3px);
+             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
          }
          
          .execute-btn:disabled {
              background: #2a2f3e;
              color: #8896ab;
              cursor: not-allowed;
+             box-shadow: none;
          }
          
          .advanced-options {
@@ -1364,6 +1478,112 @@
                gap: 12px !important;
                align-items: stretch !important;
            }
+           
+           /* Trading Modal Mobile Styles */
+           .trading-modal {
+               padding: 10px;
+           }
+           
+           .modal-container {
+               width: 100%;
+               height: 100%;
+               max-height: 100vh;
+               border-radius: 16px;
+           }
+           
+           .modal-content {
+               grid-template-columns: 1fr;
+               grid-template-rows: 1fr 1fr;
+               height: calc(100% - 80px);
+           }
+           
+           .chart-panel {
+               border-right: none;
+               border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+           }
+           
+           .chart-header {
+               padding: 12px 16px;
+           }
+           
+           .timeframe-buttons {
+               gap: 6px;
+           }
+           
+           .timeframe-btn {
+               padding: 8px 12px;
+               font-size: 12px;
+           }
+           
+           .order-content {
+               padding: 16px;
+           }
+           
+           .order-direction-toggle {
+               gap: 12px;
+               margin-bottom: 20px;
+           }
+           
+           .direction-btn {
+               padding: 16px 12px;
+           }
+           
+           .direction-btn .btn-text {
+               font-size: 16px;
+           }
+           
+           .direction-btn i {
+               font-size: 18px;
+           }
+           
+           .form-group {
+               margin-bottom: 20px;
+           }
+           
+           .form-input, .form-select {
+               padding: 14px 16px;
+               font-size: 14px;
+           }
+           
+           .amount-tabs {
+               gap: 6px;
+           }
+           
+           .amount-tab {
+               padding: 8px 12px;
+               font-size: 12px;
+           }
+           
+           .percentage-buttons {
+               gap: 6px;
+           }
+           
+           .percent-btn {
+               padding: 10px 6px;
+               font-size: 12px;
+           }
+           
+           .order-summary {
+               padding: 16px;
+               margin-bottom: 20px;
+           }
+           
+           .execute-btn {
+               padding: 18px;
+               font-size: 15px;
+               margin-bottom: 20px;
+           }
+           
+           .trading-tabs {
+               padding: 12px 16px;
+               gap: 8px;
+           }
+           
+                       .trading-tab {
+                padding: 10px 16px;
+                font-size: 13px;
+                min-width: 100px;
+            }
            
            .market-controls input {
                width: 100% !important;
@@ -2407,7 +2627,7 @@
                                 <h2 id="modalCoinName">Bitcoin</h2>
                                 <div class="modal-coin-info">
                                     <span id="modalCoinSymbol">BTC</span>
-                                    <span id="modalCoinPrice">$45,000.00</span>
+                                    <span id="modalCoinPrice">₺1,350,000</span>
                                     <span id="modalCoinChange" class="price-change positive">+2.5%</span>
                                 </div>
                             </div>
@@ -2422,150 +2642,169 @@
                                 <div class="chart-header">
                                     <div class="chart-controls">
                                         <div class="timeframe-buttons">
-                                            <button class="timeframe-btn active" data-timeframe="1m">1m</button>
-                                            <button class="timeframe-btn" data-timeframe="5m">5m</button>
-                                            <button class="timeframe-btn" data-timeframe="15m">15m</button>
-                                            <button class="timeframe-btn" data-timeframe="1h">1h</button>
-                                            <button class="timeframe-btn" data-timeframe="4h">4h</button>
-                                            <button class="timeframe-btn" data-timeframe="1d">1D</button>
+                                            <button class="timeframe-btn active" data-timeframe="1m">1d</button>
+                                            <button class="timeframe-btn" data-timeframe="5m">5d</button>
+                                            <button class="timeframe-btn" data-timeframe="15m">15d</button>
+                                            <button class="timeframe-btn" data-timeframe="1h">1s</button>
+                                            <button class="timeframe-btn" data-timeframe="4h">4s</button>
+                                            <button class="timeframe-btn" data-timeframe="1d">1g</button>
                                         </div>
                                         <div class="chart-tools">
-                                            <button class="tool-btn" title="Fullscreen">
+                                            <button class="tool-btn" title="Tam Ekran">
                                                 <i class="fas fa-expand"></i>
                                             </button>
-                                            <button class="tool-btn" title="Settings">
+                                            <button class="tool-btn" title="Ayarlar">
                                                 <i class="fas fa-cog"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                                <div class="chart-container" id="tradingChart">
-                    <canvas id="priceChart" width="800" height="400" style="width: 100%; height: 100%; background: #141927; border-radius: 8px;"></canvas>
-                    <div class="chart-placeholder" id="chartPlaceholder">
-                        <div class="chart-loading">
-                            <i class="fas fa-chart-line chart-icon"></i>
-                            <h3>Advanced Trading Chart</h3>
-                            <p>Professional price analysis</p>
-                            <div class="chart-features">
-                                <div>✓ Real-time data</div>
-                                <div>✓ Price movements</div>
-                                <div>✓ Trend analysis</div>
-                                <div>✓ Multiple timeframes</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <div class="chart-container" id="tradingChart">
+                                    <div class="chart-placeholder" id="chartPlaceholder">
+                                        <div class="chart-loading">
+                                            <i class="fas fa-chart-line chart-icon"></i>
+                                            <h3>Gerçek Zamanlı Grafik</h3>
+                                            <p>Son 1 saatlik fiyat verisi yükleniyor...</p>
+                                            <div class="chart-features">
+                                                <div>✓ Gerçek zamanlı veri</div>
+                                                <div>✓ Fiyat hareketleri</div>
+                                                <div>✓ Trend analizi</div>
+                                                <div>✓ Çoklu zaman dilimi</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- TradingView Widget -->
+                                    <div id="tradingview-widget" style="display: none; width: 100%; height: 100%;">
+                                        <div class="tradingview-widget-container">
+                                            <div id="tradingview_chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
                             <!-- Sağ Panel: Trading Form -->
                             <div class="order-panel">
                                 <div class="order-header">
-                                    <div class="order-tabs">
-                                        <button class="order-tab active" data-tab="spot">Spot Trading</button>
-                                        <button class="order-tab" data-tab="margin">Margin</button>
+                                    <div class="trading-tabs">
+                                        <button class="trading-tab active" data-tab="spot">
+                                            <i class="fas fa-coins"></i>
+                                            <span>Spot İşlem</span>
+                                        </button>
+                                        <button class="trading-tab" data-tab="margin">
+                                            <i class="fas fa-chart-line"></i>
+                                            <span>Kaldıraçlı</span>
+                                        </button>
                                     </div>
                                 </div>
                                 
                                 <div class="order-content">
-                                    <!-- Buy/Sell Toggle -->
+                                    <!-- Al/Sat Toggle -->
                                     <div class="order-direction-toggle">
                                         <button class="direction-btn buy-btn active" data-direction="buy">
-                                            <span class="btn-text">BUY</span>
-                                            <span class="btn-subtitle" id="buyPrice">$45,000</span>
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span class="btn-text">AL</span>
+                                            <span class="btn-subtitle" id="buyPrice">₺1,350,000</span>
                                         </button>
                                         <button class="direction-btn sell-btn" data-direction="sell">
-                                            <span class="btn-text">SELL</span>
-                                            <span class="btn-subtitle" id="sellPrice">$44,980</span>
+                                            <i class="fas fa-arrow-down"></i>
+                                            <span class="btn-text">SAT</span>
+                                            <span class="btn-subtitle" id="sellPrice">₺1,348,000</span>
                                         </button>
                                     </div>
                                     
-                                    <!-- Order Type -->
+                                    <!-- İşlem Türü -->
                                     <div class="form-group">
-                                        <label class="form-label">Order Type</label>
+                                        <label class="form-label">İşlem Türü</label>
                                         <select id="orderType" class="form-select">
-                                            <option value="market">Market Order</option>
-                                            <option value="limit">Limit Order</option>
+                                            <option value="market">Piyasa Emri</option>
+                                            <option value="limit">Limit Emri</option>
                                             <option value="stop_limit">Stop-Limit</option>
                                         </select>
                                     </div>
                                     
-                                    <!-- Price (Limit orders) -->
+                                    <!-- Fiyat (Limit emirler için) -->
                                     <div class="form-group" id="priceGroup" style="display: none;">
-                                        <label class="form-label">Price (USD)</label>
+                                        <label class="form-label">Fiyat (₺)</label>
                                         <div class="input-group">
                                             <input type="number" id="orderPrice" class="form-input" placeholder="0.00" step="0.01">
-                                            <span class="input-suffix">USD</span>
+                                            <span class="input-suffix">₺</span>
                                         </div>
                                     </div>
                                     
-                                    <!-- Amount Selection -->
+                                    <!-- Miktar Seçimi -->
                                     <div class="form-group">
-                                        <label class="form-label">Amount</label>
+                                        <label class="form-label">Miktar</label>
                                         <div class="amount-tabs">
-                                            <button class="amount-tab active" data-type="quantity">Quantity</button>
-                                            <button class="amount-tab" data-type="total">Total (USD)</button>
+                                            <button class="amount-tab active" data-type="quantity">
+                                                <i class="fas fa-coins"></i>
+                                                <span>Birim</span>
+                                            </button>
+                                            <button class="amount-tab" data-type="total">
+                                                <i class="fas fa-money-bill"></i>
+                                                <span>Tutar (₺)</span>
+                                            </button>
                                         </div>
                                     </div>
                                     
-                                    <!-- Quantity Input -->
+                                    <!-- Birim Girişi -->
                                     <div class="form-group" id="quantityGroup">
                                         <div class="input-group">
                                             <input type="number" id="orderQuantity" class="form-input" placeholder="0.00" step="0.00001">
                                             <span class="input-suffix" id="quantitySuffix">BTC</span>
                                         </div>
                                         <div class="percentage-buttons">
-                                            <button class="percent-btn" data-percent="25">25%</button>
-                                            <button class="percent-btn" data-percent="50">50%</button>
-                                            <button class="percent-btn" data-percent="75">75%</button>
-                                            <button class="percent-btn" data-percent="100">100%</button>
+                                            <button class="percent-btn" data-percent="25">%25</button>
+                                            <button class="percent-btn" data-percent="50">%50</button>
+                                            <button class="percent-btn" data-percent="75">%75</button>
+                                            <button class="percent-btn" data-percent="100">%100</button>
                                         </div>
                                     </div>
                                     
-                                    <!-- Total Input -->
+                                    <!-- Tutar Girişi -->
                                     <div class="form-group" id="totalGroup" style="display: none;">
                                         <div class="input-group">
                                             <input type="number" id="orderTotal" class="form-input" placeholder="0.00" step="0.01">
-                                            <span class="input-suffix">USD</span>
+                                            <span class="input-suffix">₺</span>
                                         </div>
                                     </div>
                                     
-                                    <!-- Order Summary -->
+                                    <!-- İşlem Özeti -->
                                     <div class="order-summary">
                                         <div class="summary-row">
-                                            <span class="summary-label">Available Balance:</span>
-                                            <span class="summary-value" id="availableBalance">$1,000.00</span>
+                                            <span class="summary-label">Mevcut Bakiye:</span>
+                                            <span class="summary-value" id="availableBalance">₺10,000.00</span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label">Order Total:</span>
-                                            <span class="summary-value" id="orderTotalValue">$0.00</span>
+                                            <span class="summary-label">İşlem Tutarı:</span>
+                                            <span class="summary-value" id="orderTotalValue">₺0.00</span>
                                         </div>
                                         <div class="summary-row">
-                                            <span class="summary-label">Fee (0.1%):</span>
-                                            <span class="summary-value" id="tradingFee">$0.00</span>
+                                            <span class="summary-label">Komisyon (%0.1):</span>
+                                            <span class="summary-value" id="tradingFee">₺0.00</span>
                                         </div>
                                     </div>
                                     
-                                    <!-- Execute Button -->
+                                    <!-- İşlem Onayı Butonu -->
                                     <button id="executeOrderBtn" class="execute-btn buy-order" disabled>
                                         <i class="fas fa-bolt"></i>
-                                        <span id="executeText">Buy BTC</span>
+                                        <span id="executeText">BTC Al</span>
                                     </button>
                                     
-                                    <!-- Advanced Options -->
+                                    <!-- Gelişmiş Seçenekler -->
                                     <div class="advanced-options">
                                         <button class="advanced-toggle" onclick="toggleAdvancedOptions()">
                                             <i class="fas fa-chevron-down"></i>
-                                            Advanced Options
+                                            Gelişmiş Seçenekler
                                         </button>
                                         <div class="advanced-content" id="advancedContent" style="display: none;">
                                             <div class="form-group">
                                                 <label class="form-label">Stop Loss</label>
-                                                <input type="number" id="stopLoss" class="form-input" placeholder="Optional" step="0.01">
+                                                <input type="number" id="stopLoss" class="form-input" placeholder="İsteğe bağlı" step="0.01">
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">Take Profit</label>
-                                                <input type="number" id="takeProfit" class="form-input" placeholder="Optional" step="0.01">
+                                                <input type="number" id="takeProfit" class="form-input" placeholder="İsteğe bağlı" step="0.01">
                                             </div>
                                         </div>
                                     </div>
@@ -3055,7 +3294,7 @@
              // Coin bilgilerini modal'a yükle
              document.getElementById('modalCoinName').textContent = coinName;
              document.getElementById('modalCoinSymbol').textContent = coinId.toUpperCase();
-             document.getElementById('modalCoinPrice').textContent = `$${parseFloat(currentPrice).toLocaleString()}`;
+             document.getElementById('modalCoinPrice').textContent = `₺${(parseFloat(currentPrice) * 30).toLocaleString()}`;
              
              // Random değişim % (gerçek API'den gelecek)
              const change = (Math.random() - 0.5) * 10;
@@ -3063,15 +3302,15 @@
              changeElement.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
              changeElement.className = `price-change ${change >= 0 ? 'positive' : 'negative'}`;
              
-             // Buy/Sell fiyatlarını güncelle
-             const buyPrice = parseFloat(currentPrice) * 1.001; // 0.1% spread
-             const sellPrice = parseFloat(currentPrice) * 0.999;
-             document.getElementById('buyPrice').textContent = `$${buyPrice.toFixed(2)}`;
-             document.getElementById('sellPrice').textContent = `$${sellPrice.toFixed(2)}`;
+             // Al/Sat fiyatlarını güncelle
+             const buyPrice = parseFloat(currentPrice) * 30 * 1.001; // 0.1% spread
+             const sellPrice = parseFloat(currentPrice) * 30 * 0.999;
+             document.getElementById('buyPrice').textContent = `₺${buyPrice.toFixed(2)}`;
+             document.getElementById('sellPrice').textContent = `₺${sellPrice.toFixed(2)}`;
              
              // Quantity suffix'i güncelle
              document.getElementById('quantitySuffix').textContent = coinId.toUpperCase();
-             document.getElementById('executeText').textContent = `Buy ${coinId.toUpperCase()}`;
+             document.getElementById('executeText').textContent = `${coinId.toUpperCase()} Al`;
              
              // Modal'ı göster
              modal.style.display = 'flex';
@@ -3088,6 +3327,9 @@
              
              // Grafik çiz
              drawPriceChart(coinId, currentPrice);
+             
+             // TradingView widget'ını yükle
+             loadTradingViewWidget(coinId);
          }
 
          // Trading modalını kapat
@@ -3105,10 +3347,10 @@
                  modal.style.display = 'none';
                  
                  // Chart'ı sıfırla
-                 const canvas = document.getElementById('priceChart');
                  const placeholder = document.getElementById('chartPlaceholder');
-                 if (canvas && placeholder) {
-                     canvas.style.display = 'none';
+                 const widgetContainer = document.getElementById('tradingview-widget');
+                 if (placeholder && widgetContainer) {
+                     widgetContainer.style.display = 'none';
                      placeholder.style.display = 'flex';
                  }
              }, 200);
@@ -3129,10 +3371,10 @@
                      
                      if (direction === 'buy') {
                          executeBtn.className = 'execute-btn buy-order';
-                         executeText.textContent = `Buy ${coinSymbol}`;
+                         executeText.textContent = `${coinSymbol} Al`;
                      } else {
                          executeBtn.className = 'execute-btn sell-order';
-                         executeText.textContent = `Sell ${coinSymbol}`;
+                         executeText.textContent = `${coinSymbol} Sat`;
                      }
                  });
              });
@@ -3171,8 +3413,8 @@
              document.querySelectorAll('.percent-btn').forEach(btn => {
                  btn.addEventListener('click', function() {
                      const percent = parseInt(this.dataset.percent);
-                     const balance = 1000; // User balance (gerçek değer backend'den gelecek)
-                     const price = parseFloat(document.getElementById('modalCoinPrice').textContent.replace('$', '').replace(',', ''));
+                     const balance = 10000; // User balance (gerçek değer backend'den gelecek)
+                     const price = parseFloat(document.getElementById('modalCoinPrice').textContent.replace('₺', '').replace(',', ''));
                      
                      const totalAmount = (balance * percent) / 100;
                      const quantity = totalAmount / price;
@@ -3209,15 +3451,15 @@
          // Order özeti güncelle
          function updateOrderSummary() {
              const quantity = parseFloat(document.getElementById('orderQuantity').value) || 0;
-             const price = parseFloat(document.getElementById('modalCoinPrice').textContent.replace('$', '').replace(',', '')) || 0;
+             const price = parseFloat(document.getElementById('modalCoinPrice').textContent.replace('₺', '').replace(',', '')) || 0;
              const orderPrice = parseFloat(document.getElementById('orderPrice').value) || price;
              
              const total = quantity * orderPrice;
              const fee = total * 0.001; // 0.1% fee
              const totalWithFee = total + fee;
              
-             document.getElementById('orderTotalValue').textContent = `$${total.toFixed(2)}`;
-             document.getElementById('tradingFee').textContent = `$${fee.toFixed(2)}`;
+             document.getElementById('orderTotalValue').textContent = `₺${total.toFixed(2)}`;
+             document.getElementById('tradingFee').textContent = `₺${fee.toFixed(2)}`;
              
              // Execute button'ı etkinleştir/devre dışı bırak
              const executeBtn = document.getElementById('executeOrderBtn');
@@ -3232,18 +3474,70 @@
              const orderType = document.getElementById('orderType').value;
              const total = document.getElementById('orderTotalValue').textContent;
              
-             alert(`🚀 ${direction.toUpperCase()} Order Placed!\n\n` +
-                   `Symbol: ${coinSymbol}\n` +
-                   `Type: ${orderType.toUpperCase()}\n` +
-                   `Quantity: ${quantity}\n` +
-                   `Total: ${total}\n\n` +
-                   `Order will be executed in real trading system.`);
+             const directionText = direction === 'buy' ? 'ALIŞ' : 'SATIŞ';
+             const orderTypeText = orderType === 'market' ? 'Piyasa Emri' : 
+                                  orderType === 'limit' ? 'Limit Emri' : 'Stop-Limit';
+             
+             alert(`🚀 ${directionText} Emri Verildi!\n\n` +
+                   `Sembol: ${coinSymbol}\n` +
+                   `Tür: ${orderTypeText}\n` +
+                   `Miktar: ${quantity}\n` +
+                   `Toplam: ${total}\n\n` +
+                   `Emir gerçek trading sisteminde işleme alınacak.`);
              
              // Demo için modal'ı kapat
              closeTradingModal();
          }
 
-                 // Advanced options toggle
+                 // TradingView Widget yükle
+         function loadTradingViewWidget(symbol) {
+             const widgetContainer = document.getElementById('tradingview-widget');
+             const placeholder = document.getElementById('chartPlaceholder');
+             
+             // Placeholder'ı gizle
+             placeholder.style.display = 'none';
+             widgetContainer.style.display = 'block';
+             
+             // TradingView script'ini yükle
+             if (!window.TradingView) {
+                 const script = document.createElement('script');
+                 script.src = 'https://s3.tradingview.com/tv.js';
+                 script.onload = () => {
+                     createTradingViewWidget(symbol);
+                 };
+                 document.head.appendChild(script);
+             } else {
+                 createTradingViewWidget(symbol);
+             }
+         }
+         
+         // TradingView Widget oluştur
+         function createTradingViewWidget(symbol) {
+             new TradingView.widget({
+                 "width": "100%",
+                 "height": "100%",
+                 "symbol": `BINANCE:${symbol.toUpperCase()}USDT`,
+                 "interval": "1H",
+                 "timezone": "Europe/Istanbul",
+                 "theme": "dark",
+                 "style": "1",
+                 "locale": "tr",
+                 "toolbar_bg": "#f1f3f6",
+                 "enable_publishing": false,
+                 "hide_side_toolbar": false,
+                 "allow_symbol_change": true,
+                 "container_id": "tradingview_chart",
+                 "studies": [
+                     "RSI@tv-basicstudies",
+                     "MACD@tv-basicstudies"
+                 ],
+                 "show_popup_button": true,
+                 "popup_width": "1000",
+                 "popup_height": "650"
+             });
+         }
+         
+         // Advanced options toggle
         function toggleAdvancedOptions() {
             const content = document.getElementById('advancedContent');
             const icon = document.querySelector('.advanced-toggle i');
