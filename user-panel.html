@@ -774,19 +774,19 @@
              -webkit-text-fill-color: transparent;
          }
          
-         /* Trading Modal Styles */
-         .trading-modal {
-             position: fixed;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
-             z-index: 10000;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             padding: 20px;
-         }
+                 /* Yeni Trading Modal Styles */
+        .trading-modal-new {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
          
          .modal-overlay {
              position: absolute;
@@ -798,66 +798,395 @@
              backdrop-filter: blur(15px);
          }
          
-         .modal-container {
-             position: relative;
-             width: 100%;
-             height: 100%;
-             max-width: 1400px;
-             max-height: 90vh;
-             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-             border-radius: 20px;
-             overflow: hidden;
-             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-             border: 1px solid rgba(255, 255, 255, 0.1);
-             transform: scale(0.95);
-             opacity: 0;
-             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-         }
+                 .modal-container-new {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            max-height: 85vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .trading-modal-new[style*="block"] .modal-container-new {
+            transform: scale(1);
+            opacity: 1;
+        }
          
-         .modal-header {
-             background: linear-gradient(135deg, #1e2742 0%, #2a3f5f 100%);
-             padding: 20px 24px;
-             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
-         }
+                 .modal-header-new {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .coin-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .coin-details h3 {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .coin-price-info {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .coin-symbol {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .coin-price {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ffffff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
          
-         .modal-title-section h2 {
-             color: #ffffff;
-             font-size: 24px;
-             font-weight: 700;
-             margin-bottom: 8px;
-         }
+                 /* Modal Content Yeni Stiller */
+        .modal-content-new {
+            padding: 0;
+        }
+        
+        .chart-section {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chart-controls {
+            margin-bottom: 15px;
+        }
+        
+        .timeframe-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .time-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #8896ab;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .time-btn.active,
+        .time-btn:hover {
+            background: #2563eb;
+            color: #ffffff;
+        }
+        
+        .chart-container-new {
+            height: 200px;
+            background: #0f1419;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        #priceChart {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        .price-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 11px;
+            color: #8896ab;
+            margin-bottom: 4px;
+        }
+        
+        .stat-value {
+            display: block;
+            font-size: 13px;
+            color: #ffffff;
+            font-weight: 600;
+        }
          
-         .modal-coin-info {
-             display: flex;
-             gap: 16px;
-             align-items: center;
-         }
+                 #modalCoinPrice {
+            color: #ffffff;
+            font-size: 18px;
+        }
+        
+        /* Trading Section Stiller */
+        .trading-section {
+            padding: 20px;
+        }
+        
+        .trade-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .trade-tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8896ab;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .trade-tab.active[data-action="buy"] {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+            color: #ffffff;
+        }
+        
+        .trade-tab.active[data-action="sell"] {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: #ef4444;
+            color: #ffffff;
+        }
+        
+        .trade-form {
+            space-y: 20px;
+        }
+        
+        .input-section {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            color: #8896ab;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .trade-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 14px 16px;
+            padding-right: 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .trade-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .input-currency {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8896ab;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .amount-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8896ab;
+            padding: 10px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .amount-btn:hover,
+        .amount-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+        
+        .percentage-section {
+            margin-bottom: 20px;
+        }
+        
+        .percentage-label {
+            display: block;
+            color: #8896ab;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .percentage-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        
+        .percent-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8896ab;
+            padding: 10px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .percent-btn:hover,
+        .percent-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
          
-         .modal-coin-info span {
-             font-size: 14px;
-             font-weight: 600;
-         }
-         
-         #modalCoinSymbol {
-             color: #8896ab;
-             background: rgba(255, 255, 255, 0.1);
-             padding: 4px 8px;
-             border-radius: 4px;
-         }
-         
-         #modalCoinPrice {
-             color: #ffffff;
-             font-size: 18px;
-         }
-         
-         .price-change {
-             padding: 4px 8px;
-             border-radius: 4px;
-             font-weight: 700;
-         }
+                 .price-change {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        
+        /* Trade Summary ve Execute Button */
+        .trade-summary {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .summary-label {
+            color: #8896ab;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .summary-value {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .execute-button {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: #ffffff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .execute-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+        .execute-button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: #8896ab;
+            cursor: not-allowed;
+        }
+        
+        .execute-button.sell-mode {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .execute-button.sell-mode:hover:not(:disabled) {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
          
          .price-change.positive {
              background: rgba(76, 175, 80, 0.2);
@@ -2686,194 +3015,125 @@
                     </div>
                 </section>
 
-                <!-- Trading Modal -->
-                <div id="tradingModal" class="trading-modal" style="display: none;">
+                <!-- Trading Modal - Yeniden Tasarlandı -->
+                <div id="tradingModal" class="trading-modal-new" style="display: none;">
                     <div class="modal-overlay" onclick="closeTradingModal()"></div>
-                    <div class="modal-container">
-                        <div class="modal-header">
-                            <div class="modal-title-section">
-                                <h2 id="modalCoinName">Bitcoin</h2>
-                                <div class="modal-coin-info">
-                                    <span id="modalCoinSymbol">BTC</span>
-                                    <span id="modalCoinPrice">₺1,350,000</span>
-                                    <span id="modalCoinChange" class="price-change positive">+2.5%</span>
+                    <div class="modal-container-new">
+                        <!-- Modal Header -->
+                        <div class="modal-header-new">
+                            <div class="coin-info-header">
+                                <div class="coin-details">
+                                    <h3 id="modalCoinName">Bitcoin</h3>
+                                    <div class="coin-price-info">
+                                        <span id="modalCoinSymbol" class="coin-symbol">BTC</span>
+                                        <span id="modalCoinPrice" class="coin-price">₺1,350,000</span>
+                                        <span id="modalCoinChange" class="price-change positive">+2.5%</span>
+                                    </div>
                                 </div>
+                                <button class="close-btn" onclick="closeTradingModal()">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
-                            <button class="modal-close-btn" onclick="closeTradingModal()">
-                                <i class="fas fa-times"></i>
-                            </button>
                         </div>
                         
-                        <div class="modal-content">
-                            <!-- Sol Panel: Grafik -->
-                            <div class="chart-panel">
-                                <div class="chart-header">
-                                    <div class="chart-controls">
-                                        <div class="timeframe-buttons">
-                                            <button class="timeframe-btn active" data-timeframe="1m">1d</button>
-                                            <button class="timeframe-btn" data-timeframe="5m">5d</button>
-                                            <button class="timeframe-btn" data-timeframe="15m">15d</button>
-                                            <button class="timeframe-btn" data-timeframe="1h">1s</button>
-                                            <button class="timeframe-btn" data-timeframe="4h">4s</button>
-                                            <button class="timeframe-btn" data-timeframe="1d">1g</button>
-                                        </div>
-                                        <div class="chart-tools">
-                                            <button class="tool-btn" title="Tam Ekran">
-                                                <i class="fas fa-expand"></i>
-                                            </button>
-                                            <button class="tool-btn" title="Ayarlar">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
-                                        </div>
+                        <!-- Modal Content -->
+                        <div class="modal-content-new">
+                            <!-- Grafik Bölümü -->
+                            <div class="chart-section">
+                                <div class="chart-controls">
+                                    <div class="timeframe-tabs">
+                                        <button class="time-btn active" data-time="1h">1S</button>
+                                        <button class="time-btn" data-time="4h">4S</button>
+                                        <button class="time-btn" data-time="1d">1G</button>
+                                        <button class="time-btn" data-time="1w">1H</button>
                                     </div>
                                 </div>
                                 
-                                <div class="chart-container" id="tradingChart">
-                                    <div class="chart-placeholder" id="chartPlaceholder">
-                                        <div class="chart-loading">
-                                            <i class="fas fa-chart-line chart-icon"></i>
-                                            <h3>Gerçek Zamanlı Grafik</h3>
-                                            <p>Son 1 saatlik fiyat verisi yükleniyor...</p>
-                                            <div class="chart-features">
-                                                <div>✓ Gerçek zamanlı veri</div>
-                                                <div>✓ Fiyat hareketleri</div>
-                                                <div>✓ Trend analizi</div>
-                                                <div>✓ Çoklu zaman dilimi</div>
-                                            </div>
-                                        </div>
+                                <div class="chart-container-new">
+                                    <canvas id="priceChart" width="600" height="250"></canvas>
+                                </div>
+                                
+                                <div class="price-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-label">24s Yüksek</span>
+                                        <span class="stat-value" id="high24h">₺1,355,000</span>
                                     </div>
-                                    <!-- Sahte Grafik -->
-                                    <div id="fake-chart" style="display: none; width: 100%; height: 100%;">
-                                        <canvas id="priceChart" width="800" height="400" style="width: 100%; height: 100%; background: #141927; border-radius: 8px;"></canvas>
+                                    <div class="stat-item">
+                                        <span class="stat-label">24s Düşük</span>
+                                        <span class="stat-value" id="low24h">₺1,340,000</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Hacim</span>
+                                        <span class="stat-value" id="volume24h">₺45.2M</span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Sağ Panel: Trading Form -->
-                            <div class="order-panel">
-                                <div class="order-header">
-                                    <div class="trading-tabs">
-                                        <button class="trading-tab active" data-tab="spot">
-                                            <i class="fas fa-coins"></i>
-                                            <span>Spot İşlem</span>
-                                        </button>
-                                        <button class="trading-tab" data-tab="margin">
-                                            <i class="fas fa-chart-line"></i>
-                                            <span>Kaldıraçlı</span>
-                                        </button>
-                                    </div>
+                            <!-- Trading Paneli -->
+                            <div class="trading-section">
+                                <!-- Al/Sat Seçimi -->
+                                <div class="trade-tabs">
+                                    <button class="trade-tab active" data-action="buy">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>AL</span>
+                                    </button>
+                                    <button class="trade-tab" data-action="sell">
+                                        <i class="fas fa-arrow-down"></i>
+                                        <span>SAT</span>
+                                    </button>
                                 </div>
                                 
-                                <div class="order-content">
-                                    <!-- Al/Sat Toggle -->
-                                    <div class="order-direction-toggle">
-                                        <button class="direction-btn buy-btn active" data-direction="buy">
-                                            <i class="fas fa-arrow-up"></i>
-                                            <span class="btn-text">AL</span>
-                                            <span class="btn-subtitle" id="buyPrice">₺1,350,000</span>
-                                        </button>
-                                        <button class="direction-btn sell-btn" data-direction="sell">
-                                            <i class="fas fa-arrow-down"></i>
-                                            <span class="btn-text">SAT</span>
-                                            <span class="btn-subtitle" id="sellPrice">₺1,348,000</span>
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- İşlem Türü -->
-                                    <div class="form-group">
-                                        <label class="form-label">İşlem Türü</label>
-                                        <select id="orderType" class="form-select">
-                                            <option value="market">Piyasa Emri</option>
-                                            <option value="limit">Limit Emri</option>
-                                            <option value="stop_limit">Stop-Limit</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <!-- Fiyat (Limit emirler için) -->
-                                    <div class="form-group" id="priceGroup" style="display: none;">
-                                        <label class="form-label">Fiyat (₺)</label>
-                                        <div class="input-group">
-                                            <input type="number" id="orderPrice" class="form-input" placeholder="0.00" step="0.01">
-                                            <span class="input-suffix">₺</span>
+                                <!-- İşlem Formu -->
+                                <div class="trade-form">
+                                    <!-- Miktar Girişi -->
+                                    <div class="input-section">
+                                        <label class="input-label">Tutar (₺)</label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="tradeAmount" class="trade-input" placeholder="0.00" min="10" step="0.01">
+                                            <span class="input-currency">₺</span>
                                         </div>
                                     </div>
                                     
-                                    <!-- Miktar Seçimi -->
-                                    <div class="form-group">
-                                        <label class="form-label">Miktar</label>
-                                        <div class="amount-tabs">
-                                            <button class="amount-tab active" data-type="quantity">
-                                                <i class="fas fa-coins"></i>
-                                                <span>Birim</span>
-                                            </button>
-                                            <button class="amount-tab" data-type="total">
-                                                <i class="fas fa-money-bill"></i>
-                                                <span>Tutar (₺)</span>
-                                            </button>
-                                        </div>
+                                    <!-- Hızlı Tutar Seçimi -->
+                                    <div class="quick-amounts">
+                                        <button class="amount-btn" data-amount="100">₺100</button>
+                                        <button class="amount-btn" data-amount="500">₺500</button>
+                                        <button class="amount-btn" data-amount="1000">₺1000</button>
+                                        <button class="amount-btn" data-amount="5000">₺5000</button>
                                     </div>
                                     
-                                    <!-- Birim Girişi -->
-                                    <div class="form-group" id="quantityGroup">
-                                        <div class="input-group">
-                                            <input type="number" id="orderQuantity" class="form-input" placeholder="0.00" step="0.00001">
-                                            <span class="input-suffix" id="quantitySuffix">BTC</span>
-                                        </div>
+                                    <!-- Yüzde Butonları -->
+                                    <div class="percentage-section">
+                                        <span class="percentage-label">Bakiyenin:</span>
                                         <div class="percentage-buttons">
                                             <button class="percent-btn" data-percent="25">%25</button>
                                             <button class="percent-btn" data-percent="50">%50</button>
                                             <button class="percent-btn" data-percent="75">%75</button>
-                                            <button class="percent-btn" data-percent="100">%100</button>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Tutar Girişi -->
-                                    <div class="form-group" id="totalGroup" style="display: none;">
-                                        <div class="input-group">
-                                            <input type="number" id="orderTotal" class="form-input" placeholder="0.00" step="0.01">
-                                            <span class="input-suffix">₺</span>
+                                            <button class="percent-btn" data-percent="100">Tümü</button>
                                         </div>
                                     </div>
                                     
                                     <!-- İşlem Özeti -->
-                                    <div class="order-summary">
-                                        <div class="summary-row">
-                                            <span class="summary-label">Mevcut Bakiye:</span>
+                                    <div class="trade-summary">
+                                        <div class="summary-item">
+                                            <span class="summary-label">Mevcut Bakiye</span>
                                             <span class="summary-value" id="availableBalance">₺10,000.00</span>
                                         </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label">İşlem Tutarı:</span>
-                                            <span class="summary-value" id="orderTotalValue">₺0.00</span>
+                                        <div class="summary-item">
+                                            <span class="summary-label">Alınacak Miktar</span>
+                                            <span class="summary-value" id="estimatedAmount">0.00 BTC</span>
                                         </div>
-                                        <div class="summary-row">
-                                            <span class="summary-label">Komisyon (%0.1):</span>
+                                        <div class="summary-item">
+                                            <span class="summary-label">Komisyon (%0.25)</span>
                                             <span class="summary-value" id="tradingFee">₺0.00</span>
                                         </div>
                                     </div>
                                     
-                                    <!-- İşlem Onayı Butonu -->
-                                    <button id="executeOrderBtn" class="execute-btn buy-order" disabled>
-                                        <i class="fas fa-bolt"></i>
+                                    <!-- İşlem Butonu -->
+                                    <button id="executeOrderBtn" class="execute-button buy-mode" disabled>
+                                        <i class="fas fa-shopping-cart"></i>
                                         <span id="executeText">BTC Al</span>
                                     </button>
-                                    
-                                    <!-- Gelişmiş Seçenekler -->
-                                    <div class="advanced-options">
-                                        <button class="advanced-toggle" onclick="toggleAdvancedOptions()">
-                                            <i class="fas fa-chevron-down"></i>
-                                            Gelişmiş Seçenekler
-                                        </button>
-                                        <div class="advanced-content" id="advancedContent" style="display: none;">
-                                            <div class="form-group">
-                                                <label class="form-label">Stop Loss</label>
-                                                <input type="number" id="stopLoss" class="form-input" placeholder="İsteğe bağlı" step="0.01">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="form-label">Take Profit</label>
-                                                <input type="number" id="takeProfit" class="form-input" placeholder="İsteğe bağlı" step="0.01">
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3353,42 +3613,268 @@
              }
          }
 
-                 // Trading modalını aç
-         function openTradingModal(coinId, coinName, currentPrice) {
-             const modal = document.getElementById('tradingModal');
+                                 // Trading modalını aç - Yeni tasarım
+        function openTradingModal(coinId, coinName, currentPrice) {
+            const modal = document.getElementById('tradingModal');
+            const price = parseFloat(currentPrice) * 30;
+            
+            // Coin bilgilerini modal'a yükle
+            document.getElementById('modalCoinName').textContent = coinName;
+            document.getElementById('modalCoinSymbol').textContent = coinId.toUpperCase();
+            document.getElementById('modalCoinPrice').textContent = `₺${price.toLocaleString()}`;
+            
+            // Random değişim % 
+            const change = (Math.random() - 0.5) * 10;
+            const changeElement = document.getElementById('modalCoinChange');
+            changeElement.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+            changeElement.className = `price-change ${change >= 0 ? 'positive' : 'negative'}`;
+            
+            // İstatistikleri güncelle
+            document.getElementById('high24h').textContent = `₺${(price * 1.08).toLocaleString()}`;
+            document.getElementById('low24h').textContent = `₺${(price * 0.92).toLocaleString()}`;
+            document.getElementById('volume24h').textContent = `₺${(Math.random() * 100 + 10).toFixed(1)}M`;
+            
+            // Execute button'u güncelle
+            document.getElementById('executeText').textContent = `${coinId.toUpperCase()} Al`;
+            
+            // Modal'ı göster
+            modal.style.display = 'flex';
+            
+            // Modal açılma animasyonu
+            setTimeout(() => {
+                const container = modal.querySelector('.modal-container-new');
+                if (container) {
+                    container.style.transform = 'scale(1)';
+                    container.style.opacity = '1';
+                }
+            }, 10);
+            
+            // Sahte grafik oluştur
+            setTimeout(() => {
+                createFakeChart(coinId, price);
+                initializeTradeHandlers();
+            }, 100);
              
-             // Coin bilgilerini modal'a yükle
-             document.getElementById('modalCoinName').textContent = coinName;
-             document.getElementById('modalCoinSymbol').textContent = coinId.toUpperCase();
-             document.getElementById('modalCoinPrice').textContent = `₺${(parseFloat(currentPrice) * 30).toLocaleString()}`;
-             
-             // Random değişim % (gerçek API'den gelecek)
-             const change = (Math.random() - 0.5) * 10;
-             const changeElement = document.getElementById('modalCoinChange');
-             changeElement.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
-             changeElement.className = `price-change ${change >= 0 ? 'positive' : 'negative'}`;
-             
-             // Al/Sat fiyatlarını güncelle
-             const buyPrice = parseFloat(currentPrice) * 30 * 1.001; // 0.1% spread
-             const sellPrice = parseFloat(currentPrice) * 30 * 0.999;
-             document.getElementById('buyPrice').textContent = `₺${buyPrice.toFixed(2)}`;
-             document.getElementById('sellPrice').textContent = `₺${sellPrice.toFixed(2)}`;
-             
-             // Quantity suffix'i güncelle
-             document.getElementById('quantitySuffix').textContent = coinId.toUpperCase();
-             document.getElementById('executeText').textContent = `${coinId.toUpperCase()} Al`;
-             
-             // Modal'ı göster
-             modal.style.display = 'flex';
-             
-             // Modal açılma animasyonu
-             setTimeout(() => {
-                 const container = modal.querySelector('.modal-container');
-                 container.style.transform = 'scale(1)';
-                 container.style.opacity = '1';
-             }, 10);
-             
-             // Trading modalı için event listener'ları kurulum
+         }
+        
+        // Sahte grafik oluşturma fonksiyonu
+        function createFakeChart(coinSymbol, basePrice) {
+            const canvas = document.getElementById('priceChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = 600;
+            const height = canvas.height = 250;
+            
+            // Canvas'ı temizle
+            ctx.fillStyle = '#0f1419';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Veri noktaları oluştur (son 24 saat)
+            const dataPoints = 48;
+            const prices = [];
+            let currentPrice = basePrice;
+            
+            for (let i = 0; i < dataPoints; i++) {
+                // Rastgele fiyat değişimi (-2% ile +2% arası)
+                const change = (Math.random() - 0.5) * 0.04;
+                currentPrice = currentPrice * (1 + change);
+                prices.push(currentPrice);
+            }
+            
+            // Min ve max fiyatları bul
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const priceRange = maxPrice - minPrice;
+            
+            // Grafik çizimi
+            const padding = 40;
+            const chartWidth = width - (padding * 2);
+            const chartHeight = height - (padding * 2);
+            
+            // Grid çizgileri
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+            
+            // Yatay grid çizgileri
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (chartHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // Dikey grid çizgileri
+            for (let i = 0; i <= 6; i++) {
+                const x = padding + (chartWidth / 6) * i;
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            
+            // Fiyat çizgisi
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            for (let i = 0; i < prices.length; i++) {
+                const x = padding + (chartWidth / (prices.length - 1)) * i;
+                const normalizedPrice = (prices[i] - minPrice) / priceRange;
+                const y = height - padding - (normalizedPrice * chartHeight);
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+            
+            // Gradient dolgu
+            const gradient = ctx.createLinearGradient(0, padding, 0, height - padding);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(padding, height - padding);
+            
+            for (let i = 0; i < prices.length; i++) {
+                const x = padding + (chartWidth / (prices.length - 1)) * i;
+                const normalizedPrice = (prices[i] - minPrice) / priceRange;
+                const y = height - padding - (normalizedPrice * chartHeight);
+                ctx.lineTo(x, y);
+            }
+            
+            ctx.lineTo(width - padding, height - padding);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Son fiyat noktası
+            const lastPrice = prices[prices.length - 1];
+            const lastX = width - padding;
+            const lastY = height - padding - ((lastPrice - minPrice) / priceRange * chartHeight);
+            
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath();
+            ctx.arc(lastX, lastY, 4, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Fiyat etiketleri
+            ctx.fillStyle = '#8896ab';
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'right';
+            
+            for (let i = 0; i <= 5; i++) {
+                const price = minPrice + (priceRange / 5) * (5 - i);
+                const y = padding + (chartHeight / 5) * i + 4;
+                ctx.fillText(`₺${price.toLocaleString()}`, padding - 10, y);
+            }
+            
+            // Zaman etiketleri
+            ctx.textAlign = 'center';
+            const timeLabels = ['24s', '20s', '16s', '12s', '8s', '4s', 'Şimdi'];
+            for (let i = 0; i <= 6; i++) {
+                const x = padding + (chartWidth / 6) * i;
+                ctx.fillText(timeLabels[i], x, height - 10);
+            }
+        }
+        
+        // Trade handler'ları başlat
+        function initializeTradeHandlers() {
+            // Al/Sat tab değişimi
+            document.querySelectorAll('.trade-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.trade-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const action = this.dataset.action;
+                    const executeBtn = document.getElementById('executeOrderBtn');
+                    const executeText = document.getElementById('executeText');
+                    const coinSymbol = document.getElementById('modalCoinSymbol').textContent;
+                    
+                    if (action === 'buy') {
+                        executeBtn.className = 'execute-button buy-mode';
+                        executeText.textContent = `${coinSymbol} Al`;
+                    } else {
+                        executeBtn.className = 'execute-button sell-mode';
+                        executeText.textContent = `${coinSymbol} Sat`;
+                    }
+                });
+            });
+            
+            // Hızlı tutar butonları
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const amount = this.dataset.amount;
+                    document.getElementById('tradeAmount').value = amount;
+                    updateTradeCalculations();
+                });
+            });
+            
+            // Yüzde butonları
+            document.querySelectorAll('.percent-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.percent-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const percent = this.dataset.percent;
+                    const balance = 10000; // Mevcut bakiye (gerçek API'den gelecek)
+                    const amount = (balance * percent / 100);
+                    
+                    document.getElementById('tradeAmount').value = amount.toFixed(2);
+                    updateTradeCalculations();
+                });
+            });
+            
+            // Tutar girişi değişimi
+            document.getElementById('tradeAmount').addEventListener('input', updateTradeCalculations);
+            
+            // Zaman dilimi butonları
+            document.querySelectorAll('.time-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Yeni zaman dilimine göre grafik güncelle
+                    const coinSymbol = document.getElementById('modalCoinSymbol').textContent;
+                    const price = parseFloat(document.getElementById('modalCoinPrice').textContent.replace('₺', '').replace(',', ''));
+                    createFakeChart(coinSymbol, price);
+                });
+            });
+        }
+        
+        // Trade hesaplamalarını güncelle
+        function updateTradeCalculations() {
+            const amount = parseFloat(document.getElementById('tradeAmount').value) || 0;
+            const coinPrice = parseFloat(document.getElementById('modalCoinPrice').textContent.replace('₺', '').replace(',', '')) || 0;
+            
+            if (amount > 0 && coinPrice > 0) {
+                const estimatedCoins = amount / coinPrice;
+                const fee = amount * 0.0025; // %0.25 komisyon
+                
+                document.getElementById('estimatedAmount').textContent = `${estimatedCoins.toFixed(8)} ${document.getElementById('modalCoinSymbol').textContent}`;
+                document.getElementById('tradingFee').textContent = `₺${fee.toFixed(2)}`;
+                
+                // Execute button'u aktif et
+                const executeBtn = document.getElementById('executeOrderBtn');
+                executeBtn.disabled = false;
+            } else {
+                document.getElementById('estimatedAmount').textContent = `0.00 ${document.getElementById('modalCoinSymbol').textContent}`;
+                document.getElementById('tradingFee').textContent = '₺0.00';
+                
+                // Execute button'u pasif et
+                const executeBtn = document.getElementById('executeOrderBtn');
+                executeBtn.disabled = true;
+            }
+        }
+        
+        // Trading modalı için event listener'ları kurulum
              setupTradingModalEvents();
              
              // Grafik çiz
@@ -3398,10 +3884,10 @@
              loadFakeChart(coinId);
          }
 
-         // Trading modalını kapat
-         function closeTradingModal() {
-             const modal = document.getElementById('tradingModal');
-             const container = modal.querySelector('.modal-container');
+                 // Trading modalını kapat
+        function closeTradingModal() {
+            const modal = document.getElementById('tradingModal');
+            const container = modal.querySelector('.modal-container-new') || modal.querySelector('.modal-container');
              
              // Chart animasyonunu durdur
              stopChartAnimation();
