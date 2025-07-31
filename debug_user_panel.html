@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Panel Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .debug-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #00d4aa;
+        }
+        .error { border-left-color: #ff4757; }
+        .success { border-left-color: #00d4aa; }
+        .warning { border-left-color: #ffa502; }
+        pre {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #00d4aa;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #00b894;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 User Panel Debug Tool</h1>
+    
+    <div class="debug-section">
+        <h3>📊 API Test Sonuçları</h3>
+        <button onclick="testAPIs()">Tüm API'leri Test Et</button>
+        <div id="apiResults"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>🔍 JavaScript Hataları</h3>
+        <div id="jsErrors">Henüz hata yok</div>
+    </div>
+    
+    <div class="debug-section">
+        <h3>🌐 Network İstekleri</h3>
+        <div id="networkRequests">Henüz istek yok</div>
+    </div>
+
+    <script>
+        // JavaScript hatalarını yakala
+        window.addEventListener('error', function(e) {
+            const errorDiv = document.getElementById('jsErrors');
+            errorDiv.innerHTML += `
+                <div class="error" style="margin: 10px 0; padding: 10px; background: #ff4757; border-radius: 4px;">
+                    <strong>Hata:</strong> ${e.message}<br>
+                    <strong>Dosya:</strong> ${e.filename}<br>
+                    <strong>Satır:</strong> ${e.lineno}<br>
+                    <strong>Kolon:</strong> ${e.colno}
+                </div>
+            `;
+        });
+
+        // Console hatalarını yakala
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            const errorDiv = document.getElementById('jsErrors');
+            errorDiv.innerHTML += `
+                <div class="error" style="margin: 10px 0; padding: 10px; background: #ff4757; border-radius: 4px;">
+                    <strong>Console Error:</strong> ${args.join(' ')}
+                </div>
+            `;
+            originalConsoleError.apply(console, args);
+        };
+
+        // API'leri test et
+        async function testAPIs() {
+            const resultsDiv = document.getElementById('apiResults');
+            resultsDiv.innerHTML = '<p>Test ediliyor...</p>';
+            
+            const apis = [
+                { name: 'Profile API', url: 'backend/public/profile.php' },
+                { name: 'Coins Hybrid API', url: 'backend/user/coins_hybrid.php?limit=5' },
+                { name: 'Config API', url: 'backend/config.php' }
+            ];
+            
+            let results = '';
+            
+            for (const api of apis) {
+                try {
+                    console.log(`Testing ${api.name}...`);
+                    const response = await fetch(api.url, {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+                    
+                    const status = response.status;
+                    const statusText = response.statusText;
+                    
+                    let data;
+                    const contentType = response.headers.get('content-type');
+                    
+                    if (contentType && contentType.includes('application/json')) {
+                        data = await response.json();
+                    } else {
+                        data = await response.text();
+                    }
+                    
+                    const isSuccess = status === 200;
+                    const className = isSuccess ? 'success' : 'error';
+                    
+                    results += `
+                        <div class="${className}" style="margin: 10px 0; padding: 15px; border-radius: 4px;">
+                            <h4>${api.name}</h4>
+                            <p><strong>Status:</strong> ${status} ${statusText}</p>
+                            <p><strong>URL:</strong> ${api.url}</p>
+                            <p><strong>Content-Type:</strong> ${contentType}</p>
+                            <details>
+                                <summary>Response Data</summary>
+                                <pre>${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}</pre>
+                            </details>
+                        </div>
+                    `;
+                } catch (error) {
+                    results += `
+                        <div class="error" style="margin: 10px 0; padding: 15px; border-radius: 4px;">
+                            <h4>${api.name}</h4>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                            <p><strong>URL:</strong> ${api.url}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            resultsDiv.innerHTML = results;
+        }
+
+        // Network isteklerini logla
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            const networkDiv = document.getElementById('networkRequests');
+            const url = args[0];
+            const options = args[1] || {};
+            
+            networkDiv.innerHTML += `
+                <div style="margin: 5px 0; padding: 10px; background: #3a3a3a; border-radius: 4px;">
+                    <strong>Fetch:</strong> ${url}<br>
+                    <strong>Method:</strong> ${options.method || 'GET'}<br>
+                    <strong>Time:</strong> ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+            
+            return originalFetch.apply(this, args);
+        };
+
+        // Sayfa yüklendiğinde otomatik test
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Debug sayfası yüklendi');
+            setTimeout(testAPIs, 1000);
+        });
+    </script>
+</body>
+</html>
