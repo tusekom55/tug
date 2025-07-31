@@ -219,8 +219,8 @@
     border-radius: 10px;
     font-size: 1rem;
     transition: all 0.3s ease;
-    background: white !important;
-    color: #333 !important;
+    background: white;
+    color: #333;
 }
 
 .form-group input:hover {
@@ -232,8 +232,8 @@
     outline: none;
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    background: white !important;
-    color: #333 !important;
+    background: white;
+    color: #333;
 }
 
 .form-group input::placeholder {
